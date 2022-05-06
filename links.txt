@@ -1,0 +1,95 @@
+Get top losers
+https://www1.nseindia.com/live_market/dynaContent/live_analysis/losers/niftyLosers1.json
+
+Underlyings OI data
+https://nseindia.com/api/live-analysis-oi-spurts-underlyings
+
+https://obfuscator.io/
+https://www.demo2s.com/javascript/javascript-c3.html
+
+===================================
+
+Kill port 3000 in MAC:
+> lsof -i tcp:3000
+and then kill the pid returned
+
+Windows:
+netstat -ano | findstr :3000
+tskill typeyourPIDhere
+
+OR:
+npx kill-port 3000
+
+====
+Link Trading View Chart
+https://www.tradingview.com/widget/advanced-chart/
+https://google.com/finance/quote/NIFTY_50:INDEXNSE
+https://www.google.com/finance/quote/SBIN:NSE
+===================================
+
+Once git code is committed and synced to git hub, run below command to push the code to heroku app
+
+git push heroku-staging HEAD:master
+
+NOTE: GIT remote to heroku has renamed to heroku-staging using below command 
+> git remote rename heroku heroku-staging
+====
+heroku login
+heroku create -a optionChain
+
+Creating ⬢ optionChain... done
+https://optionChain.herokuapp.com/ | https://git.heroku.com/optionChain.git
+
+You can use the git remote command to confirm that a remote named heroku has been set for your app:
+git remote -v
+
+~\CODING\node_projects\nse>git remote -v
+heroku  https://git.heroku.com/optionChain.git (fetch)
+heroku  https://git.heroku.com/optionChain.git (push)
+origin  https://github.com/chandre-gowda/nse.git (fetch)
+origin  https://github.com/chandre-gowda/nse.git (push)
+
+Add a remote to your local repository with the heroku git:remote command. All you need is your Heroku app’s name:
+
+heroku git:remote -a optionChain
+
+~\CODING\node_projects\nse>heroku git:remote -a optionChain
+set git remote heroku to https://git.heroku.com/optionChain.git
+
+Rename a Remote
+By default, the Heroku CLI names all of the Heroku remotes it creates for your app heroku. You can rename your remotes with the git remote rename command. For example, rename heroku to heroku-staging:
+
+git remote rename heroku heroku-staging
+
+Deploy Your Code
+To deploy your app to Heroku, use the git push command to push the code from your local repository’s main branch to your heroku remote. For example:
+
+If you have not renamed:
+> git push heroku HEAD:master
+If you have renamed:
+> git push heroku-staging HEAD:master
+
+Use this same command whenever you want to deploy the latest committed version of your code to Heroku.
+
+~\CODING\node_projects\nse>git push heroku-staging HEAD:master
+Enumerating objects: 54, done.
+Counting objects: 100% (54/54), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (52/52), done.
+Writing objects: 100% (54/54), 636.04 KiB | 9.64 MiB/s, done.
+Total 54 (delta 17), reused 0 (delta 0), pack-reused 0
+remote: Compressing source files... done.
+remote: Building source:
+remote:
+…
+…
+…
+remote: -----> Compressing...
+remote:        Done: 32.7M
+remote: -----> Launching...
+remote:        Released v4
+remote:        https://optionChain.herokuapp.com/ deployed to Heroku
+remote:
+remote: Verifying deploy... done.
+To https://git.heroku.com/optionChain.git
+   04eab3a..8ce6930  HEAD -> master

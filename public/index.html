@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>CAR Trading</title>
+
+    <script src="vendor/c3.min.js"></script>
+    <script src="vendor/d3.v5.min.js"></script>
+    <link href="vendor/c3.min.css" rel="stylesheet" />
+
+    <script src="vendor/vue.global.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="shortcut icon" type="image/png" href="images/bull-logo.png" />
+
+    <link rel="stylesheet" href="style/main.css" />
+  </head>
+
+  <body>
+    <script type="importmap">
+      {
+        "imports": {
+          "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+        }
+      }
+    </script>
+
+    <div id="app">
+      <div>
+        <!-- <span style="font-weight: bold">Select Index:</span>
+        <template v-for="indices in supportedSymbols">
+          <input
+            type="radio"
+            :id="indices"
+            :value="indices"
+            v-model="symbol"
+            @change="fetchOptions()"
+          />
+          <label :for="indices">{{ indices }}</label>
+        </template> -->
+        <label>Expiry: </label>
+        <select v-model="expiry" @change="refreshData()">
+          <option disabled value="">Select Expiry</option>
+          <option value="0">Current</option>
+          <option value="1">Next</option>
+          <option value="2">Future</option>
+        </select>
+
+        &nbsp; Strikes:
+        <select v-model="range" @change="refreshData()">
+          <option disabled value="">Number of Strikes</option>
+          <option>5</option>
+          <option>10</option>
+          <option>15</option>
+          <option>25</option>
+        </select>
+        &nbsp;
+        <template v-if="store.getExpiry() !== '' ">
+          <button @click="refreshData()">Refresh</button> &nbsp; Option Chain
+          for Expiry Date:
+          <span class="expiry">{{ store.getExpiry() }} </span>
+        </template>
+        &nbsp; Current Time: <span class="timer"><timer></timer></span>
+      </div>
+
+      <hr />
+      <div class="container">
+        <div class="innerContainer">
+          <option-chain symbol="BANKNIFTY"> </option-chain>
+        </div>
+        <div class="innerContainer">
+          <option-chain symbol="NIFTY"> </option-chain>
+        </div>
+      </div>
+      <div>
+        <div class="tips">
+          NOTE: If LTP is lesser than Actual value, then you are getting that
+          strike price in DISCOUNTED price
+        </div>
+        <!-- <pre>{{store}}</pre></td> -->
+      </div>
+    </div>
+    <script type="module" src="index.js"></script>
+  </body>
+</html>

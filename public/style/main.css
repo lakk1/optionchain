@@ -1,0 +1,172 @@
+html {
+  font-family: Roboto, sans-serif;
+  font-size: 10px;
+  height: 100vh;
+}
+.red {
+  color: red;
+}
+.priceRed, .priceGreen {
+  font-weight: bold;
+}
+.priceRed {
+  color: red;
+}
+.priceGreen {
+  color: green;
+}
+.itm {
+  background-color: #e8e8e8 !important;
+}
+.atm {
+  background-color: orange;
+}
+.call {
+  background-color: greenyellow;
+}
+.put {
+  background-color: orangered;
+}
+.strikePrice {
+  background-color: rgb(174, 243, 243);
+  text-align: center !important;
+}
+.stats {
+  background-color: rgb(223, 237, 144);
+  text-align: center !important;
+  padding: 3px 0;
+  font-weight: bold;
+}
+.pcr {
+  font-size: small;
+}
+.spotprice {
+  color: brown;
+}
+.spotprice,
+.symbol {
+  font-size: 16px;
+}
+
+.headerActions {
+  display: flex;
+  align-items: stretch;
+  /* padding: 6px; */
+}
+.timestamp,
+.actions {
+  font-size: 12px;
+  color: rgb(86, 109, 109, 0.9);
+  flex-basis: 50%;
+  display: flex;
+  align-items: center;
+}
+.actions {
+  justify-content: right;
+}
+
+table.report,
+table.report td,
+table.report th,
+table.report tr {
+  border-collapse: collapse;
+  border: 1px solid rgba(206, 205, 205, 0.5);
+  white-space: nowrap;
+}
+.container,
+.chainTabContainer {
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
+}
+.innerContainer {
+  flex: 49%;
+  border: 1px solid grey;
+  padding: 3px;
+}
+table.report tr td,
+table.report tr th {
+  padding: 4px 6px;
+}
+table.report tr td {
+  text-align: right;
+}
+table.report tr th {
+  font-weight: bold;
+  text-align: center;
+}
+.reportHeader {
+  text-align: center;
+  font-size: medium;
+  font-weight: bold;
+}
+.tabHeader {
+  background-color: rgb(3, 70, 97);
+  color: ivory;
+}
+.oiDifference {
+  background-color: rgb(248, 235, 219);
+  font-weight: bold;
+  text-align: center !important;
+}
+.totals td {
+  font-weight: bold;
+}
+.highVolumeCall,
+.highOICall,
+.highVolumePut,
+.highOIPut,
+.secondHigh {
+  font-size: small;
+  font-weight: bold;
+}
+.highVolumeCall {
+  background-color: red !important;
+  color: ivory;
+}
+.highOICall {
+  background-color: lightcoral !important;
+}
+.highOIchgCall,
+.highOIchgPut {
+  background-color: darkolivegreen !important;
+  color: ivory;
+}
+.highVolumePut {
+  background-color: rgb(5, 129, 78) !important;
+  color: ivory;
+}
+.highOIPut {
+  background-color: greenyellow !important;
+}
+.secondHigh {
+  background-color: yellow !important;
+}
+.tips {
+  padding: 10px 0;
+  color: grey;
+}
+.discount {
+  color: brown !important;
+  font-weight: bold;
+  font-size: small;
+  /* background-color: ivory !important; */
+}
+.premium {
+  color: grey;
+  font-size: xx-small;
+}
+
+.chartLayout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.chartLayout .title {
+  font-weight: bold;
+  color: rgb(21, 72, 129);
+}
+.expiry, .timer {
+  font-size: large;
+  color: brown;
+}

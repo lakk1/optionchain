@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>JavaScript | fetch() Method</title>
+    <script src="https://unpkg.com/vue@3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </head>
+
+  <body>
+    <script type="importmap">
+      {
+        "imports": {
+          "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+        }
+      }
+    </script>
+
+    <div id="app">
+      {{message}}
+
+      <button @click="increment">Add {{count}}</button>
+
+      <br />
+      STORE Count: {{ store.count }}
+      <button @click="store.increment()">Increment Store Count</button>
+
+      <br />
+      - {{ obj.arr }}
+
+      <br />
+      New Arr: {{ newArr }}
+
+      <ol>
+        <li v-for="item in obj.arr">{{ item }}</li>
+      </ol>
+
+      <div>
+        Profile:
+        <p v-for="(value, key) in obj.profile">{{ key }} : {{ value}}</p>
+      </div>
+
+      <div>
+        <my-button title="AAA"></my-button>
+        <my-button title="BBB"></my-button>
+      </div>
+      <div>
+        <button @click="fetchOptions('NIFTY')">Fetch NSE data for NIFTY</button>
+        <p>{{ store.response }}</p>
+
+        <br />symbol={ NIFTY | FINNIFTY | BANKNIFTY | NIFTYMID50 | MIDCPNIFTY }
+
+        <button @click="fetchOptions('BANKNIFTY')">
+          Fetch NSE data for BANKNIFTY
+        </button>
+        <p>{{ store.response }}</p>
+      </div>
+    </div>
+
+    <script type="module" src="index.js"></script>
+  </body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Option Filtering</title>
+
+    <link rel="shortcut icon" type="image/png" href="images/bull-logo.png" />
+
+    <link rel="stylesheet" href="style/stock.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
+    />
+  </head>
+
+  <body>
+    <script type="importmap">
+      {
+        "imports": {
+          "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+        }
+      }
+    </script>
+    
+    <div id="app" class="container is-centered">
+      <!-- TradingView Widget BEGIN -->
+      <!-- <div class="tradingview-widget-container" style="height: 610px;">
+        <div id="tradingview_chart" style="height: 100%;">
+          <iframe id="tradingview_iframe" src="https://in.investing.com/equities/larsen-toubro-infotech-ltd" 
+          style="width: 100%; height: 100%; margin: 0 !important; padding: 0 !important;" 
+          frameborder="0" allowtransparency="true" scrolling="true" allowfullscreen="" ></iframe>
+        </div> 
+      </div>-->
+      <!-- TradingView Widget END -->
+      <form v-on:submit.prevent="submitData">
+      <p class="title container text-center">Trade Symbol generator</p>
+      <div class="field is-grouped">
+        <p class="control">
+          <div class="select">
+            <select v-model="expiry">
+              <option disabled value="">Please select Expriry</option>
+              <option v-for="mon in months">{{ mon }}</option>
+            </select>
+          </div>
+        </p>
+        <p class="control">
+          <div class="select">
+            <select v-model="optionType">
+              <option value="CE">CALL</option>
+              <option value="PE">PUT</option>
+            </select>
+          </div>
+        </p>
+        <p class="control">
+          <div class="control">
+            <input
+              class="input"
+              list="stockList"
+              v-model="stock"
+              placeholder="Select Symbol"
+              @change="populateStock(stock)"
+              @focus="stock=''"
+            />
+            <datalist id="stockList">
+              <option :value="stocks.symbol" v-for="stocks in stockList">
+                {{ stocks.underlying }}
+              </option>
+            </datalist>
+          </div>
+        </p>  
+        <p class="control">
+          <input
+            class="input"
+            v-model="price"
+            placeholder="Enter Strike Price"
+            type="number"
+            :step="stepInterval"
+            ref="stockPrice"
+          />
+        </p>
+        <p class="control">
+          <button class="button is-info" @click.prevent="submitData"> Add </button>
+        </p>
+        <p class="control">
+          <button class="button is-warning" @click.prevent="undo"> Undo </button>
+        </p>
+        <p class="control">
+          <button class="button is-danger" @click.prevent="clear"> Clear List </button>
+        </p>
+      </div>
+      </form>
+      <hr />
+      <div class="columns">
+        <div class="column">
+          <input v-model="tradingViewChartID" placeholder="Trading view chart ID">
+          <br>
+          <table class="report">
+            <tr>
+              <th>SL No</th>
+              <th>Chart</th>
+              <th>Underlying</th>
+              <th>Symbol</th>
+              <th>Lot size</th>
+              <th>Step Interval</th>
+            </tr>
+            <tr v-for="(s, i) in stockList" class="is-size-6">
+              <td class="has-text-left">{{i+1}}</td> 
+
+              <td class="has-text-centered">
+                <a :href="chartLink + s.symbol" target="_blank" @click="populateStock(s.symbol)">&nbsp;<img src="images/graph-10.svg" width="15" height="auto" alt="open chart" title="Trading View"> </a>
+                &nbsp; | &nbsp;
+                <a :href="investingDaddyLink + s.symbol" target="_blank" @click="populateStock(s.symbol)">&nbsp;<img src="images/id.svg" width="15" height="auto" alt="open chart" title="Investing Daddy"> </a>
+              </td> 
+              <td class="has-text-left">{{s.underlying}}</td> 
+              <td class="has-text-left">
+                 <a @click="populateStock(s.symbol)">{{s.symbol}}</a>
+                 <!-- <a :href="'https://www.tradingview.com/chart/'+tradingViewChartID+'/?&interval=5&symbol=NSE:'+s.symbol" target="_blank" @click="populateStock(s.symbol)">&nbsp;<img src="images/graph-10.svg" width="15" height="auto" alt="open chart"> </a> -->
+              </td>
+              <td>{{s.lotsize}}</td>
+              <td>{{s.steps}}</td>
+            </tr>
+          </table>
+        </div>
+        <div class="column">
+          <div class="level ml-2">
+            <div class="level-left">
+              <table class="report">
+                <tr>
+                  <th>Steps/Lots</th>
+                  <th>Symbol</th>
+                </tr>
+                <template v-for="sym in selectedSymbols">
+                  <tr class="is-size-6">
+                    <td>{{sym.steps}}/{{sym.lotsize}}</td>
+                    <td>{{sym.symbol}}</td>
+                  </tr>
+                </template>
+              </table>
+              <table class="report">
+                <tr>
+                  <th>Lot Size</th>
+                  <th>Step Interval</th>
+                  <th>Chart</th>
+                </tr>
+                <template v-for="(sym,i) in selectedSymbols">
+                  <tr class="is-size-6">
+                    <td>{{sym.lotsize}}</td>
+                    <td>{{sym.steps}}</td>
+                    <td class="has-text-centered">
+                      <template v-if="i%2 == 0">
+                        <a :href="chartLink + sym.symbol.replace('NSE ', '')" target="_blank">&nbsp;<img src="images/graph-10.svg" width="15" height="auto" alt="open chart" title="Trading View"> </a> 
+                        &nbsp; | &nbsp;
+                        <a :href="investingDaddyLink + sym.symbol.replace('NSE ', '')" target="_blank">&nbsp;<img src="images/id.svg" width="15" height="auto" alt="open chart" title="Investing Daddy"> </a>
+                      </template>
+                    </td> 
+                  </tr>
+                </template>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <script type="module" src="stock.js"></script>
+  </body>
+</html>

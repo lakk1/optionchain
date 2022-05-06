@@ -1,0 +1,21 @@
+{
+  "name": "nse",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "start http://localhost:3000 && nodemon --ignore ./OISTATS/ server.js",
+    "stub": "start http://localhost:3000 && nodemon --ignore ./OISTATS/ server.js stub ",
+    "start": "start http://localhost:3000 && node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.26.1",
+    "express": "^4.17.3"
+  },
+  "engines": {
+    "node": "16.x"
+  }
+}
