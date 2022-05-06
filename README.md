@@ -1,4 +1,4 @@
-# **CAR Trading**
+# **Option Chain**
 
 This is the Option Chain analyzer for NIFTY and BANKNIFTY from NSE
 
