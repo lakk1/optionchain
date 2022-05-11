@@ -142,6 +142,9 @@ table.report tr th {
 .secondHigh {
   background-color: yellow !important;
 }
+.thirdHigh {
+  background-color: rgb(229, 248, 153) !important;
+}
 .tips {
   padding: 10px 0;
   color: grey;

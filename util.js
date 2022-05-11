@@ -168,6 +168,13 @@ function calculateTotals(filteredStrikes) {
   totals.PE.secondHighOIStrike = totals.PE.oiList[1].strikePrice;
   totals.PE.secondHighVolStrike = totals.PE.volumeList[1].strikePrice;
 
+  // Third High values
+  totals.CE.thirdHighOIStrike = totals.CE.oiList[2].strikePrice;
+  totals.CE.thirdHighVolStrike = totals.CE.volumeList[2].strikePrice;
+
+  totals.PE.thirdHighOIStrike = totals.PE.oiList[2].strikePrice;
+  totals.PE.thirdHighVolStrike = totals.PE.volumeList[2].strikePrice;
+
   totals.OIdifference = totals.PE.oi - totals.CE.oi;
   totals.OIChgdifference = totals.PE.oiChange - totals.CE.oiChange;
 
