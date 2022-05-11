@@ -35,26 +35,26 @@ NOTE: GIT remote to heroku has renamed to heroku-staging using below command
 > git remote rename heroku heroku-staging
 ====
 heroku login
-heroku create -a optionChain
+heroku create -a optionchain
 
-Creating ⬢ optionChain... done
-https://optionChain.herokuapp.com/ | https://git.heroku.com/optionChain.git
+Creating ⬢ optionchain... done
+https://optionchain.herokuapp.com/ | https://git.heroku.com/optionchain.git
 
 You can use the git remote command to confirm that a remote named heroku has been set for your app:
 git remote -v
 
 ~\CODING\node_projects\nse>git remote -v
-heroku  https://git.heroku.com/optionChain.git (fetch)
-heroku  https://git.heroku.com/optionChain.git (push)
+heroku  https://git.heroku.com/optionchain.git (fetch)
+heroku  https://git.heroku.com/optionchain.git (push)
 origin  https://github.com/chandre-gowda/nse.git (fetch)
 origin  https://github.com/chandre-gowda/nse.git (push)
 
 Add a remote to your local repository with the heroku git:remote command. All you need is your Heroku app’s name:
 
-heroku git:remote -a optionChain
+heroku git:remote -a optionchain
 
-~\CODING\node_projects\nse>heroku git:remote -a optionChain
-set git remote heroku to https://git.heroku.com/optionChain.git
+~\CODING\node_projects\nse>heroku git:remote -a optionchain
+set git remote heroku to https://git.heroku.com/optionchain.git
 
 Rename a Remote
 By default, the Heroku CLI names all of the Heroku remotes it creates for your app heroku. You can rename your remotes with the git remote rename command. For example, rename heroku to heroku-staging:
@@ -88,8 +88,8 @@ remote: -----> Compressing...
 remote:        Done: 32.7M
 remote: -----> Launching...
 remote:        Released v4
-remote:        https://optionChain.herokuapp.com/ deployed to Heroku
+remote:        https://optionchain.herokuapp.com/ deployed to Heroku
 remote:
 remote: Verifying deploy... done.
-To https://git.heroku.com/optionChain.git
+To https://git.heroku.com/optionchain.git
    04eab3a..8ce6930  HEAD -> master
