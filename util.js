@@ -15,15 +15,14 @@ const config = { collectStats: true };
   });
 })();
 
-function storeOIdiffernece(fetchTime, symbol, OIChgdifference, expiry) {
+function storeOIdiffernece(data) {
   let dirName = path.join(__dirname, "OISTATS");
-  let fileDate = fetchTime.replace(/\s.*/, "");
+  let fileDate = data.fetchTime.replace(/\s.*/, "");
 
-  let baseName = symbol;
+  let baseName = data.symbol;
   let fileName = path.join(dirName, `${baseName}_${fileDate}.json`);
 
-  let content = { fetchTime, OIChgdifference, expiry };
-  fs.writeFileSync(fileName, JSON.stringify(content) + ",\n", {
+  fs.writeFileSync(fileName, JSON.stringify(data) + ",\n", {
     flag: "a",
   });
 }
@@ -207,14 +206,16 @@ function getDataForCurrentExpiry(response, symbol, range = 10, expiry = 0) {
 
     // Store the OIDifference with timestamp for future use
     if (config.collectStats == true) {
-      storeOIdiffernece(
+      storeOIdiffernece({
         fetchTime,
         symbol,
-        totals.OIChgdifference,
+        OIChgdifference: totals.OIChgdifference,
         currentExpiry,
         pcrVolume,
-        pcrOI
-      );
+        pcrOI,
+        peTotalVolume: PE.totVol,
+        ceTotalVolume: CE.totVol,
+      });
     }
 
     return {
