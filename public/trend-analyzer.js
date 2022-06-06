@@ -9,6 +9,7 @@ export default {
       range: 10,
       expiry: 0,
       refreshInterval: 30, // seconds
+      display: "both",
     };
   },
   methods: {

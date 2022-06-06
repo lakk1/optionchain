@@ -40,6 +40,14 @@
           />
           <label :for="indices">{{ indices }}</label>
         </template> -->
+        <label>Display: </label>
+        <select v-model="display">
+          <option disabled value="">Select Indices</option>
+          <option value="both">BOTH</option>
+          <option value="nifty">NIFTY</option>
+          <option value="banknifty">BANK NIFTY</option>
+        </select>
+
         <label>Expiry: </label>
         <select v-model="expiry" @change="refreshData()">
           <option disabled value="">Select Expiry</option>
@@ -67,10 +75,10 @@
 
       <hr />
       <div class="container">
-        <div class="innerContainer">
+        <div class="innerContainer" v-if="display != 'nifty' ">
           <option-chain symbol="BANKNIFTY"> </option-chain>
         </div>
-        <div class="innerContainer">
+        <div class="innerContainer" v-if="display != 'banknifty' ">
           <option-chain symbol="NIFTY"> </option-chain>
         </div>
       </div>
