@@ -5,6 +5,7 @@
 temp/
 **/node_modules/
 **/OISTATS/
+**/DATA/
 
 npm-debug.log
 .DS_Store

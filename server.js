@@ -64,6 +64,9 @@ async function getCookies(instance) {
 async function fetchNSEdata(symbol = "NIFTY", range = 10, expiry = 0) {
   let url =
     "https://www.nseindia.com/api/option-chain-indices?symbol=" + symbol;
+
+  // let url = "https://www.nseindia.com/api/option-chain-equities?symbol=AARTIIND";
+
   console.log("URL: ", url);
 
   let data = undefined;

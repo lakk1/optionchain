@@ -1,5 +1,6 @@
 Get top losers
 https://www1.nseindia.com/live_market/dynaContent/live_analysis/losers/niftyLosers1.json
+https://www.nseindia.com/api/option-chain-equities?symbol=AARTIIND
 
 Underlyings OI data
 https://nseindia.com/api/live-analysis-oi-spurts-underlyings
