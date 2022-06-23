@@ -1,10 +1,10 @@
 import { store } from "./store.js";
+import stockList from "./data.js";
 
 export default {
   data() {
     return {
       store,
-      supportedSymbols: ["BANKNIFTY", "NIFTY"],
       symbol: "BANKNIFTY",
       range: 10,
       expiry: 0,
@@ -30,8 +30,12 @@ export default {
       }
     },
     refreshData() {
-      this.fetchOptions("NIFTY");
-      this.fetchOptions("BANKNIFTY");
+      if (this.display == "both") {
+        this.fetchOptions("NIFTY");
+        this.fetchOptions("BANKNIFTY");
+      } else {
+        this.fetchOptions(this.display);
+      }
     },
     isDataAvailable(sym) {
       return this.store.data && this.store.data[sym] ? true : false;
@@ -52,19 +56,17 @@ export default {
     },
   },
   mounted() {
-    let fetchData = this.fetchOptions;
     let interval = this.refreshInterval * 1000;
-
-    function refresh() {
-      console.log("Refreshing data @ ", Date());
-      fetchData("BANKNIFTY");
-      fetchData("NIFTY");
-    }
-
-    refresh(); // Call once before starting interval
+    this.refreshData(); // Call once before starting interval
 
     // Call every 30 seconds to refresh data
-    setInterval(refresh, interval);
+    this.intervalHandler = setInterval(this.refreshData, interval);
+
+    this.stockList = stockList;
+  },
+  beforeUnmount() {
+    console.log("Unmounting Option Chain analyzer");
+    clearInterval(this.intervalHandler);
   },
   computed: {},
 };

@@ -41,11 +41,12 @@
           <label :for="indices">{{ indices }}</label>
         </template> -->
         <label>Display: </label>
-        <select v-model="display">
+        <select v-model="display" @change="refreshData()">
           <option disabled value="">Select Indices</option>
-          <option value="both">BOTH</option>
-          <option value="nifty">NIFTY</option>
-          <option value="banknifty">BANK NIFTY</option>
+          <option value="both">INDICES</option>
+          <template v-for="stock in stockList">
+            <option :value="stock.symbol">{{stock.underlying}}</option>
+          </template>
         </select>
 
         <label>Expiry: </label>
@@ -64,22 +65,29 @@
           <option>15</option>
           <option>25</option>
         </select>
+
+        &nbsp; Current Time: <span class="timer"><timer></timer></span>
+
         &nbsp;
         <template v-if="store.getExpiry() !== '' ">
           <button @click="refreshData()">Refresh</button> &nbsp; Option Chain
           for Expiry Date:
-          <span class="expiry">{{ store.getExpiry() }} </span>
+          <span class="expiry">{{ store.getExpiry(display) }} </span>
         </template>
-        &nbsp; Current Time: <span class="timer"><timer></timer></span>
       </div>
 
       <hr />
-      <div class="container">
-        <div class="innerContainer" v-if="display != 'nifty' ">
+      <div class="container" v-if="display == 'both' ">
+        <div class="innerContainer">
           <option-chain symbol="BANKNIFTY"> </option-chain>
         </div>
-        <div class="innerContainer" v-if="display != 'banknifty' ">
+        <div class="innerContainer">
           <option-chain symbol="NIFTY"> </option-chain>
+        </div>
+      </div>
+      <div class="container" v-else>
+        <div class="innerContainer">
+          <option-chain :symbol="display"> </option-chain>
         </div>
       </div>
       <div>

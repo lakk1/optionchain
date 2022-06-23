@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const stockList = require("./symbols.json");
 
 const config = { collectStats: true };
 
@@ -28,8 +29,8 @@ function storeOIdiffernece(data) {
 }
 
 function getStrikePriceRange(symbol = "NIFTY", spotPrice = 10000, range = 10) {
-  const INTERVAL = { NIFTY: 50, BANKNIFTY: 100 };
-  const strikeInterval = INTERVAL[symbol];
+  let symbolDetails = stockList.filter((s) => s.symbol == symbol)[0];
+  const strikeInterval = symbolDetails.steps;
 
   let ATM = Math.round(spotPrice / strikeInterval) * strikeInterval;
 
@@ -77,63 +78,98 @@ function calculateTotals(filteredStrikes) {
     // Calculate Premium
     // If LTP is lesser than actual value it is supposed to be then you are getting that strike price in DISCOUNTED price
 
-    strike.CE.actualValue =
-      strike.CE.underlyingValue - strike.CE.strikePrice > 0
-        ? strike.CE.underlyingValue - strike.CE.strikePrice
-        : 0;
-    strike.CE.premium = strike.CE.lastPrice - strike.CE.actualValue;
-    strike.CE.premiumPercent = (100 * strike.CE.premium) / strike.CE.lastPrice;
+    // This is to write the x axis
+    strike.CE
+      ? totals.chart.series.push(strike.CE.strikePrice)
+      : totals.chart.series.push(strike.PE.strikePrice);
 
-    strike.PE.actualValue =
-      strike.PE.strikePrice - strike.PE.underlyingValue > 0
-        ? strike.PE.strikePrice - strike.PE.underlyingValue
-        : 0;
-    strike.PE.premium = strike.PE.lastPrice - strike.PE.actualValue;
-    strike.PE.premiumPercent = (100 * strike.PE.premium) / strike.PE.lastPrice;
+    if (strike.CE) {
+      strike.CE.actualValue =
+        strike.CE.underlyingValue - strike.CE.strikePrice > 0
+          ? strike.CE.underlyingValue - strike.CE.strikePrice
+          : 0;
+      strike.CE.premium = strike.CE.lastPrice - strike.CE.actualValue;
+      strike.CE.premiumPercent =
+        (100 * strike.CE.premium) / strike.CE.lastPrice;
+      // Calculate Totals
+      totals.CE.oi += strike.CE.openInterest;
+      totals.CE.oiChange += strike.CE.changeinOpenInterest;
+      totals.CE.volume += strike.CE.totalTradedVolume;
 
-    // Calculate Totals
-    totals.CE.oi += strike.CE.openInterest;
-    totals.CE.oiChange += strike.CE.changeinOpenInterest;
-    totals.CE.volume += strike.CE.totalTradedVolume;
+      // Data For Graph
+      totals.chart.CEoiChg.push(strike.CE.changeinOpenInterest);
+      totals.chart.CEoi.push(strike.CE.openInterest);
+      totals.chart.CEvolume.push(strike.CE.totalTradedVolume);
 
-    totals.PE.oi += strike.PE.openInterest;
-    totals.PE.oiChange += strike.PE.changeinOpenInterest;
-    totals.PE.volume += strike.PE.totalTradedVolume;
+      totals.CE.volumeList.push({
+        strikePrice: strike.strikePrice,
+        volume: strike.CE.totalTradedVolume,
+      });
+      totals.CE.oiList.push({
+        strikePrice: strike.strikePrice,
+        oi: strike.CE.openInterest,
+      });
+      totals.CE.oiChgList.push({
+        strikePrice: strike.strikePrice,
+        oiChg: strike.CE.changeinOpenInterest,
+      });
+    } else {
+      strike.CE = {};
+      strike.CE.actualValue =
+        strike.CE.premium =
+        strike.CE.premiumPercent =
+        strike.CE.changeinOpenInterest =
+        strike.CE.openInterest =
+        strike.CE.totalTradedVolume =
+          0;
+      //   // totals.chart.CEoiChg.push(0);
+      //   // totals.chart.CEoi.push(0);
+      //   // totals.chart.CEvolume.push(0);
+    }
 
-    // Data For Graph
-    totals.chart.PEoiChg.push(strike.PE.changeinOpenInterest);
-    totals.chart.CEoiChg.push(strike.CE.changeinOpenInterest);
-    totals.chart.PEoi.push(strike.PE.openInterest);
-    totals.chart.PEvolume.push(strike.PE.totalTradedVolume);
-    totals.chart.CEoi.push(strike.CE.openInterest);
-    totals.chart.series.push(strike.CE.strikePrice);
-    totals.chart.CEvolume.push(strike.CE.totalTradedVolume);
+    if (strike.PE) {
+      strike.PE.actualValue =
+        strike.PE.strikePrice - strike.PE.underlyingValue > 0
+          ? strike.PE.strikePrice - strike.PE.underlyingValue
+          : 0;
+      strike.PE.premium = strike.PE.lastPrice - strike.PE.actualValue;
+      strike.PE.premiumPercent =
+        (100 * strike.PE.premium) / strike.PE.lastPrice;
 
-    totals.CE.volumeList.push({
-      strikePrice: strike.strikePrice,
-      volume: strike.CE.totalTradedVolume,
-    });
-    totals.CE.oiList.push({
-      strikePrice: strike.strikePrice,
-      oi: strike.CE.openInterest,
-    });
-    totals.CE.oiChgList.push({
-      strikePrice: strike.strikePrice,
-      oiChg: strike.CE.changeinOpenInterest,
-    });
+      totals.PE.oi += strike.PE.openInterest;
+      totals.PE.oiChange += strike.PE.changeinOpenInterest;
+      totals.PE.volume += strike.PE.totalTradedVolume;
 
-    totals.PE.volumeList.push({
-      strikePrice: strike.strikePrice,
-      volume: strike.PE.totalTradedVolume,
-    });
-    totals.PE.oiList.push({
-      strikePrice: strike.strikePrice,
-      oi: strike.PE.openInterest,
-    });
-    totals.PE.oiChgList.push({
-      strikePrice: strike.strikePrice,
-      oiChg: strike.PE.changeinOpenInterest,
-    });
+      // Data For Graph
+      totals.chart.PEoiChg.push(strike.PE.changeinOpenInterest);
+      totals.chart.PEoi.push(strike.PE.openInterest);
+      totals.chart.PEvolume.push(strike.PE.totalTradedVolume);
+
+      totals.PE.volumeList.push({
+        strikePrice: strike.strikePrice,
+        volume: strike.PE.totalTradedVolume,
+      });
+      totals.PE.oiList.push({
+        strikePrice: strike.strikePrice,
+        oi: strike.PE.openInterest,
+      });
+      totals.PE.oiChgList.push({
+        strikePrice: strike.strikePrice,
+        oiChg: strike.PE.changeinOpenInterest,
+      });
+    } else {
+      strike.PE = {};
+      strike.PE.actualValue =
+        strike.PE.premium =
+        strike.PE.premiumPercent =
+        strike.PE.changeinOpenInterest =
+        strike.PE.openInterest =
+        strike.PE.totalTradedVolume =
+          0;
+      //   // totals.chart.PEoiChg.push(0);
+      //   // totals.chart.PEoi.push(0);
+      //   // totals.chart.PEvolume.push(0);
+    }
   });
 
   // Calculate top 1st and 2nd values

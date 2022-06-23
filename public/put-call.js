@@ -61,8 +61,13 @@ export default {
     },
   },
   mounted() {
-    setInterval(this.drawOptionsChart, 30000); // Call every 15 seconds, Updated function is not getting called
+    console.log("Chart mounted...");
+    this.intervalHandler = setInterval(this.drawOptionsChart, 30000); // Call every 15 seconds, Updated function is not getting called
     this.drawOptionsChart();
+  },
+  beforeUnmount() {
+    console.log("Unmounting chart....");
+    clearInterval(this.intervalHandler);
   },
   template: ` 
   <div class="chartLayout">

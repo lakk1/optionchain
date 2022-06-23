@@ -17,6 +17,9 @@ export const store = reactive({
     return this.data[sym] ? this.data[sym].totals : {};
   },
   getExpiry(sym = "NIFTY") {
+    if (sym == "both") {
+      sym = "NIFTY";
+    }
     return this.data[sym] ? this.data[sym].currentExpiry : "";
   },
   getChartData(sym = "NIFTY") {

@@ -6,13 +6,10 @@ import threading
 import time
 import datetime
 import traceback
+import scanner
 
 
-baseurl = "https://www.nseindia.com/"
-headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36',
-        'accept-language': 'en,gu;q=0.9,hi;q=0.8', 'accept-encoding': 'gzip, deflate, br'}
-        
-SLEEP_INTERVAL = 30 # seconds
+SLEEP_INTERVAL = 60 # seconds
 SOURCE_FILE = "symbols.json"
 # SOURCE_FILE = "sample.json"
 LOOP = 2
@@ -44,10 +41,15 @@ def thread_function(sym):
     
     # for i in range(LOOP): # Call LOOP times
     while True:
-        fetchData(sym)
-        if datetime.datetime.now().time() > datetime.time(15, 32, 59, 999999):
+        now = datetime.datetime.now().time()
+        
+        if now > datetime.time(9, 5, 0, 999999):
+            fetchData(sym)
+            time.sleep(SLEEP_INTERVAL)
+        elif now > datetime.time(15, 32, 59, 999999):
             break
-        time.sleep(SLEEP_INTERVAL)
+        else:
+            time.sleep(180)
 
     logging.info("Thread %s: finishing", sym)
 """
@@ -66,12 +68,9 @@ def fetchData(sym):
     url = "https://www.nseindia.com/api/option-chain-" + suffix + "?symbol=" + sym
     logging.info("URL: "+ url)
 
-    session = requests.Session()
-    request = session.get(baseurl, headers=headers, timeout=5)
-    cookies = dict(request.cookies)
-
     try:
-        response = session.get(url, headers=headers, timeout=5, cookies=cookies)
+        response = session.get(url, headers=headers, timeout=10, cookies=cookies)
+        print("Got response for:", url)
         # print(response.json())
 
         jsonResponse = response.json()
@@ -103,18 +102,32 @@ def fetchData(sym):
 END OF fechData
 """
 
+async def fetchLoop(symbol):
+    while True:
+        logging.info("Fetching data for %s", symbol)
+        fetchData(symbol)
+        time.sleep(SLEEP_INTERVAL)
+
 """
 FUNCTION: main STARTED
 """
-def main():
+async def main():
 
     logging.info("Main : Opening Symbols")
     f = open(SOURCE_FILE, "r")
     data = json.loads(f.read())
 
     for sym in data:
-        x = threading.Thread(target=thread_function, args=(sym['symbol'],))
-        x.start()
+        symbol = sym['symbol']
+        suffix = 'indices' if symbol == 'NIFTY' or symbol == 'BANKNIFTY' else 'equities'
+        url = f"https://www.nseindia.com/api/option-chain-" + suffix + "?symbol=" + symbol
+        scanner.scan(url)
+        # fetchLoop(sym['symbol'])
+
+        # x = threading.Thread(target=thread_function, args=(sym['symbol'],))
+        # time.sleep(1)
+        # x.start()
+        
         # break # REMOVE THIS LINE
 """
 END OF main

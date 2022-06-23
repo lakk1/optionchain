@@ -1,5 +1,17 @@
 export default [
   {
+    underlying: "BANK NIFTY",
+    symbol: "BANKNIFTY",
+    steps: 100,
+    lotsize: 25,
+  },
+  {
+    underlying: "NIFTY",
+    symbol: "NIFTY",
+    steps: 50,
+    lotsize: 50,
+  },
+  {
     underlying: "AARTI INDUSTRIES LTD",
     symbol: "AARTIIND",
     steps: 20,
@@ -92,13 +104,13 @@ export default [
   {
     underlying: "ASIAN PAINTS LIMITED",
     symbol: "ASIANPAINT",
-    steps: 20,
+    steps: 50,
     lotsize: 150,
   },
   {
     underlying: "ASTRAL LIMITED",
     symbol: "ASTRAL",
-    steps: 50,
+    steps: 20,
     lotsize: 275,
   },
   {
@@ -128,7 +140,7 @@ export default [
   {
     underlying: "BAJAJ AUTO LIMITED",
     symbol: "BAJAJ-AUTO",
-    steps: 20,
+    steps: 50,
     lotsize: 250,
   },
   {
@@ -152,7 +164,7 @@ export default [
   {
     underlying: "BALRAMPUR CHINI MILLS LTD",
     symbol: "BALRAMCHIN",
-    steps: 5,
+    steps: 10,
     lotsize: 1600,
   },
   {
@@ -164,14 +176,8 @@ export default [
   {
     underlying: "BANK OF BARODA",
     symbol: "BANKBARODA",
-    steps: 1,
+    steps: 2.5,
     lotsize: 11700,
-  },
-  {
-    underlying: "NIFTY BANK",
-    symbol: "BANKNIFTY",
-    steps: 100,
-    lotsize: 25,
   },
   {
     underlying: "BATA INDIA LTD",
@@ -320,7 +326,7 @@ export default [
   {
     underlying: "CUMMINS INDIA LTD",
     symbol: "CUMMINSIND",
-    steps: 10,
+    steps: 20,
     lotsize: 600,
   },
   {
@@ -332,13 +338,13 @@ export default [
   {
     underlying: "DALMIA BHARAT LIMITED",
     symbol: "DALBHARAT",
-    steps: 50,
+    steps: 20,
     lotsize: 250,
   },
   {
     underlying: "DEEPAK NITRITE LTD",
     symbol: "DEEPAKNTR",
-    steps: 20,
+    steps: 50,
     lotsize: 250,
   },
   {
@@ -394,12 +400,6 @@ export default [
     symbol: "FEDERALBNK",
     steps: 1,
     lotsize: 10000,
-  },
-  {
-    underlying: "NIFTY FINANCIAL SERVICES",
-    symbol: "FINNIFTY",
-    steps: 50,
-    lotsize: 40,
   },
   {
     underlying: "FIRSTSOURCE SOLU. LTD.",
@@ -608,7 +608,7 @@ export default [
   {
     underlying: "THE INDIA CEMENTS LIMITED",
     symbol: "INDIACEM",
-    steps: 2.5,
+    steps: 5,
     lotsize: 2900,
   },
   {
@@ -626,7 +626,7 @@ export default [
   {
     underlying: "INDUSIND BANK LIMITED",
     symbol: "INDUSINDBK",
-    steps: 10,
+    steps: 20,
     lotsize: 900,
   },
   {
@@ -692,7 +692,7 @@ export default [
   {
     underlying: "JUBILANT FOODWORKS LTD",
     symbol: "JUBLFOOD",
-    steps: 50,
+    steps: 10,
     lotsize: 125,
   },
   {
@@ -810,12 +810,6 @@ export default [
     lotsize: 600,
   },
   {
-    underlying: "NIFTY MID SELECT",
-    symbol: "MIDCPNIFTY",
-    steps: "",
-    lotsize: 75,
-  },
-  {
     underlying: "MINDTREE LIMITED",
     symbol: "MINDTREE",
     steps: 100,
@@ -866,7 +860,7 @@ export default [
   {
     underlying: "NAVIN FLUORINE INT. LTD",
     symbol: "NAVINFLUOR",
-    steps: 50,
+    steps: 100,
     lotsize: 225,
   },
   {
@@ -880,12 +874,6 @@ export default [
     symbol: "NESTLEIND",
     steps: 100,
     lotsize: 25,
-  },
-  {
-    underlying: "NIFTY 50",
-    symbol: "NIFTY",
-    steps: 50,
-    lotsize: 50,
   },
   {
     underlying: "NMDC LTD.",
@@ -1022,7 +1010,7 @@ export default [
   {
     underlying: "STEEL AUTHORITY OF INDIA",
     symbol: "SAIL",
-    steps: 2.5,
+    steps: 1,
     lotsize: 4750,
   },
   {
@@ -1040,7 +1028,7 @@ export default [
   {
     underlying: "STATE BANK OF INDIA",
     symbol: "SBIN",
-    steps: 5,
+    steps: 10,
     lotsize: 1500,
   },
   {
@@ -1058,7 +1046,7 @@ export default [
   {
     underlying: "SRF LTD",
     symbol: "SRF",
-    steps: 20,
+    steps: 50,
     lotsize: 375,
   },
   {
@@ -1094,7 +1082,7 @@ export default [
   {
     underlying: "TATA CHEMICALS LTD",
     symbol: "TATACHEM",
-    steps: 10,
+    steps: 20,
     lotsize: 1000,
   },
   {
@@ -1130,7 +1118,7 @@ export default [
   {
     underlying: "TATA CONSULTANCY SERV LT",
     symbol: "TCS",
-    steps: 20,
+    steps: 50,
     lotsize: 150,
   },
   {
@@ -1142,7 +1130,7 @@ export default [
   {
     underlying: "TITAN COMPANY LIMITED",
     symbol: "TITAN",
-    steps: 20,
+    steps: 50,
     lotsize: 375,
   },
   {
@@ -1208,7 +1196,7 @@ export default [
   {
     underlying: "WIPRO LTD",
     symbol: "WIPRO",
-    steps: 5,
+    steps: 10,
     lotsize: 800,
   },
   {

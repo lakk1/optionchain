@@ -1,4 +1,5 @@
 import { store } from "./store.js";
+import stockList from "./data.js";
 
 export default {
   props: ["symbol"],
@@ -30,8 +31,8 @@ export default {
   },
   computed: {
     lotSize() {
-      const LOTSIZE = { NIFTY: 50, BANKNIFTY: 25 };
-      return LOTSIZE[this.symbol];
+      let symbolDetails = stockList.filter((s) => s.symbol == this.symbol)[0];
+      return symbolDetails.lotsize;
     },
     oiMultiplier() {
       return this.multiply ? this.lotSize : 1;
