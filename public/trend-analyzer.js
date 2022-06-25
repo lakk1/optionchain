@@ -14,8 +14,8 @@ export default {
   },
   methods: {
     async fetchOptions(sym) {
-      let symbol = sym || this.symbol;
-
+      let symbol = sym || this.display;
+      console.log("Fetching data for ", this.display);
       this.store.updateLoading(true);
 
       const response = await axios.get(
@@ -24,6 +24,7 @@ export default {
 
       if (response.data.fetchTime) {
         this.store.updateResponse(response.data, symbol);
+        this.store.updateLoading();
       } else {
         console.log("Failed to get data for symbol", symbol);
         this.store.updateLoading();
@@ -34,6 +35,7 @@ export default {
         this.fetchOptions("NIFTY");
         this.fetchOptions("BANKNIFTY");
       } else {
+        console.log("Displaying: ", this.display);
         this.fetchOptions(this.display);
       }
     },

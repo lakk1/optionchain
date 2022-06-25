@@ -71,7 +71,7 @@ export default {
         </div -->
           <hr /> 
             <div class="oichart">
-              <apex-chart :symbol="symbol">Place for Apex Chart</apex-chart>
+              <apex-chart :symbol="symbol" :time="Date.now()">Place for Apex Chart</apex-chart>
             </div>
           <hr /> 
         <!-- div>

@@ -1,17 +1,21 @@
 import { store } from "./store.js";
 
 export default {
-  props: ["symbol"],
+  props: ["symbol", "time"],
   data() {
     return {
-      store,
       chart: undefined,
+      series: [],
     };
   },
   methods: {
     getSeries() {
-      let chartData = this.store.getApexChartData(this.symbol);
-      let { CEoi, PEoi, CEoiChg, PEoiChg } = chartData;
+      let chartData = store.getApexChartData(this.symbol);
+      // console.log("Chart DATA: for", this.symbol);
+      // console.log(chartData);
+
+      let { CEoi, PEoi, CEoiChg, PEoiChg, series } = chartData;
+      this.series = series;
 
       return [
         {
@@ -36,15 +40,24 @@ export default {
         },
       ];
     },
-    updateSeries() {
+    updateOptions() {
       console.log("Updating chart series for:", this.symbol);
-      this.chart.updateSeries(this.getSeries());
+      // this.chart.updateSeries(this.getSeries());
+      this.chart.updateOptions({
+        series: this.getSeries(),
+        xaxis: {
+          categories: this.series,
+        },
+      });
+    },
+    getUpdatedTimeFromStore() {
+      return store.getUpdatedTime();
     },
     drawOptionsChart() {
       let symbol = this.symbol;
-      console.log("Drawing Apex Chart for : ", symbol);
+      // console.log("Drawing Apex Chart for : ", symbol);
 
-      let chartData = this.store.getApexChartData(this.symbol);
+      let chartData = store.getApexChartData(this.symbol);
       // let ticks = this.store.getChartData(symbol).series;
       if (chartData) {
         let { CEoi, PEoi, CEoiChg, PEoiChg, series, PEvolume, CEvolume } =
@@ -111,7 +124,7 @@ export default {
             },
           },
           xaxis: {
-            categories: series,
+            categories: this.series,
           },
         };
 
@@ -125,20 +138,27 @@ export default {
       }
     },
   },
+  beforeUpdate() {
+    // console.log("Apex Chart beforeUpdate....");
+    this.updateOptions();
+  },
   mounted() {
-    console.log("Apex Chart mounted...");
-    this.intervalHandler = setInterval(this.updateSeries, 30000); // Call every 15 seconds, Updated function is not getting called
+    // console.log("Apex Chart mounted...");
+    this.intervalHandler = setInterval(this.updateOptions, 15000); // Call every 5 seconds, Updated function is not getting called
     this.drawOptionsChart();
-    this.updateSeries();
+    this.updateOptions();
   },
   beforeUnmount() {
-    console.log("Unmounting chart....");
+    // console.log("Unmounting chart....");
     clearInterval(this.intervalHandler);
   },
   template: ` 
   <table class="columns">
       <tr>
-        <td style="width:100%"><div :id="symbol+'_barchart_div'" style="width: 1000px; height: 300px;"></div></td>
+        <td style="width:100%">
+          <div :id="symbol+'_barchart_div'" style="width: 1000px; height: 300px;"></div>
+          <!-- span> Updated At: {{ getUpdatedTimeFromStore() }} and time: {{ time }} </span -->
+        </td>
       </tr>
     </table>
   `,

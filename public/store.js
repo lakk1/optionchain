@@ -2,9 +2,18 @@ import { reactive } from "vue";
 
 export const store = reactive({
   loading: true,
+  updatesAt: undefined,
   data: {},
   updateLoading(status = false) {
     this.loading = status;
+    this.updatesAt = new Date().toLocaleDateString("en-GB", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      second: "numeric",
+    });
   },
   updateResponse(data, symbol) {
     this.data[symbol] = data;
@@ -21,6 +30,9 @@ export const store = reactive({
       sym = "NIFTY";
     }
     return this.data[sym] ? this.data[sym].currentExpiry : "";
+  },
+  getUpdatedTime() {
+    return this.updatesAt;
   },
   getChartData(sym = "NIFTY") {
     return this.data[sym] ? this.data[sym].totals.chart : {};
