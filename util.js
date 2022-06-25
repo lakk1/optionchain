@@ -63,15 +63,27 @@ function calculateTotals(filteredStrikes) {
       oiList: [],
       oiChgList: [],
     },
+    apexChart: {
+      series: [],
+      PEoiChg: [],
+      CEoiChg: [],
+      PEoi: [],
+      CEoi: [],
+      PEvolume: [],
+      CEvolume: [],
+    },
     chart: {
+      series: [],
       PEoiChg: ["putOIChange"],
       CEoiChg: ["callOIChange"],
-      series: [],
       PEoi: ["putOI"],
       CEoi: ["callOI"],
       PEvolume: ["putVolume"],
       CEvolume: ["callVolume"],
     },
+    googleData: [
+      ["Strike", "putOI Change", "callOI Change", "Put OI", "Call OI"],
+    ],
   };
 
   filteredStrikes.forEach((strike) => {
@@ -82,6 +94,9 @@ function calculateTotals(filteredStrikes) {
     strike.CE
       ? totals.chart.series.push(strike.CE.strikePrice)
       : totals.chart.series.push(strike.PE.strikePrice);
+    strike.CE
+      ? totals.apexChart.series.push(strike.CE.strikePrice)
+      : totals.apexChart.series.push(strike.PE.strikePrice);
 
     if (strike.CE) {
       strike.CE.actualValue =
@@ -100,6 +115,9 @@ function calculateTotals(filteredStrikes) {
       totals.chart.CEoiChg.push(strike.CE.changeinOpenInterest);
       totals.chart.CEoi.push(strike.CE.openInterest);
       totals.chart.CEvolume.push(strike.CE.totalTradedVolume);
+      totals.apexChart.CEoiChg.push(strike.CE.changeinOpenInterest);
+      totals.apexChart.CEoi.push(strike.CE.openInterest);
+      totals.apexChart.CEvolume.push(strike.CE.totalTradedVolume);
 
       totals.CE.volumeList.push({
         strikePrice: strike.strikePrice,
@@ -122,9 +140,6 @@ function calculateTotals(filteredStrikes) {
         strike.CE.openInterest =
         strike.CE.totalTradedVolume =
           0;
-      //   // totals.chart.CEoiChg.push(0);
-      //   // totals.chart.CEoi.push(0);
-      //   // totals.chart.CEvolume.push(0);
     }
 
     if (strike.PE) {
@@ -144,6 +159,10 @@ function calculateTotals(filteredStrikes) {
       totals.chart.PEoiChg.push(strike.PE.changeinOpenInterest);
       totals.chart.PEoi.push(strike.PE.openInterest);
       totals.chart.PEvolume.push(strike.PE.totalTradedVolume);
+
+      totals.apexChart.PEoiChg.push(strike.PE.changeinOpenInterest);
+      totals.apexChart.PEoi.push(strike.PE.openInterest);
+      totals.apexChart.PEvolume.push(strike.PE.totalTradedVolume);
 
       totals.PE.volumeList.push({
         strikePrice: strike.strikePrice,
@@ -166,10 +185,16 @@ function calculateTotals(filteredStrikes) {
         strike.PE.openInterest =
         strike.PE.totalTradedVolume =
           0;
-      //   // totals.chart.PEoiChg.push(0);
-      //   // totals.chart.PEoi.push(0);
-      //   // totals.chart.PEvolume.push(0);
     }
+
+    let gc_data = [
+      strike.CE.strikePrice,
+      strike.PE.changeinOpenInterest,
+      strike.CE.changeinOpenInterest,
+      strike.PE.openInterest,
+      strike.CE.openInterest,
+    ];
+    totals.googleData.push(gc_data);
   });
 
   // Calculate top 1st and 2nd values

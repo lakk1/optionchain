@@ -73,7 +73,7 @@ table.report tr {
   border: 1px solid rgba(206, 205, 205, 0.5);
   white-space: nowrap;
 }
-.container,
+.container,.oichart,
 .chainTabContainer {
   display: flex;
   justify-content: center;

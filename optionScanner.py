@@ -63,12 +63,14 @@ def fetchData(symbol):
     # url = "https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY"
     # url = "https://www.nseindia.com/api/option-chain-equities?symbol=SBIN"
 
+    logging.info("INFO: Requested data for: %s", symbol)
+
     try:
         cmd = "py ./scanner.py "+  symbol
         filename = subprocess.getoutput(cmd)
         
         if(len(filename) > 0 and 'Traceback' not in filename):
-            logging.info("Got response for: %s  FILE: %s", symbol, filename)
+            logging.info("INFO: Got response for: %s  FILE: %s", symbol, filename)
 
             f = open(filename, "r")
             jsonResponse = json.loads(f.read())
@@ -81,7 +83,7 @@ def fetchData(symbol):
                 dir = createDirectory(symbol, responseDate)
                 filename = os.path.join(dir, symbol + '_' + responseTime +".json")
                 if os.path.exists(filename):
-                    logging.info("File "+ filename +" already exists")
+                    logging.info("INFO: --------- File "+ filename +" already exists")
                 else:
                     with open(filename, 'w') as f:
                         f.write(json.dumps(jsonResponse))
@@ -91,12 +93,17 @@ def fetchData(symbol):
                     with open(filename, 'w') as f:
                         f.write(json.dumps(jsonResponse, indent=1))
             else:
-                logging.error("ERROR: Fetching data for " + symbol)
+                logging.error("ERROR: --------- Records not found " + symbol)
+                logging.error(filename)
         else:
-            print("Failed to fetch data for:", symbol)
+            if ('TimeoutError' in filename):
+                logging.error("ERROR: --------- TIMEOUT - Failed to fetch data for:"+ symbol)
+            else:
+                logging.error("ERROR: --------- Failed to fetch data for:"+ symbol)
+                logging.error(filename)
     except Exception:
+        logging.warning("EXCEPTION: --------- Failed to fetch data for:" + symbol)
         traceback.print_exc()
-        logging.warning("Failed to fetch data for:" + symbol)
 """
 END OF fechData
 """
@@ -111,26 +118,17 @@ async def fetchLoop(symbol):
 FUNCTION: main STARTED
 """
 def main():
-
-    logging.info("Main : Opening Symbols")
+    logging.info("Main : Reading Symbols")
     f = open(SOURCE_FILE, "r")
     data = json.loads(f.read())
 
     for sym in data:
         symbol = sym['symbol']
-        fetchData(symbol)
-        # cmd = "py ./scanner.py "+  symbol
-        # result = subprocess.getoutput(cmd)
-
-        # print ("GOT result for ", symbol)
-        # print ("GOT result:", result)
-        # fetchLoop(sym['symbol'])
-
-        x = threading.Thread(target=thread_function, args=(symbol,))
-        time.sleep(2)
-        x.start()
-        
-        # break # REMOVE THIS LINE
+        if 'scan' in sym and sym['scan'] == 'yes':
+            fetchData(symbol)
+            x = threading.Thread(target=thread_function, args=(symbol,))
+            time.sleep(2)
+            x.start()
 """
 END OF main
 """

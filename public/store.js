@@ -25,6 +25,12 @@ export const store = reactive({
   getChartData(sym = "NIFTY") {
     return this.data[sym] ? this.data[sym].totals.chart : {};
   },
+  getApexChartData(sym = "NIFTY") {
+    return this.data[sym] ? this.data[sym].totals.apexChart : {};
+  },
+  getGoogleChartData(sym = "NIFTY") {
+    return this.data[sym] ? this.data[sym].totals.googleData : [];
+  },
   getTotalOiDiff(sym = "NIFTY") {
     return this.data[sym] ? this.data[sym].totalOiDiff : {};
   },
