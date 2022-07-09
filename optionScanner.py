@@ -79,19 +79,20 @@ def fetchData(symbol):
                 timestamp = jsonResponse["records"]["timestamp"]
                 responseDate = timestamp.split(' ')[0]
                 responseTime = timestamp.split(' ')[1].replace(':', '_')
+                filteredData = jsonResponse["filtered"]
 
                 dir = createDirectory(symbol, responseDate)
-                filename = os.path.join(dir, symbol + '_' + responseTime +".json")
+                filename = os.path.join(dir, symbol + '_' + responseDate + '_' + responseTime +".json")
                 if os.path.exists(filename):
                     logging.info("INFO: --------- File "+ filename +" already exists")
                 else:
                     with open(filename, 'w') as f:
-                        f.write(json.dumps(jsonResponse))
+                        f.write(json.dumps(filteredData)) # write only current expired data
 
                     dir = os.path.join("DATA", symbol)
                     filename = os.path.join(dir, symbol + ".json")
                     with open(filename, 'w') as f:
-                        f.write(json.dumps(jsonResponse, indent=1))
+                        f.write(json.dumps(jsonResponse, indent=1)) 
             else:
                 logging.error("ERROR: --------- Records not found " + symbol)
                 logging.error(filename)
@@ -107,12 +108,6 @@ def fetchData(symbol):
 """
 END OF fechData
 """
-
-async def fetchLoop(symbol):
-    while True:
-        logging.info("Fetching data for %s", symbol)
-        fetchData(symbol)
-        time.sleep(SLEEP_INTERVAL)
 
 """
 FUNCTION: main STARTED
