@@ -7,7 +7,7 @@ import time
 import datetime
 import traceback
 import subprocess
-from marketData import insertOptionChain as storeOptionChain
+from marketData import insertOptionChain as storeOptionChain, calculateGreeks
 
 DB_ENABLED = True
 SLEEP_INTERVAL = 60 # seconds
@@ -78,9 +78,10 @@ def fetchData(symbol):
             jsonResponse = json.loads(f.read())
 
             if jsonResponse and jsonResponse["records"]:
-                timestamp = jsonResponse["records"]["timestamp"]
-                responseDate = timestamp.split(' ')[0]
-                responseTime = timestamp.split(' ')[1].replace(':', '_')
+                timeStampStr = jsonResponse["records"]["timestamp"]
+                responseDate = timeStampStr.split(' ')[0]
+                responseTime = timeStampStr.split(' ')[1].replace(':', '_')
+                timeStamp = datetime.datetime.strptime(timeStampStr, '%d-%b-%Y %H:%M:%S')
                 filteredData = jsonResponse["filtered"]
 
                 dir = createDirectory(symbol, responseDate)
@@ -91,10 +92,11 @@ def fetchData(symbol):
                     with open(filename, 'w') as f:
                         f.write(json.dumps(filteredData)) # write only current expired data
                         if DB_ENABLED:
-                            storeOptionChain(filteredData, timestamp)
+                            storeOptionChain(filteredData, timeStampStr)
 
                     dir = os.path.join("DATA", symbol)
                     filename = os.path.join(dir, symbol + ".json")
+                    jsonResponse["filtered"] = appendGreeks(filteredData, timeStamp)
                     with open(filename, 'w') as f:
                         f.write(json.dumps(jsonResponse, indent=1)) 
             else:
@@ -112,6 +114,19 @@ def fetchData(symbol):
 """
 END OF fechData
 """
+
+"""
+FUNCTION: appendGreeks STARTED
+"""
+def appendGreeks(data, timeStamp):
+    for record in data['data']:
+        record['CE']['greeks'] = calculateGreeks(record['CE']['underlyingValue'], record['CE']['strikePrice'], record['CE']['expiryDate'], 'CE', record['CE']['impliedVolatility'], timeStamp)
+        record['PE']['greeks'] = calculateGreeks(record['PE']['underlyingValue'], record['PE']['strikePrice'], record['PE']['expiryDate'], 'PE', record['PE']['impliedVolatility'], timeStamp)
+    return data
+"""
+END OF appendGreeks
+"""
+
 
 """
 FUNCTION: main STARTED
