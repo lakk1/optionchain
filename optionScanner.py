@@ -7,8 +7,10 @@ import time
 import datetime
 import traceback
 import subprocess
+from marketData import insertOptionChain as storeOptionChain
 
-SLEEP_INTERVAL = 90 # seconds
+DB_ENABLED = True
+SLEEP_INTERVAL = 60 # seconds
 SOURCE_FILE = "symbols.json"
 # SOURCE_FILE = "sample.json"
 LOOP = 1
@@ -88,6 +90,8 @@ def fetchData(symbol):
                 else:
                     with open(filename, 'w') as f:
                         f.write(json.dumps(filteredData)) # write only current expired data
+                        if DB_ENABLED:
+                            storeOptionChain(filteredData, timestamp)
 
                     dir = os.path.join("DATA", symbol)
                     filename = os.path.join(dir, symbol + ".json")

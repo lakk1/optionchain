@@ -1,0 +1,12 @@
+// Select the database to use.
+use("marketData");
+
+// The drop() command destroys all data from a collection.
+// Make sure you run it against the correct database and collection.
+db.optionChainData.drop();
+db.totalOI.drop();
+
+db.optionChainData.ensureIndex({symbol: 1, timeStamp: 1, strikePrice: 1}, {unique: true})
+db.optionChainData.ensureIndex({symbol: 1, date: 1})
+db.totalOI.ensureIndex({symbol: 1, timeStamp: 1 }, {unique: true})
+db.totalOI.ensureIndex({symbol: 1, date: 1})

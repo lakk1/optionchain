@@ -10,3 +10,5 @@ temp/
 npm-debug.log
 .DS_Store
 /*.env
+__pycache__/marketData.cpython-39.pyc
+.vscode/extensions.json
