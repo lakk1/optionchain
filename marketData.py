@@ -11,8 +11,10 @@ if DEBUG:
     data = json.load(f)
 
 try:
+    print("Connecting to Mongo DB")
     conn = pymongo.MongoClient('mongodb://localhost:27017/', serverSelectionTimeoutMS=10000)
     conn.server_info()
+    print("Connected to Mongo DB")
 except pymongo.errors.ConnectionFailure as err:
     print('Could not connect to MongoDB')
     conn = None
@@ -36,7 +38,8 @@ def insertOptionChain(data, timeStampStr):
     optionsData = data['data']
     timeStamp = datetime.datetime.strptime(timeStampStr, '%d-%b-%Y %H:%M:%S')
     symbol = optionsData[0]['CE']['underlying'] if optionsData[0]['CE'] != None else optionsData[0]['PE']['underlying']
-    
+    print("Inserting ", symbol, " Data")
+
     oiData = {
         'sequence': timeStamp.timestamp(),
         'timeStamp': timeStampStr,
@@ -50,7 +53,7 @@ def insertOptionChain(data, timeStampStr):
     except Exception:
         print('Could not insert into DB due to a DB error')
         # traceback.print_exc()
-    
+
     for record in optionsData:
         callData = prepareOCData('CE', record['CE'], timeStamp)
         putData = prepareOCData('PE', record['PE'], timeStamp)
@@ -67,7 +70,7 @@ def insertOptionChain(data, timeStampStr):
         try:
             optionChainData.insert_one(ocData)
         except Exception:
-            print('Could not insert into DB due to a DB error')
+            print('ERROR : DB Insertion failed, Possibly duplicate records...')
             # traceback.print_exc()
 
 
@@ -100,7 +103,7 @@ def calculateGreeks(spot, strike, expiryDate, ceOrPe, IV, timeStamp):
     elif ceOrPe == 'PE':
         delta = greeks.putDelta
         theta = greeks.putTheta
-    
+
     return {'delta': delta, 'theta': theta, 'gamma': gamma, 'vega': vega}
 
 

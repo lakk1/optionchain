@@ -13,6 +13,13 @@ Email: chandregowda@gmail.com
 ### Prerequisite
 
 Install NODE JS and NPM from (version 16 and above): https://nodejs.org/en/download/
+Install Mongo DB Community Edition
+Install Python 3.9 or higher
+Install python modules:
+pip install pandas
+pip install pymongo
+pip install scipy
+pip install mibian
 
 ### Setup:
 

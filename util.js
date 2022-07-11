@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const stockList = require("./symbols.json");
 
-const config = { collectStats: true };
+const config = { collectStats: false };
 
 (function createOIstatsFolder() {
   let dirName = path.join(__dirname, "OISTATS");
