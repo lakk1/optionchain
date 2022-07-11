@@ -97,12 +97,15 @@ def calculateGreeks(spot, strike, expiryDate, ceOrPe, IV, timeStamp):
     gamma = greeks.gamma
     vega = greeks.vega
 
+    if IV == 0:
+        return {'delta': 0, 'theta': 0, 'gamma': gamma, 'vega': vega}
+
     if ceOrPe == 'CE':
-        delta = greeks.callDelta
-        theta = greeks.callTheta
+        delta = greeks.callDelta or 0
+        theta = greeks.callTheta or 0
     elif ceOrPe == 'PE':
-        delta = greeks.putDelta
-        theta = greeks.putTheta
+        delta = greeks.putDelta or 0
+        theta = greeks.putTheta or 0
 
     return {'delta': delta, 'theta': theta, 'gamma': gamma, 'vega': vega}
 

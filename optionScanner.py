@@ -19,15 +19,15 @@ LOOP = 1
 FUNCTION: createDirectory STARTED
 """
 def createDirectory(sym, day=''):
-    logging.debug("Checking Dir: %s", sym) 
+    logging.debug("Checking Dir: %s", sym)
 
     dir = os.path.join("DATA", sym, day)
     try:
         if not os.path.exists(dir):
-            logging.debug("Creating new folder: %s", sym) 
+            logging.debug("Creating new folder: %s", sym)
             os.makedirs(dir)
     except:
-        logging.critical("ERROR: Failed to create directory: %s", dir)        
+        logging.critical("ERROR: Failed to create directory: %s", dir)
     return dir
 """
 END OF createDirectory
@@ -39,11 +39,11 @@ FUNCTION: thread_function STARTED
 """
 def thread_function(symbol):
     logging.info("Thread %s: starting", symbol)
-    
+
     # for i in range(LOOP): # Call LOOP times
     while True:
         now = datetime.datetime.now().time()
-        
+
         if now > datetime.time(15, 32, 59, 999999):
             break
         elif now > datetime.time(9, 5, 0, 999999):
@@ -70,7 +70,7 @@ def fetchData(symbol):
     try:
         cmd = "py ./scanner.py "+  symbol
         filename = subprocess.getoutput(cmd)
-        
+
         if(len(filename) > 0 and 'Traceback' not in filename):
             logging.info("INFO: Got response for: %s  FILE: %s", symbol, filename)
 
@@ -98,7 +98,7 @@ def fetchData(symbol):
                     filename = os.path.join(dir, symbol + ".json")
                     jsonResponse["filtered"] = appendGreeks(filteredData, timeStamp)
                     with open(filename, 'w') as f:
-                        f.write(json.dumps(jsonResponse, indent=1)) 
+                        f.write(json.dumps(jsonResponse, indent=1))
             else:
                 logging.error("ERROR: --------- Records not found " + symbol)
                 logging.error(filename)

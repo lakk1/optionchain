@@ -41,16 +41,16 @@ export default {
   template: `
       <template v-if="isDataAvailable()">
         <div class="reportHeader">
-          <span class="symbol">{{ symbol }} </span> :  <span class="spotprice">{{spotPrice()}} </span> 
+          <span class="symbol">{{ symbol }} </span> :  <span class="spotprice">{{spotPrice()}} </span>
           <span class="pcr">
             PCR (oi): {{ store.getOiPCR(symbol) }}
             &nbsp;
-            PCR (volume): {{ store.getVolumePCR(symbol) }} 
+            PCR (volume): {{ store.getVolumePCR(symbol) }}
             &nbsp;
-            Put OI - Call OI : <span :class="{ red: store.getTotalOiDiff(symbol) < 0 }">{{ Number(store.getTotalOiDiff(symbol) * oiMultiplier).toLocaleString() }}</span> 
+            Put OI - Call OI : <span :class="{ red: store.getTotalOiDiff(symbol) < 0 }">{{ Number(store.getTotalOiDiff(symbol) * oiMultiplier).toLocaleString() }}</span>
           <span/>
         </span>
-          <hr /> 
+          <hr />
           <div class="headerActions">
             <div class="timestamp">
               NSE data valid as on: {{fetchTime()}}
@@ -63,23 +63,23 @@ export default {
           </div>
         </div>
         <!-- div>
-        <hr /> 
+        <hr />
           <div>
             <put-call-trend :symbol="symbol">Place for Put Call Trend</put-call-trend>
           </div>
-        <hr /> 
+        <hr />
         </div -->
-          <hr /> 
+          <hr />
             <div class="oichart">
               <apex-chart :symbol="symbol" :time="Date.now()">Place for Apex Chart</apex-chart>
             </div>
-          <hr /> 
+          <hr />
         <!-- div>
-          <hr /> 
+          <hr />
             <div>
               <oigraph :symbol="symbol">Place for Google Chart</oigraph>
             </div>
-          <hr /> 
+          <hr />
         </div -->
         <div class="stats">
           Total PUT OI: {{ Number(store.getOiTotal(symbol, 'PE')).toLocaleString() }}
@@ -94,11 +94,12 @@ export default {
         <div class="chainTabContainer">
           <table id="optionAnalyzer" class="report">
             <tr>
-              <th colspan="8" class="call">CALL</th>
+              <th colspan="9" class="call">CALL</th>
               <th><span>BOTTOM</span></th>
-              <th colspan="8" class="put">PUT</th>
+              <th colspan="9" class="put">PUT</th>
             </tr>
             <tr class="tabHeader">
+              <th>Delta</th>
               <th>IV</th>
               <th>OI Chg</th>
               <th>OI</th>
@@ -118,9 +119,11 @@ export default {
               <th>OI</th>
               <th>OI Chg</th>
               <th>IV</th>
+              <th>Delta</th>
             </tr>
 
             <tr v-for="strikes in store.getStrikesDetails(symbol)" :class="{atm: strikes.strikePrice == getATM(symbol)}">
+              <td :class="{itm: strikes.strikePrice < getATM(symbol)}">{{ parseFloat(strikes.CE.greeks.delta).toFixed(2)  }}</td>
               <td :class="{itm: strikes.strikePrice < getATM(symbol)}">{{ parseFloat(strikes.CE.impliedVolatility).toFixed(2)  }}</td>
               <td :class="{ red: strikes.CE.changeinOpenInterest < 0, itm: strikes.strikePrice < getATM(symbol), highOIchgCall: store.getTotals(symbol).CE.highOIchgStrike == strikes.strikePrice }">{{ Number(strikes.CE.changeinOpenInterest * oiMultiplier).toLocaleString() }}</td>
               <td :class="{itm: strikes.strikePrice < getATM(symbol), highOICall: store.getTotals(symbol).CE.highOIStrike == strikes.strikePrice, secondHigh: store.getTotals(symbol).CE.secondHighOIStrike == strikes.strikePrice, thirdHigh: store.getTotals(symbol).CE.thirdHighOIStrike == strikes.strikePrice}">{{ Number(strikes.CE.openInterest * oiMultiplier).toLocaleString() }}</td>
@@ -129,9 +132,9 @@ export default {
               <td :class="{itm: strikes.strikePrice < getATM(symbol)}">{{ parseFloat(strikes.CE.premium).toFixed(2) }} <span class="premium">{{parseFloat(strikes.CE.premiumPercent).toFixed(2)}}</span></td>
               <td :class="{itm: strikes.strikePrice < getATM(symbol)}">{{ parseFloat(strikes.CE.actualValue).toFixed(2) }}</td>
               <td :class="{itm: strikes.strikePrice < getATM(symbol), discount: strikes.CE.premium < 0}">{{ parseFloat(strikes.CE.lastPrice).toFixed(2) }}</td>
-              
+
               <td class="strikePrice">{{ strikes.strikePrice }}</td>
-              
+
               <td :class="{itm: strikes.strikePrice > getATM(symbol), discount: strikes.PE.premium < 0 }">{{ parseFloat(strikes.PE.lastPrice).toFixed(2) }}</td>
               <td :class="{itm: strikes.strikePrice > getATM(symbol)}">{{ parseFloat(strikes.PE.actualValue).toFixed(2) }}</td>
               <td :class="{itm: strikes.strikePrice > getATM(symbol)}">{{ parseFloat(strikes.PE.premium).toFixed(2) }} <span class="premium"> {{parseFloat(strikes.PE.premiumPercent).toFixed(2)}}</span></td>
@@ -140,10 +143,11 @@ export default {
               <td :class="{itm: strikes.strikePrice > getATM(symbol), highOIPut: store.getTotals(symbol).PE.highOIStrike == strikes.strikePrice, secondHigh: store.getTotals(symbol).PE.secondHighOIStrike == strikes.strikePrice, thirdHigh: store.getTotals(symbol).PE.thirdHighOIStrike == strikes.strikePrice}">{{ Number(strikes.PE.openInterest * oiMultiplier).toLocaleString() }}</td>
               <td :class="{ red: strikes.PE.changeinOpenInterest < 0, itm: strikes.strikePrice > getATM(symbol), highOIchgPut: store.getTotals(symbol).PE.highOIchgStrike == strikes.strikePrice }">{{ Number(strikes.PE.changeinOpenInterest * oiMultiplier).toLocaleString() }}</td>
               <td :class="{itm: strikes.strikePrice > getATM(symbol)}">{{ parseFloat(strikes.PE.impliedVolatility).toFixed(2)  }}</td>
+              <td :class="{itm: strikes.strikePrice > getATM(symbol)}">{{ parseFloat(strikes.PE.greeks.delta).toFixed(2)  }}</td>
             </tr>
             <tr class="totals">
-              <td>&nbsp;</td>
-              <td>&Sigma; OI Chg <hr /> 
+              <td colspan=2>&nbsp;</td>
+              <td>&Sigma; OI Chg <hr />
                 <span :class="{ red: store.getTotals(symbol).CE.oiChange < 0 }">{{ Number(store.getTotals(symbol).CE.oiChange * oiMultiplier).toLocaleString() }}</span>
               </td>
               <td>&Sigma; CE OI <hr /> {{ Number(store.getTotals(symbol).CE.oi * oiMultiplier).toLocaleString() }}</td>
@@ -156,10 +160,10 @@ export default {
               <td colspan=4>&nbsp;</td>
               <td>&Sigma; Volume <hr /> {{ Number(store.getTotals(symbol).PE.volume * oiMultiplier).toLocaleString() }} </td>
               <td>&Sigma; PE OI <hr /> {{ Number(store.getTotals(symbol).PE.oi * oiMultiplier).toLocaleString() }} </td>
-              <td>&Sigma; OI Chg <hr /> 
-                <span :class="{ red: store.getTotals(symbol).PE.oiChange < 0 }">{{ Number(store.getTotals(symbol).PE.oiChange * oiMultiplier).toLocaleString() }}</span> 
+              <td>&Sigma; OI Chg <hr />
+                <span :class="{ red: store.getTotals(symbol).PE.oiChange < 0 }">{{ Number(store.getTotals(symbol).PE.oiChange * oiMultiplier).toLocaleString() }}</span>
               </td>
-              <td>&nbsp;</td>
+              <td colspan=2>&nbsp;</td>
             </tr>
           </table>
         </div>
