@@ -78,6 +78,8 @@ def fetchData(symbol):
             jsonResponse = json.loads(f.read())
 
             if jsonResponse and jsonResponse["records"]:
+                nextExpiry = jsonResponse["records"]["expiryDates"][1]
+                futureExpiry = jsonResponse["records"]["expiryDates"][2]
                 timeStampStr = jsonResponse["records"]["timestamp"]
                 responseDate = timeStampStr.split(' ')[0]
                 responseTime = timeStampStr.split(' ')[1].replace(':', '_')
@@ -97,6 +99,8 @@ def fetchData(symbol):
                     dir = os.path.join("DATA", symbol)
                     filename = os.path.join(dir, symbol + ".json")
                     jsonResponse["filtered"] = appendGreeks(filteredData, timeStamp)
+                    jsonResponse["records"] = appendGreeks(jsonResponse["records"], timeStamp, nextExpiry)
+                    jsonResponse["records"] = appendGreeks(jsonResponse["records"], timeStamp, futureExpiry)
                     with open(filename, 'w') as f:
                         f.write(json.dumps(jsonResponse, indent=1))
             else:
@@ -118,10 +122,14 @@ END OF fechData
 """
 FUNCTION: appendGreeks STARTED
 """
-def appendGreeks(data, timeStamp):
+def appendGreeks(data, timeStamp, nextExpiry=None):
     for record in data['data']:
-        record['CE']['greeks'] = calculateGreeks(record['CE']['underlyingValue'], record['CE']['strikePrice'], record['CE']['expiryDate'], 'CE', record['CE']['impliedVolatility'], timeStamp)
-        record['PE']['greeks'] = calculateGreeks(record['PE']['underlyingValue'], record['PE']['strikePrice'], record['PE']['expiryDate'], 'PE', record['PE']['impliedVolatility'], timeStamp)
+        shouldCalculate = False if nextExpiry and record['expiryDate'] != nextExpiry else True
+        if shouldCalculate:
+            if record['CE']:
+                record['CE']['greeks'] = calculateGreeks(record['CE']['underlyingValue'], record['CE']['strikePrice'], record['CE']['expiryDate'], 'CE', record['CE']['impliedVolatility'], timeStamp)
+            if record['PE']:
+                record['PE']['greeks'] = calculateGreeks(record['PE']['underlyingValue'], record['PE']['strikePrice'], record['PE']['expiryDate'], 'PE', record['PE']['impliedVolatility'], timeStamp)
     return data
 """
 END OF appendGreeks
