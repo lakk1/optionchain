@@ -19,7 +19,7 @@ export default {
       this.store.updateLoading(true);
 
       const response = await axios.get(
-        "/nse/" + symbol + "/" + this.range + "/" + this.expiry
+        "/nse/optionChain/" + symbol + "/" + this.range + "/" + this.expiry
       );
 
       if (response.data.fetchTime) {

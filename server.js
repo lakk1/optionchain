@@ -6,61 +6,70 @@
  * To run in STUB mode for API response : > npm run stub
  */
 
-const express = require("express");
-const fs = require("fs");
-const path = require("path");
+"use strict";
 
-const app = express();
-const port = process.env.PORT || 3000;
+const cluster = require("cluster");
 
-const { getDataForCurrentExpiry } = require("./util");
-app.use(express.static("public"));
+if (cluster.isMaster) {
+  let workerCount = require("os").cpus().length;
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
-
-async function fetchNSEdata(symbol = "NIFTY", range = 10, expiry = 0) {
-  let suffix =
-    symbol == "NIFTY" || symbol == "BANKNIFTY" ? "indices" : "equities";
-  let url = `https://www.nseindia.com/api/option-chain-${suffix}?symbol=${symbol}`;
-
-  // let url = "https://www.nseindia.com/api/option-chain-equities?symbol=AARTIIND";
-
-  console.log("URL: ", url);
-
-  let data = undefined;
-  // data = require(`./DATA/${symbol}/${symbol}.json`);
-  let filename = path.resolve(`./DATA/${symbol}/${symbol}.json`);
-  console.log("Reading file", filename);
-  data = await fs.promises.readFile(filename, "utf8");
-  if (data) {
-    console.log("GOT DATA From:", filename);
-    data = JSON.parse(data);
-    // console.log("Calling getDataForCurrentExpiry:", symbol, range, expiry);
-
-    filteredData = getDataForCurrentExpiry(data, symbol, range, expiry);
-    // console.log("Returning filtered data", filteredData);
-    return filteredData;
+  for (let i = 0; i < 1; i++) {
+    cluster.fork();
   }
-  console.log("Failed to read file....", filename);
-  return data;
+
+  cluster.on("online", (worker) => {
+    console.log("Worker: " + worker.process.pid + " is online");
+  });
+
+  cluster.on("exit", (worker, code, signal) => {
+    console.log(
+      `Worker ${worker.process.pid} died with code ${code} and signal ${signal}`
+    );
+
+    // cluster.fork();
+  });
+
+  process.on("uncaughtException", (err) => {
+    console.log(err.stack);
+    console.log("Node NOT exiting");
+  });
+} else {
+  require("./database"); // Establish connection with DB
+  // Actual program
+  const bodyParser = require("body-parser");
+  const parseurl = require("parseurl");
+  const express = require("express");
+  const fs = require("fs");
+  const path = require("path");
+
+  const port = process.env.PORT || 3000;
+  const app = express();
+  let router = express.Router();
+
+  app.use(router);
+
+  router.use(bodyParser.json());
+  router.use(
+    bodyParser.urlencoded({
+      extended: false,
+    })
+  );
+
+  require("./routes/routes")(router);
+
+  app.use(express.static("public"));
+
+  app.use(function (req, res, next) {
+    let url = parseurl(req);
+    console.log("Requesting Data for", url.path);
+    next();
+  });
+
+  app.listen(port, (e) => {
+    if (e) {
+      return console.log("Failed to start server", e);
+    }
+
+    console.log(`CAR is listening on port ${port}`);
+  });
 }
-
-app.get("/nse/:symbol/:range/:expiry", async (req, res) => {
-  let symbol = req.params.symbol || "NIFTY";
-  let range = req.params.range || 25;
-  let expiry = Number(req.params.expiry) || 0;
-
-  try {
-    let data = await fetchNSEdata(symbol, range, expiry);
-    console.log("");
-    res.send(data);
-  } catch (e) {
-    res.status(401).send(e);
-  }
-});
-
-app.listen(port, () => {
-  console.log(`CAR is listening on port ${port}`);
-});
