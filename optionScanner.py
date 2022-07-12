@@ -79,6 +79,7 @@ def fetchData(symbol):
 
             if jsonResponse and jsonResponse["records"]:
                 nextExpiry = jsonResponse["records"]["expiryDates"][1]
+                futureExpiry = jsonResponse["records"]["expiryDates"][2]
                 timeStampStr = jsonResponse["records"]["timestamp"]
                 responseDate = timeStampStr.split(' ')[0]
                 responseTime = timeStampStr.split(' ')[1].replace(':', '_')
@@ -99,6 +100,7 @@ def fetchData(symbol):
                     filename = os.path.join(dir, symbol + ".json")
                     jsonResponse["filtered"] = appendGreeks(filteredData, timeStamp)
                     jsonResponse["records"] = appendGreeks(jsonResponse["records"], timeStamp, nextExpiry)
+                    jsonResponse["records"] = appendGreeks(jsonResponse["records"], timeStamp, futureExpiry)
                     with open(filename, 'w') as f:
                         f.write(json.dumps(jsonResponse, indent=1))
             else:
