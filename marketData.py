@@ -16,7 +16,7 @@ try:
     conn.server_info()
     print("Connected to Mongo DB")
 except pymongo.errors.ConnectionFailure as err:
-    print('Could not connect to MongoDB')
+    print('ERROR: Could not connect to MongoDB')
     conn = None
 
 if conn != None:
@@ -32,7 +32,7 @@ if conn != None:
 
 def insertOptionChain(data, timeStampStr):
     if conn == None:
-        print('DB Connection unavailable, check your Mongo Server')
+        print('ERROR: DB Connection unavailable, check your Mongo Server')
         return
 
     optionsData = data['data']
@@ -51,7 +51,7 @@ def insertOptionChain(data, timeStampStr):
     try:
         totalOI.insert_one(oiData)
     except Exception:
-        print('Could not insert into DB due to a DB error')
+        print('ERROR: DB Insertion failed, Possibly duplicate records...')
         # traceback.print_exc()
 
     for record in optionsData:
@@ -70,7 +70,7 @@ def insertOptionChain(data, timeStampStr):
         try:
             optionChainData.insert_one(ocData)
         except Exception:
-            print('ERROR : DB Insertion failed, Possibly duplicate records...')
+            print('ERROR: DB Insertion failed, Possibly duplicate records...')
             # traceback.print_exc()
 
 
@@ -87,6 +87,9 @@ def prepareOCData(ceOrPe, data, timeStamp):
 
 
 def calculateGreeks(spot, strike, expiryDate, ceOrPe, IV, timeStamp):
+    if IV == 0:
+        return {'delta': 0, 'theta': 0, 'gamma': 0, 'vega': 0}
+        
     rateOfInterest = 0.1
     expiryDate = datetime.datetime.strptime(expiryDate, '%d-%b-%Y')
     expiryDate = expiryDate.replace(hour=15, minute=30, second=0, microsecond=0)
@@ -97,15 +100,12 @@ def calculateGreeks(spot, strike, expiryDate, ceOrPe, IV, timeStamp):
     gamma = greeks.gamma
     vega = greeks.vega
 
-    if IV == 0:
-        return {'delta': 0, 'theta': 0, 'gamma': gamma, 'vega': vega}
-
     if ceOrPe == 'CE':
-        delta = greeks.callDelta or 0
-        theta = greeks.callTheta or 0
+        delta = greeks.callDelta
+        theta = greeks.callTheta
     elif ceOrPe == 'PE':
-        delta = greeks.putDelta or 0
-        theta = greeks.putTheta or 0
+        delta = greeks.putDelta
+        theta = greeks.putTheta 
 
     return {'delta': delta, 'theta': theta, 'gamma': gamma, 'vega': vega}
 
