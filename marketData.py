@@ -36,6 +36,8 @@ def insertOptionChain(data, timeStampStr):
         return
 
     optionsData = data['data']
+    totalCE = data['CE']
+    totalPE = data['PE']
     timeStamp = datetime.datetime.strptime(timeStampStr, '%d-%b-%Y %H:%M:%S')
     symbol = optionsData[0]['CE']['underlying'] if optionsData[0]['CE'] != None else optionsData[0]['PE']['underlying']
     print("Inserting ", symbol, " Data")
@@ -45,8 +47,8 @@ def insertOptionChain(data, timeStampStr):
         'timeStamp': timeStampStr,
         'date': timeStampStr.split(' ')[0],
         'symbol': symbol,
-        'CE': data['CE'],
-        'PE': data['PE']
+        'CE': totalCE,
+        'PE': totalPE
     }
     try:
         totalOI.insert_one(oiData)
@@ -55,8 +57,8 @@ def insertOptionChain(data, timeStampStr):
         # traceback.print_exc()
 
     for record in optionsData:
-        callData = prepareOCData('CE', record['CE'], timeStamp)
-        putData = prepareOCData('PE', record['PE'], timeStamp)
+        callData = prepareOCData('CE', record['CE'], timeStamp, totalCE)
+        putData = prepareOCData('PE', record['PE'], timeStamp, totalPE)
         ocData = {
             'sequence': timeStamp.timestamp(),
             'timeStamp': timeStampStr,
@@ -74,13 +76,15 @@ def insertOptionChain(data, timeStampStr):
             # traceback.print_exc()
 
 
-def prepareOCData(ceOrPe, data, timeStamp):
+def prepareOCData(ceOrPe, data, timeStamp, totals):
     ocData = {
         'ltp': data['lastPrice'],
         'IV': data['impliedVolatility'],
         'volume': data['totalTradedVolume'],
         'OI': data['openInterest'],
         'changeInOI': data['changeinOpenInterest'],
+        'TotalOI': totals['totOI'],
+        'TotalVolume': totals['totVol'],
         'greeks': calculateGreeks(data['underlyingValue'], data['strikePrice'], data['expiryDate'], ceOrPe, data['impliedVolatility'], timeStamp)
     }
     return ocData
@@ -89,7 +93,7 @@ def prepareOCData(ceOrPe, data, timeStamp):
 def calculateGreeks(spot, strike, expiryDate, ceOrPe, IV, timeStamp):
     if IV == 0:
         return {'delta': 0, 'theta': 0, 'gamma': 0, 'vega': 0}
-        
+
     rateOfInterest = 0.1
     expiryDate = datetime.datetime.strptime(expiryDate, '%d-%b-%Y')
     expiryDate = expiryDate.replace(hour=15, minute=30, second=0, microsecond=0)
@@ -105,7 +109,7 @@ def calculateGreeks(spot, strike, expiryDate, ceOrPe, IV, timeStamp):
         theta = greeks.callTheta
     elif ceOrPe == 'PE':
         delta = greeks.putDelta
-        theta = greeks.putTheta 
+        theta = greeks.putTheta
 
     return {'delta': delta, 'theta': theta, 'gamma': gamma, 'vega': vega}
 

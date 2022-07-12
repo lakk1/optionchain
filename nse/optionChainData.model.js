@@ -15,6 +15,8 @@ const OptionSchema = new Schema({
   volume: Number,
   OI: Number,
   changeInOI: Number,
+  TotalOI: Number,
+  TotalVolume: Number,
   greeks: GreeksSchema,
 });
 

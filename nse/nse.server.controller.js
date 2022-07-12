@@ -1,7 +1,7 @@
 "use strict";
 const fs = require("fs");
 const path = require("path");
-const { getDataForCurrentExpiry } = require("../util");
+const { getDataForCurrentExpiry, today } = require("../util");
 const optionChainModel = require("./optionChainData.model");
 const NSE = {};
 module.exports = {
@@ -40,6 +40,7 @@ async function fetchNSEdata(symbol = "NIFTY", range = 10, expiry = 0) {
 }
 
 NSE.fetchData = async (req, res) => {
+  // GET: http://localhost:3000/nse/optionChain/BANKNIFTY/10/0
   console.log("Fetching NSE data with ", req.params);
 
   let symbol = req.params.symbol || "NIFTY";
@@ -57,28 +58,31 @@ NSE.fetchData = async (req, res) => {
   //   return res.json({ NSEData: { a: 1, b: 2 } });
 };
 
-async function getPCDataFromDB(symbol, date) {
-  let records = await optionChainModel.find({ symbol, date });
+async function getPCDataFromDB(symbol, date, strikePrices) {
+  let records = await optionChainModel
+    .find(
+      {
+        symbol,
+        date,
+        strikePrice: { $in: strikePrices },
+      },
+      "-_id -CE._id -PE._id -CE.greeks._id -PE.greeks._id "
+    )
+    .sort({ sequence: "asc" });
   //   console.log("Records: ", records);
   return records;
 }
 
-function today() {
-  const date = new Date();
-  const formattedDate = date
-    .toLocaleDateString("en-GB", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    })
-    .replace(/ /g, "-");
-  return formattedDate;
-}
-
 NSE.getPutCallData = async (req, res) => {
+  // GET: http://localhost:3000/nse/putCallData/NIFTY/12-Jul-2022
+
   let symbol = req.params.symbol || "NIFTY";
   let date = req.params.date || today();
+  let strikePrices = req.params.strikePrices || [
+    15000, 15100, 15200, 15300, 15400, 15500, 15600, 15700, 15900, 15900, 16000,
+    16100, 16200, 16300, 16400, 16500,
+  ];
 
-  let records = await getPCDataFromDB(symbol, date);
+  let records = await getPCDataFromDB(symbol, date, strikePrices);
   res.json({ records });
 };

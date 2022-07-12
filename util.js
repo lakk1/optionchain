@@ -299,5 +299,16 @@ function getDataForCurrentExpiry(response, symbol, range = 10, expiry = 0) {
 }
 
 // getDataForCurrentExpiry(data, 'NIFTY');
+function today() {
+  const date = new Date();
+  const formattedDate = date
+    .toLocaleDateString("en-GB", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    })
+    .replace(/ /g, "-");
+  return formattedDate;
+}
 
-module.exports = { getDataForCurrentExpiry };
+module.exports = { getDataForCurrentExpiry, today };
