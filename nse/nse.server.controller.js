@@ -2,7 +2,7 @@
 const fs = require("fs");
 const path = require("path");
 const { getDataForCurrentExpiry } = require("../util");
-
+const optionChainModel = require("./nse.model");
 const NSE = {};
 module.exports = {
   NSE,
@@ -28,8 +28,6 @@ async function fetchNSEdata(symbol = "NIFTY", range = 10, expiry = 0) {
     console.log("GOT DATA From file:", filename);
     try {
       data = JSON.parse(data);
-      console.log("Calling getDataForCurrentExpiry:", symbol, range, expiry);
-
       let filteredData = getDataForCurrentExpiry(data, symbol, range, expiry);
       //   console.log("Returning filtered data", filteredData);
       return filteredData;
@@ -37,7 +35,7 @@ async function fetchNSEdata(symbol = "NIFTY", range = 10, expiry = 0) {
       console.log("ERROR converting Option Data to JSON", e);
     }
   }
-  console.log("Failed to read file....", filename);
+  console.log("FATAL: Failed to read file....", filename);
   return data;
 }
 
@@ -59,6 +57,28 @@ NSE.fetchData = async (req, res) => {
   //   return res.json({ NSEData: { a: 1, b: 2 } });
 };
 
+async function getPCDataFromDB(symbol, date) {
+  let records = await optionChainModel.find({ symbol, date });
+  //   console.log("Records: ", records);
+  return records;
+}
+
+function today() {
+  const date = new Date();
+  const formattedDate = date
+    .toLocaleDateString("en-GB", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    })
+    .replace(/ /g, "-");
+  return formattedDate;
+}
+
 NSE.getPutCallData = async (req, res) => {
-  res.json({ putCallData: "Enjoy" });
+  let symbol = req.params.symbol || "NIFTY";
+  let date = req.params.date || today();
+
+  let records = await getPCDataFromDB(symbol, date);
+  res.json({ records });
 };

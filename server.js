@@ -13,7 +13,7 @@ const cluster = require("cluster");
 if (cluster.isMaster) {
   let workerCount = require("os").cpus().length;
 
-  for (let i = 0; i < 1; i++) {
+  for (let i = 0; i < workerCount; i++) {
     cluster.fork();
   }
 
