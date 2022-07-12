@@ -2,7 +2,7 @@
 const fs = require("fs");
 const path = require("path");
 const { getDataForCurrentExpiry } = require("../util");
-const optionChainModel = require("./nse.model");
+const optionChainModel = require("./optionChainData.model");
 const NSE = {};
 module.exports = {
   NSE,
