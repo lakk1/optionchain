@@ -18,7 +18,7 @@ const STUBMODE = args[0] == "stub" ? true : false;
 const axios = require("axios").default;
 axios.defaults.timeout = 10000;
 
-const { getDataForCurrentExpiry } = require("./util");
+const { getDataForCurrentExpiry } = require("../util");
 app.use(express.static("public"));
 
 app.get("/", (req, res) => {
