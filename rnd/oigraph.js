@@ -1,4 +1,4 @@
-import { store } from "./store.js";
+import { store } from "../public/store.js";
 
 export default {
   props: ["symbol"],
@@ -88,7 +88,7 @@ export default {
     console.log("Unmounting chart....");
     clearInterval(this.intervalHandler);
   },
-  template: ` 
+  template: `
   <table class="columns">
       <tr>
         <td><div :id="symbol+'_barchart_div'" style="width: 1000px; height: 300px;"></div></td>

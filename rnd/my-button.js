@@ -1,4 +1,4 @@
-import { store } from "./store.js";
+import { store } from "../public/store.js";
 
 export default {
   props: ["title"],

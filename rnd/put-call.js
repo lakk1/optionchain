@@ -1,4 +1,4 @@
-import { store } from "./store.js";
+import { store } from "../public/store.js";
 
 export default {
   props: ["symbol"],
@@ -69,7 +69,7 @@ export default {
     console.log("Unmounting chart....");
     clearInterval(this.intervalHandler);
   },
-  template: ` 
+  template: `
   <div class="chartLayout">
     <div class="title">Put Call OI Change Trend</div>
     <div :id="symbol"></div>

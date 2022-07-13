@@ -55,7 +55,7 @@ if (cluster.isMaster) {
     })
   );
 
-  require("./routes/routes")(router);
+  require("./routes")(router);
 
   app.use(express.static("public"));
 
