@@ -23,16 +23,16 @@ request = session.get(baseurl, headers=headers, timeout=8)
 cookies = dict(request.cookies)
 
 def createDirectory(sym):
-    logging.debug("Checking Dir: %s", sym) 
+    logging.debug("Checking Dir: %s", sym)
 
     dir = os.path.join("DATA", sym)
     try:
         if not os.path.exists(dir):
-            logging.debug("Creating new folder: %s", sym) 
+            logging.debug("Creating new folder: %s", sym)
             os.makedirs(dir)
     except:
         logging.critical("ERROR: Failed to create directory: %s", dir)
-           
+
     return dir
 
 def scan(symbol):
@@ -45,7 +45,7 @@ def scan(symbol):
         response = session.get(url, headers=headers, timeout=20, cookies=cookies)
 
         dir = createDirectory(symbol)
-        filename = os.path.join(dir, symbol + ".json")
+        filename = os.path.join(dir, symbol + "-TMP.json")
         with open(filename, 'w') as f:
             f.write(response.text)
 
