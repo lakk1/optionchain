@@ -56,9 +56,13 @@ Start Node Web server to load UI (http://localhost:3000)
 
 **Next Step**: Launch browser and access application with URL : [CAR TRADING](http://localhost:3000)
 
-**NOTE** : By default Node server will be running at port 3000, to start NODE server in different port set the environment variable PORT to different port number
+---
 
-Example : In Windows start node server execute below command
+###Change the default Port###
+
+By default Node server will be running at port 3000, to start NODE server in different port set the environment variable PORT to different port number
+
+**Example** : In Windows start node server execute below command
 
 `set PORT=8080 && npm start`
 
