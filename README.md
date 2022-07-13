@@ -1,4 +1,4 @@
-# **NSE Option Chain analyzer **
+# NSE Option Chain analyzer
 
 This is the Option Chain analyzer for NIFTY and BANKNIFTY from NSE
 
@@ -12,17 +12,17 @@ Email: chandregowda@gmail.com
 
 ### Prerequisite
 
-Install NODE JS and NPM from (version 16 and above): https://nodejs.org/en/download/
+Install **NODE JS** and **NPM** from (version 16 and above): https://nodejs.org/en/download/
 
-Install Mongo DB Community Edition
+Install **Mongo DB** Community Edition
 
-Install Python 3.9 or higher
+Install **Python 3.9** or higher
 
 ### How does it Work
 
-This application is using NSE API (free for localhost based apps) and saves response in the File under DATA folder and also stores stats in DB (for Put / Call changes graph - TODO)
+This application is using **NSE API** (free for localhost based apps) and saves response in the File under _DATA_ folder and also stores stats in DB (for Put / Call changes graph - TODO)
 
-Configuration of the symbols to fetch data is saved in 'symbols.json', set {"scan": "yes"} in each symbol node to fetch data from NSE
+Configuration of the symbols to fetch data is saved in _symbols.json_, set **{"scan": "yes"}** in each symbol node to fetch data from NSE
 
 ### Setup:
 
@@ -51,7 +51,7 @@ Run optionScanner.py to fetch data in periodic interval from NSE site
 Start Node Web server to load UI (http://localhost:3000)
 `npm start`
 
-NOTE: To start in development mode (nodemon) use below command
+**NOTE**: To start in development mode (nodemon) use below command
 `npm run dev`
 
 **Next Step**: Launch browser and access application with URL : [CAR TRADING](http://localhost:3000)
@@ -67,3 +67,5 @@ In Mac
 `PORT=8080 && npm start`
 
 [Github Link](https://github.com/chandregowda/optionchain)
+
+**Important NOTE**: If you run this application in Production server, NSE will not respond
