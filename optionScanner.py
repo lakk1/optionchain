@@ -126,9 +126,9 @@ def appendGreeks(data, timeStamp, nextExpiry=None):
     for record in data['data']:
         shouldCalculate = False if nextExpiry and record['expiryDate'] != nextExpiry else True
         if shouldCalculate:
-            if record['CE']:
+            if record.get('CE'):
                 record['CE']['greeks'] = calculateGreeks(record['CE']['underlyingValue'], record['CE']['strikePrice'], record['CE']['expiryDate'], 'CE', record['CE']['impliedVolatility'], timeStamp)
-            if record['PE']:
+            if record.get('PE'):
                 record['PE']['greeks'] = calculateGreeks(record['PE']['underlyingValue'], record['PE']['strikePrice'], record['PE']['expiryDate'], 'PE', record['PE']['impliedVolatility'], timeStamp)
     return data
 """
