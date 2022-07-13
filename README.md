@@ -15,31 +15,45 @@ Email: chandregowda@gmail.com
 Install NODE JS and NPM from (version 16 and above): https://nodejs.org/en/download/
 Install Mongo DB Community Edition
 Install Python 3.9 or higher
-Install python modules:
+
+### How does it Work
+
+This application is using NSE API (free for localhost based apps) and saves response in the File under DATA folder and also in DB (for Put / Call changes graph - TODO)
+Configuration of the symbols to fetch data is saved in 'symbols.json', to enable a symbol to trade each symbol node should have entry {"scan": "yes"} and others will be ignored
+
+Client program runs
+
+### Setup:
+
+Open Command prompt in Windows or Terminal in Mac
+
+Next Step: Change directory to the folder where this README.md file is present or where server.js file is present using "cd <folder path>"
+
+Next Step: Install the Express and Axios NPM packages by entering below command
+
+`npm install`
+
+#### Install python modules:
+
 pip install pandas
 pip install pymongo
 pip install scipy
 pip install mibian
 
-### Setup:
+Run dbSetup.mongodb to create Database 'marketdata' and tables with indexes
 
-Step 1. Open Command prompt in Windows or Terminal in Mac
+Next Step : Start the application, be in the root directory of this project
 
-Step 2. Change directory to the folder where this README.md file is present or where server.js file is present using "cd <folder path>"
+Run optionScanner.py to fetch data in periodic interval from NSE site
+`py optionScanner.py`
 
-Step 3: Install the Express and Axios NPM packages by entering below command
-
-`npm install`
-
-Step 2: Start the application, be in the root directory of this project
-
+Start Node Web server to load UI (http://localhost:3000)
 `npm start`
 
 NOTE: To start in development mode (nodemon) use below command
-
 `npm run dev`
 
-Step 3: Launch browser and access application with URL : **http://localhost:3000**
+Next Step: Launch browser and access application with URL : **http://localhost:3000**
 
 **NOTE** : By default Node server will be running at port 3000, to start NODE server in different port set the environment variable PORT to different port number
 
