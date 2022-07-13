@@ -62,25 +62,13 @@ export default {
             </div>
           </div>
         </div>
-        <!-- div>
+
         <hr />
-          <div>
-            <put-call-trend :symbol="symbol">Place for Put Call Trend</put-call-trend>
+          <div class="oichart">
+            <apex-chart :symbol="symbol" :time="Date.now()">Place for Apex Chart</apex-chart>
           </div>
         <hr />
-        </div -->
-          <hr />
-            <div class="oichart">
-              <apex-chart :symbol="symbol" :time="Date.now()">Place for Apex Chart</apex-chart>
-            </div>
-          <hr />
-        <!-- div>
-          <hr />
-            <div>
-              <oigraph :symbol="symbol">Place for Google Chart</oigraph>
-            </div>
-          <hr />
-        </div -->
+
         <div class="stats">
           Total PUT OI: {{ Number(store.getOiTotal(symbol, 'PE')).toLocaleString() }}
           &nbsp;

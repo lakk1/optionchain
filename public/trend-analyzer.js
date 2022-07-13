@@ -70,5 +70,4 @@ export default {
     console.log("Unmounting Option Chain analyzer");
     clearInterval(this.intervalHandler);
   },
-  computed: {},
 };
