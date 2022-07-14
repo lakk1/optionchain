@@ -42,7 +42,6 @@ def storeFilteredData(data, timeStampStr):
     totalPE = data['PE']
     timeStamp = datetime.datetime.strptime(timeStampStr, '%d-%b-%Y %H:%M:%S')
     symbol = optionsData[0]['CE']['underlying'] if optionsData[0]['CE'] != None else optionsData[0]['PE']['underlying']
-    print("Inserting ", symbol, " Data")
 
     oiData = {
         'sequence': timeStamp.timestamp(),
@@ -59,8 +58,10 @@ def storeFilteredData(data, timeStampStr):
         # traceback.print_exc()
 
     for record in optionsData:
-        callData = prepareOCData('CE', record['CE'], timeStamp, totalCE)
-        putData = prepareOCData('PE', record['PE'], timeStamp, totalPE)
+        if record.get('CE'):
+            callData = prepareOCData('CE', record['CE'], timeStamp, totalCE)
+        if record.get('PE'):
+            putData = prepareOCData('PE', record['PE'], timeStamp, totalPE)
         ocData = {
             'sequence': timeStamp.timestamp(),
             'timeStamp': timeStampStr,
@@ -68,8 +69,8 @@ def storeFilteredData(data, timeStampStr):
             'symbol': symbol,
             'strikePrice': record['strikePrice'],
             'expiryDate': record['expiryDate'],
-            'CE': callData,
-            'PE': putData
+            'CE': callData or None,
+            'PE': putData or None
         }
         try:
             filteredData.insert_one(ocData)
@@ -86,6 +87,7 @@ def storeOptionChain(data):
     timeStampStr = data['records']['timestamp']
     symbol = data['records']['data'][0]['CE']['underlying'] if data['records']['data'][0].get('CE') else data['records']['data'][0]['PE']['underlying']
     if isNewTimeStamp(symbol, timeStampStr):
+        print("Inserting ", symbol, " Data")
         nextExpiry = data['records']['expiryDates'][1]
         futureExpiry = data['records']['expiryDates'][2]
         timeStamp = datetime.datetime.strptime(timeStampStr, '%d-%b-%Y %H:%M:%S')
