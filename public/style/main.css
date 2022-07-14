@@ -3,17 +3,18 @@ html {
   font-size: 10px;
   height: 100vh;
 }
-.red {
-  color: red;
-}
+
 .priceRed, .priceGreen {
   font-weight: bold;
 }
-.priceRed {
+.priceRed, .red {
   color: red;
 }
 .priceGreen {
   color: green;
+}
+.pcrGreen {
+  color: #77e777;
 }
 .itm {
   background-color: #e8e8e8 !important;

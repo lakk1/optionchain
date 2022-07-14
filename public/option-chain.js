@@ -43,7 +43,7 @@ export default {
         <div class="reportHeader">
           <span class="symbol">{{ symbol }} </span> :  <span class="spotprice">{{spotPrice()}} </span>
           <span class="pcr">
-            PCR (oi): {{ store.getOiPCR(symbol) }}
+            <span :class="{ pcrGreen: store.getOiPCR(symbol) < 0.7, red : store.getOiPCR(symbol) > 1.5 }"> PCR (oi): {{ store.getOiPCR(symbol) }} </span>
             &nbsp;
             PCR (volume): {{ store.getVolumePCR(symbol) }}
             &nbsp;
