@@ -58,6 +58,25 @@ NSE.fetchData = async (req, res) => {
   //   return res.json({ NSEData: { a: 1, b: 2 } });
 };
 
+NSE.fetchfilteredData = async (req, res) => {
+  // GET: http://localhost:3000/nse/optionChain/BANKNIFTY/10/0
+  console.log("Fetching NSE data with ", req.params);
+
+  let symbol = req.params.symbol || "NIFTY";
+  let range = req.params.range || 25;
+  let expiry = Number(req.params.expiry) || 0;
+
+  try {
+    let data = await fetchNSEdata(symbol, range, expiry);
+    console.log("");
+    res.send(data);
+  } catch (e) {
+    res.status(401).send(e);
+  }
+
+  //   return res.json({ NSEData: { a: 1, b: 2 } });
+};
+
 async function getPCDataFromDB(symbol, date, strikePrices) {
   let records = await optionChainModel
     .find(
