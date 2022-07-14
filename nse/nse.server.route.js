@@ -2,7 +2,7 @@ const { NSE } = require("./nse.server.controller");
 
 // API server Endpoints
 module.exports = function (router) {
-  router.get("/nse/putCallData/:symbol/:date", NSE.getPutCallData);
-  router.get("/nse/optionChain/:symbol/:range/:expiry", NSE.fetchData);
-  router.get("/nse/filteredData/:symbol/:range/:expiry", NSE.fetchfilteredData);
+  router.get("/nse/optionChain/:symbol/:range/:expiry", NSE.getOptionChain);
+  router.get("/nse/optionChainDB/:symbol", NSE.getDBOptionChain);
+  router.post("/nse/filteredData/", NSE.getfilteredData);
 };

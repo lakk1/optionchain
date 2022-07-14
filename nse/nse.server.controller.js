@@ -2,6 +2,8 @@
 const fs = require("fs");
 const path = require("path");
 const { getDataForCurrentExpiry, today } = require("../util");
+const filteredDataModel = require("./filteredData.model");
+const lastCheckedModel = require("./lastChecked.model");
 const optionChainModel = require("./optionChainData.model");
 const NSE = {};
 module.exports = {
@@ -39,7 +41,7 @@ async function fetchNSEdata(symbol = "NIFTY", range = 10, expiry = 0) {
   return data;
 }
 
-NSE.fetchData = async (req, res) => {
+NSE.getOptionChain = async (req, res) => {
   // GET: http://localhost:3000/nse/optionChain/BANKNIFTY/10/0
   console.log("Fetching NSE data with ", req.params);
 
@@ -58,27 +60,26 @@ NSE.fetchData = async (req, res) => {
   //   return res.json({ NSEData: { a: 1, b: 2 } });
 };
 
-NSE.fetchfilteredData = async (req, res) => {
+NSE.getfilteredData = async (req, res) => {
   // GET: http://localhost:3000/nse/optionChain/BANKNIFTY/10/0
-  console.log("Fetching NSE data with ", req.params);
+  console.log("Fetching NSE data with ", req.body);
 
-  let symbol = req.params.symbol || "NIFTY";
-  let range = req.params.range || 25;
-  let expiry = Number(req.params.expiry) || 0;
+  let symbol = req.body.symbol || "NIFTY";
+  let date = req.body.date || today();
+  let strikePrices = req.body.strikePrices;
 
   try {
-    let data = await fetchNSEdata(symbol, range, expiry);
-    console.log("");
-    res.send(data);
-  } catch (e) {
+      let records = await getfilteredDatafromDB(symbol, date, strikePrices);
+      res.json({ records });
+    } catch (e) {
     res.status(401).send(e);
   }
 
   //   return res.json({ NSEData: { a: 1, b: 2 } });
 };
 
-async function getPCDataFromDB(symbol, date, strikePrices) {
-  let records = await optionChainModel
+async function getfilteredDatafromDB(symbol, date, strikePrices) {
+  let records = await filteredDataModel
     .find(
       {
         symbol,
@@ -92,16 +93,18 @@ async function getPCDataFromDB(symbol, date, strikePrices) {
   return records;
 }
 
-NSE.getPutCallData = async (req, res) => {
-  // GET: http://localhost:3000/nse/putCallData/NIFTY/12-Jul-2022
+NSE.getDBOptionChain = async (req, res) => {
+  console.log("Fetching NSE data with ", req.params);
 
   let symbol = req.params.symbol || "NIFTY";
-  let date = req.params.date || today();
-  let strikePrices = req.params.strikePrices || [
-    15000, 15100, 15200, 15300, 15400, 15500, 15600, 15700, 15900, 15900, 16000,
-    16100, 16200, 16300, 16400, 16500,
-  ];
 
-  let records = await getPCDataFromDB(symbol, date, strikePrices);
-  res.json({ records });
+  try {
+    let timeStamp = await lastCheckedModel.findOne({symbol}, "lastCheckedOn -_id");
+    timeStamp = timeStamp.lastCheckedOn;
+
+    let records = await optionChainModel.findOne({symbol, timeStamp})
+    res.send(records)
+  } catch (e) {
+    res.status(401).send(e);
+  }
 };

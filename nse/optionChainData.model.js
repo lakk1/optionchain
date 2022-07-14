@@ -10,14 +10,67 @@ const GreeksSchema = new Schema({
 });
 
 const OptionSchema = new Schema({
-  ltp: Number,
-  IV: Number,
-  volume: Number,
-  OI: Number,
-  changeInOI: Number,
-  TotalOI: Number,
-  TotalVolume: Number,
-  greeks: GreeksSchema,
+    strikePrice: Number,
+    expiryDate: String,
+    underlying: String,
+    identifier: String,
+    openInterest: Number,
+    changeinOpenInterest: Number,
+    pchangeinOpenInterest: Number,
+    totalTradedVolume: Number,
+    impliedVolatility: Number,
+    lastPrice: Number,
+    change: Number,
+    pChange: Number,
+    totalBuyQuantity: Number,
+    totalSellQuantity: Number,
+    bidQty: Number,
+    bidprice: Number,
+    askQty: Number,
+    askPrice: Number,
+    underlyingValue: Number,
+    greeks: GreeksSchema
+   }
+);
+
+const dataSchema = new Schema(
+  {
+    strikePrice: Number,
+    expiryDate: String,
+    CE: OptionSchema,
+    PE: OptionSchema
+  }
+);
+
+const recordsSchema = new Schema(
+  {
+    expiryDates: [String],
+    data: [dataSchema],
+    timestamp: String,
+    underlyingValue: Number,
+    strikePrices: [Number]
+  }
+);
+
+const OISchema = new Schema(
+  {
+    totOI: Number,
+    totVol: Number
+  }
+);
+
+const filteredShema = new Schema(
+  {
+    data: [dataSchema],
+    CE: OISchema,
+    PE: OISchema
+  }
+);
+
+const fullDataSchema = new Schema(
+  {
+    records: recordsSchema,
+    filtered: filteredShema
 });
 
 const OptionChainSchema = new Schema(
@@ -26,16 +79,13 @@ const OptionChainSchema = new Schema(
     timeStamp: String,
     date: String,
     symbol: String,
-    strikePrice: Number,
-    expiryDate: String,
-    CE: OptionSchema,
-    PE: OptionSchema,
+    data: fullDataSchema
   },
   { collection: "optionChainData" }
 );
 
 OptionChainSchema.index(
-  { symbol: 1, timeStamp: 1, strikePrice: 1 },
+  { symbol: 1, timeStamp: 1 },
   { unique: true }
 );
 OptionChainSchema.index({ symbol: 1, date: 1 });
