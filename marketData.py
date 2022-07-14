@@ -126,27 +126,32 @@ def prepareOCData(ceOrPe, data, timeStamp, totals):
 
 
 def calculateGreeks(spot, strike, expiryDate, ceOrPe, IV, timeStamp):
-    if IV == 0:
-        return {'delta': 0, 'theta': 0, 'gamma': 0, 'vega': 0}
-
+    default = {'delta': 0, 'theta': 0, 'gamma': 0, 'vega': 0}
     rateOfInterest = 0.1
     expiryDate = datetime.datetime.strptime(expiryDate, '%d-%b-%Y')
     expiryDate = expiryDate.replace(hour=15, minute=30, second=0, microsecond=0)
     days2expiry = (expiryDate-timeStamp).days + (expiryDate-timeStamp).seconds/86400
 
-    greeks = mb.BS([spot, strike, rateOfInterest, days2expiry], volatility=IV)
+    if IV == 0 or days2expiry == 0:
+        return default
 
-    gamma = greeks.gamma
-    vega = greeks.vega
+    try:
+        greeks = mb.BS([spot, strike, rateOfInterest, days2expiry], volatility=IV)
 
-    if ceOrPe == 'CE':
-        delta = greeks.callDelta
-        theta = greeks.callTheta
-    elif ceOrPe == 'PE':
-        delta = greeks.putDelta
-        theta = greeks.putTheta
+        default['gamma'] = greeks.gamma
+        default['vega'] = greeks.vega
 
-    return {'delta': delta, 'theta': theta, 'gamma': gamma, 'vega': vega}
+        if ceOrPe == 'CE':
+            default['delta'] = greeks.callDelta
+            default['theta'] = greeks.callTheta
+        elif ceOrPe == 'PE':
+            default['delta'] = greeks.putDelta
+            default['theta'] = greeks.putTheta
+    except Exception:
+        print('ERROR: Greeks calculation failed returned null values')
+        # traceback.print_exc()
+
+    return default
 
 
 def isNewTimeStamp(symbol, timeStamp):
@@ -171,6 +176,7 @@ def appendGreeks(data, timeStamp, expiry=None):
             if record.get('PE'):
                 record['PE']['greeks'] = calculateGreeks(record['PE']['underlyingValue'], record['PE']['strikePrice'], record['PE']['expiryDate'], 'PE', record['PE']['impliedVolatility'], timeStamp)
     return data
+
 
 if DEBUG:
     storeOptionChain(data, '08-Jul-2022 09:15:18')
