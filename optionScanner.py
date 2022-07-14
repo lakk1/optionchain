@@ -7,7 +7,7 @@ import time
 import datetime
 import traceback
 import subprocess
-from marketData import insertOptionChain as storeOptionChain, calculateGreeks
+from marketData import storeOptionChain, calculateGreeks
 
 DB_ENABLED = True
 SLEEP_INTERVAL = 60 # seconds
@@ -78,6 +78,8 @@ def fetchData(symbol):
             jsonResponse = json.loads(f.read())
 
             if jsonResponse and jsonResponse["records"]:
+                if DB_ENABLED:
+                    storeOptionChain(jsonResponse)
                 nextExpiry = jsonResponse["records"]["expiryDates"][1]
                 futureExpiry = jsonResponse["records"]["expiryDates"][2]
                 timeStampStr = jsonResponse["records"]["timestamp"]
@@ -93,8 +95,6 @@ def fetchData(symbol):
                 else:
                     with open(filename, 'w') as f:
                         f.write(json.dumps(filteredData)) # write only current expired data
-                        if DB_ENABLED:
-                            storeOptionChain(filteredData, timeStampStr)
 
                     dir = os.path.join("DATA", symbol)
                     filename = os.path.join(dir, symbol + ".json")

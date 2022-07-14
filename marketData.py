@@ -22,7 +22,9 @@ except pymongo.errors.ConnectionFailure as err:
 if conn != None:
     database = conn['marketData']
     optionChainData = database['optionChainData']
+    filteredData = database['filteredData']
     totalOI = database['totalOI']
+    lastChecked = database['lastChecked']
 
     if DEBUG:
         # optionChainData.drop()
@@ -30,7 +32,7 @@ if conn != None:
         pass
 
 
-def insertOptionChain(data, timeStampStr):
+def storeFilteredData(data, timeStampStr):
     if conn == None:
         print('ERROR: DB Connection unavailable, check your Mongo Server')
         return
@@ -68,6 +70,37 @@ def insertOptionChain(data, timeStampStr):
             'expiryDate': record['expiryDate'],
             'CE': callData,
             'PE': putData
+        }
+        try:
+            filteredData.insert_one(ocData)
+        except Exception:
+            print('ERROR: DB Insertion failed, Possibly duplicate records...')
+            # traceback.print_exc()
+
+
+def storeOptionChain(data):
+    if conn == None:
+        print('ERROR: DB Connection unavailable, check your Mongo Server')
+        return
+
+    timeStampStr = data['records']['timestamp']
+    symbol = data['records']['data'][0]['CE']['underlying'] if data['records']['data'][0].get('CE') else data['records']['data'][0]['PE']['underlying']
+    if isNewTimeStamp(symbol, timeStampStr):
+        nextExpiry = data['records']['expiryDates'][1]
+        futureExpiry = data['records']['expiryDates'][2]
+        timeStamp = datetime.datetime.strptime(timeStampStr, '%d-%b-%Y %H:%M:%S')
+        date = timeStampStr.split(' ')[0]
+        currentData = data['filtered']
+        storeFilteredData(currentData, timeStampStr)
+        data['filtered'] = appendGreeks(currentData, timeStamp)
+        data['records'] = appendGreeks(data['records'], timeStamp, nextExpiry)
+        data['records'] = appendGreeks(data['records'], timeStamp, futureExpiry)
+        ocData = {
+            'sequence': timeStamp.timestamp(),
+            'timeStamp': timeStampStr,
+            'date': date,
+            'symbol': symbol,
+            'data': data
         }
         try:
             optionChainData.insert_one(ocData)
@@ -114,5 +147,28 @@ def calculateGreeks(spot, strike, expiryDate, ceOrPe, IV, timeStamp):
     return {'delta': delta, 'theta': theta, 'gamma': gamma, 'vega': vega}
 
 
+def isNewTimeStamp(symbol, timeStamp):
+    if lastChecked.find_one({'symbol': symbol}) == None:
+        lastChecked.insert_one({'symbol': symbol, 'lastCheckedOn': timeStamp})
+        return True
+    elif lastChecked.find_one({'symbol': symbol})['lastCheckedOn'] != timeStamp:
+        filter = {'symbol': symbol}
+        update = {"$set": {'lastCheckedOn': timeStamp}}
+        lastChecked.update_one(filter, update)
+        return True
+    else:
+        return False
+
+
+def appendGreeks(data, timeStamp, expiry=None):
+    for record in data['data']:
+        shouldCalculate = False if expiry and record['expiryDate'] != expiry else True
+        if shouldCalculate:
+            if record.get('CE'):
+                record['CE']['greeks'] = calculateGreeks(record['CE']['underlyingValue'], record['CE']['strikePrice'], record['CE']['expiryDate'], 'CE', record['CE']['impliedVolatility'], timeStamp)
+            if record.get('PE'):
+                record['PE']['greeks'] = calculateGreeks(record['PE']['underlyingValue'], record['PE']['strikePrice'], record['PE']['expiryDate'], 'PE', record['PE']['impliedVolatility'], timeStamp)
+    return data
+
 if DEBUG:
-    insertOptionChain(data, '08-Jul-2022 09:15:18')
+    storeOptionChain(data, '08-Jul-2022 09:15:18')

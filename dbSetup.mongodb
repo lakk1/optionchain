@@ -3,10 +3,15 @@ use("marketData");
 
 // The drop() command destroys all data from a collection.
 // Make sure you run it against the correct database and collection.
+db.filteredData.drop();
 db.optionChainData.drop();
 db.totalOI.drop();
+db.lastChecked.drop();
 
-db.optionChainData.ensureIndex({symbol: 1, timeStamp: 1, strikePrice: 1}, {unique: true})
-db.optionChainData.ensureIndex({symbol: 1, date: 1})
-db.totalOI.ensureIndex({symbol: 1, timeStamp: 1 }, {unique: true})
-db.totalOI.ensureIndex({symbol: 1, date: 1})
+db.filteredData.ensureIndex({symbol: 1, timeStamp: 1, strikePrice: 1}, {unique: true});
+db.filteredData.ensureIndex({symbol: 1, date: 1});
+db.optionChainData.ensureIndex({symbol: 1, timeStamp: 1}, {unique: true});
+db.optionChainData.ensureIndex({symbol: 1, date: 1});
+db.totalOI.ensureIndex({symbol: 1, timeStamp: 1 }, {unique: true});
+db.totalOI.ensureIndex({symbol: 1, date: 1});
+db.lastChecked.ensureIndex({symbol: 1, timeStamp: 1}, {unique: true});
