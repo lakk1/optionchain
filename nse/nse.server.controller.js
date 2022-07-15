@@ -62,16 +62,16 @@ NSE.getOptionChain = async (req, res) => {
 
 NSE.getfilteredData = async (req, res) => {
   // GET: http://localhost:3000/nse/optionChain/BANKNIFTY/10/0
-  console.log("Fetching NSE data with ", req.body);
+  console.log("Fetching OI Series data with ", req.body);
 
   let symbol = req.body.symbol || "NIFTY";
   let date = req.body.date || today();
   let strikePrices = req.body.strikePrices;
 
   try {
-      let records = await getfilteredDatafromDB(symbol, date, strikePrices);
-      res.json({ records });
-    } catch (e) {
+    let records = await getfilteredDatafromDB(symbol, date, strikePrices);
+    res.json({ records });
+  } catch (e) {
     res.status(401).send(e);
   }
 
@@ -99,11 +99,14 @@ NSE.getDBOptionChain = async (req, res) => {
   let symbol = req.params.symbol || "NIFTY";
 
   try {
-    let timeStamp = await lastCheckedModel.findOne({symbol}, "lastCheckedOn -_id");
+    let timeStamp = await lastCheckedModel.findOne(
+      { symbol },
+      "lastCheckedOn -_id"
+    );
     timeStamp = timeStamp.lastCheckedOn;
 
-    let records = await optionChainModel.findOne({symbol, timeStamp})
-    res.send(records)
+    let records = await optionChainModel.findOne({ symbol, timeStamp });
+    res.send(records);
   } catch (e) {
     res.status(401).send(e);
   }

@@ -10,7 +10,7 @@ export default {
   },
   methods: {
     getSeries() {
-      let chartData = store.getApexChartData(this.symbol);
+      let chartData = store.getOIChartData(this.symbol);
       // console.log("Chart DATA: for", this.symbol);
       // console.log(chartData);
 
@@ -41,7 +41,7 @@ export default {
       ];
     },
     updateOptions() {
-      console.log("Updating chart series for:", this.symbol);
+      // console.log("Updating chart series for:", this.symbol);
       // this.chart.updateSeries(this.getSeries());
       this.chart.updateOptions({
         series: this.getSeries(),
@@ -57,7 +57,7 @@ export default {
       let symbol = this.symbol;
       // console.log("Drawing Apex Chart for : ", symbol);
 
-      let chartData = store.getApexChartData(this.symbol);
+      let chartData = store.getOIChartData(this.symbol);
       // let ticks = this.store.getChartData(symbol).series;
       if (chartData) {
         let { CEoi, PEoi, CEoiChg, PEoiChg, series, PEvolume, CEvolume } =
@@ -152,7 +152,7 @@ export default {
     // console.log("Unmounting chart....");
     clearInterval(this.intervalHandler);
   },
-  template: ` 
+  template: `
   <table class="columns">
       <tr>
         <td style="width:100%">

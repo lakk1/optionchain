@@ -34,6 +34,10 @@ export default {
       let symbolDetails = stockList.filter((s) => s.symbol == this.symbol)[0];
       return symbolDetails.lotsize;
     },
+    strikeInterval() {
+      let symbolDetails = stockList.filter((s) => s.symbol == this.symbol)[0];
+      return symbolDetails.steps;
+    },
     oiMultiplier() {
       return this.multiply ? this.lotSize : 1;
     },
@@ -64,9 +68,22 @@ export default {
         </div>
 
         <hr />
-          <div class="oichart">
-            <apex-chart :symbol="symbol" :time="Date.now()">Place for Apex Chart</apex-chart>
-          </div>
+        <div class="oichart">
+          <apex-oi-chart :symbol="symbol" :time="Date.now()">Place for OI Chart</apex-oi-chart>
+        </div>
+
+        <hr />
+        <div class="oiSeries">
+          <apex-oi-series-chart :symbol="symbol" :time="Date.now()" :date="'15-Jul-2022'" :strikePrice="store.getATM(symbol)+strikeInterval*2">Place for OI Series Line Chart</apex-oi-series-chart>
+          <apex-oi-series-chart :symbol="symbol" :time="Date.now()" :date="'15-Jul-2022'" :strikePrice="store.getATM(symbol)+strikeInterval">Place for OI Series Line Chart</apex-oi-series-chart>
+        </div>
+        <div class="oiSeries">
+          <apex-oi-series-chart :symbol="symbol" :time="Date.now()" :date="'15-Jul-2022'" :strikePrice="store.getATM(symbol)">Place for OI Series Line Chart</apex-oi-series-chart>
+        </div>
+        <div class="oiSeries">
+          <apex-oi-series-chart :symbol="symbol" :time="Date.now()" :date="'15-Jul-2022'" :strikePrice="store.getATM(symbol)-strikeInterval">Place for OI Series Line Chart</apex-oi-series-chart>
+          <apex-oi-series-chart :symbol="symbol" :time="Date.now()" :date="'15-Jul-2022'" :strikePrice="store.getATM(symbol)-strikeInterval*2">Place for OI Series Line Chart</apex-oi-series-chart>
+        </div>
         <hr />
 
         <div class="stats">

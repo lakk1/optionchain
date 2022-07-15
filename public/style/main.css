@@ -80,6 +80,11 @@ table.report tr {
   justify-content: center;
   /* align-items: center; */
 }
+.oiSeries {
+  display:flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
 .innerContainer {
   flex: 49%;
   border: 1px solid grey;

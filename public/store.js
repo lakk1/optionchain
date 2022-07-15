@@ -37,7 +37,7 @@ export const store = reactive({
   getChartData(sym = "NIFTY") {
     return this.data[sym] ? this.data[sym].totals.chart : {};
   },
-  getApexChartData(sym = "NIFTY") {
+  getOIChartData(sym = "NIFTY") {
     return this.data[sym] ? this.data[sym].totals.apexChart : {};
   },
   getGoogleChartData(sym = "NIFTY") {
@@ -61,5 +61,8 @@ export const store = reactive({
     return this.data[sym]
       ? this.data[sym].currentExpiryOIandVolumeTotal[optionType].totVol
       : 0;
+  },
+  getATM(sym = "NIFTY") {
+    return this.data[sym] ? this.data[sym].ATM : 0;
   },
 });
