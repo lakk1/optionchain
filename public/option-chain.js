@@ -53,7 +53,7 @@ export default {
           <hr />
           <div class="headerActions">
             <div class="timestamp">
-              NSE data valid as on: {{fetchTime()}}
+              NSE data valid as on: <span class="red">{{fetchTime()}}</span>
             </div>
             <div class="actions">
                 <label for="lotMultiplier">Show OI with Quantity</label>
