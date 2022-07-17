@@ -18,12 +18,11 @@ async function fetchNSEdata(symbol = "NIFTY", range = 10, expiry = 0) {
   // let url = "https://www.nseindia.com/api/option-chain-equities?symbol=AARTIIND";
 
   console.log("URL: ", url);
-  console.log("FILE: ", `./DATA/${symbol}/${symbol}.json`);
+  // console.log("FILE: ", `./DATA/${symbol}/${symbol}.json`);
 
   let data = undefined;
 
   let filename = path.resolve(`./DATA/${symbol}/${symbol}.json`);
-  console.log("Reading file", filename);
 
   data = await fs.promises.readFile(filename, "utf8");
   if (data) {

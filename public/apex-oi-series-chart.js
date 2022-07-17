@@ -170,8 +170,8 @@ export default {
     },
   },
   beforeUpdate() {
-    console.log("OI Series Chart beforeUpdate....");
-    this.getOiSeriesData();
+    // console.log("OI Series Chart beforeUpdate....");
+    // this.getOiSeriesData();
   },
   afterUpdate() {
     // this.updateOptions();

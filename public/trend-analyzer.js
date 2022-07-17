@@ -56,7 +56,6 @@ export default {
       let response = await axios.get("/symbols");
       if (response.data) {
         this.stockList = response.data;
-        console.log("GOT StockList:", this.stockList);
       }
     },
   },
