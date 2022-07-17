@@ -32,7 +32,9 @@
           <option disabled value="">Select Indices</option>
           <option value="both">INDICES</option>
           <template v-for="stock in stockList">
-            <option :value="stock.symbol">{{stock.underlying}}</option>
+            <option v-if="stock.scan == 'yes'" :value="stock.symbol">
+              {{stock.underlying}}
+            </option>
           </template>
         </select>
 

@@ -41,6 +41,7 @@ if (cluster.isMaster) {
   const express = require("express");
   const fs = require("fs");
   const path = require("path");
+  const symbols = require("./symbols.json");
 
   const port = process.env.PORT || 3000;
   const app = express();
@@ -56,6 +57,8 @@ if (cluster.isMaster) {
   );
 
   require("./routes")(router);
+
+  router.get("/symbols", (req, res) => res.send(symbols));
 
   app.use(express.static("public"));
 

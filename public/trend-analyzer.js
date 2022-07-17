@@ -1,10 +1,10 @@
 import { store } from "./store.js";
-import stockList from "./data.js";
 
 export default {
   data() {
     return {
       store,
+      stockList: [],
       symbol: "BANKNIFTY",
       range: 10,
       expiry: 0,
@@ -52,15 +52,20 @@ export default {
         return data[sym][callOrPut];
       } else return [];
     },
+    async getStockList() {
+      let response = await axios.get("/symbols");
+      if (response.data) {
+        this.stockList = response.data;
+        console.log("GOT StockList:", this.stockList);
+      }
+    },
   },
-  mounted() {
+  async mounted() {
     let interval = this.refreshInterval * 1000;
     this.refreshData(); // Call once before starting interval
-
     // Call every 30 seconds to refresh data
     this.intervalHandler = setInterval(this.refreshData, interval);
-
-    this.stockList = stockList;
+    this.getStockList();
   },
   beforeUnmount() {
     console.log("Unmounting Option Chain analyzer");
