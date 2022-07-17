@@ -178,7 +178,7 @@ export default {
   },
   mounted() {
     console.log("OI Series Chart mounted...");
-    this.intervalHandler = setInterval(this.getOiSeriesData, 180000);
+    this.intervalHandler = setInterval(this.getOiSeriesData, 60000);
     // this.drawOptionsChart();
     this.getOiSeriesData();
   },

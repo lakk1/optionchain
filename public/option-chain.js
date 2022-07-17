@@ -7,6 +7,7 @@ export default {
     return {
       store,
       multiply: false,
+      showSeries: false,
     };
   },
   methods: {
@@ -60,6 +61,9 @@ export default {
               NSE data valid as on: <span class="red">{{store.getFetchTime()}}</span>
             </div>
             <div class="actions">
+                <label for="oiSeries">Show OI Series</label>
+                <input type="checkbox" id="oiSeries" v-model="showSeries" />
+                &nbsp;
                 <label for="lotMultiplier">Show OI with Quantity</label>
                 <input type="checkbox" id="lotMultiplier" v-model="multiply" />
                 Lot size : {{ lotSize }}
@@ -73,18 +77,20 @@ export default {
         </div>
 
         <hr />
-        <div class="oiSeries">
-            <apex-oi-series-chart :symbol="symbol" :time="Date.now()" :date="store.getFetchDate()" :strikePrice="store.getATM(symbol)+strikeInterval*2">Place for OI Series Line Chart</apex-oi-series-chart>
-            <apex-oi-series-chart :symbol="symbol" :time="Date.now()" :date="store.getFetchDate()" :strikePrice="store.getATM(symbol)+strikeInterval">Place for OI Series Line Chart</apex-oi-series-chart>
-        </div>
-        <div class="oiSeries">
-          <apex-oi-series-chart :symbol="symbol" :time="Date.now()" :date="'15-Jul-2022'" :strikePrice="store.getATM(symbol)">Place for OI Series Line Chart</apex-oi-series-chart>
-        </div>
-        <div class="oiSeries">
-            <apex-oi-series-chart :symbol="symbol" :time="Date.now()" :date="'15-Jul-2022'" :strikePrice="store.getATM(symbol)-strikeInterval">Place for OI Series Line Chart</apex-oi-series-chart>
-            <apex-oi-series-chart :symbol="symbol" :time="Date.now()" :date="'15-Jul-2022'" :strikePrice="store.getATM(symbol)-strikeInterval*2">Place for OI Series Line Chart</apex-oi-series-chart>
-        </div>
-        <hr />
+        <template v-if="showSeries" >
+          <div class="oiSeries" >
+              <apex-oi-series-chart :symbol="symbol" :time="Date.now()" :date="store.getFetchDate()" :strikePrice="store.getATM(symbol)+strikeInterval*2">Place for OI Series Line Chart</apex-oi-series-chart>
+              <apex-oi-series-chart :symbol="symbol" :time="Date.now()" :date="store.getFetchDate()" :strikePrice="store.getATM(symbol)+strikeInterval">Place for OI Series Line Chart</apex-oi-series-chart>
+          </div>
+          <div class="oiSeries">
+            <apex-oi-series-chart :symbol="symbol" :time="Date.now()" :date="'15-Jul-2022'" :strikePrice="store.getATM(symbol)">Place for OI Series Line Chart</apex-oi-series-chart>
+          </div>
+          <div class="oiSeries">
+              <apex-oi-series-chart :symbol="symbol" :time="Date.now()" :date="'15-Jul-2022'" :strikePrice="store.getATM(symbol)-strikeInterval">Place for OI Series Line Chart</apex-oi-series-chart>
+              <apex-oi-series-chart :symbol="symbol" :time="Date.now()" :date="'15-Jul-2022'" :strikePrice="store.getATM(symbol)-strikeInterval*2">Place for OI Series Line Chart</apex-oi-series-chart>
+          </div>
+          <hr />
+        </template>
 
         <div class="stats">
           Total PUT OI: {{ Number(store.getOiTotal(symbol, 'PE')).toLocaleString() }}
