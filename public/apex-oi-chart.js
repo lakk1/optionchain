@@ -50,9 +50,6 @@ export default {
         },
       });
     },
-    getUpdatedTimeFromStore() {
-      return store.getUpdatedTime();
-    },
     drawOptionsChart() {
       let symbol = this.symbol;
       // console.log("Drawing Apex Chart for : ", symbol);
@@ -157,7 +154,6 @@ export default {
       <tr>
         <td style="width:100%">
           <div :id="symbol+'_barchart_div'" style="width: 1000px; height: 300px;"></div>
-          <!-- span> Updated At: {{ getUpdatedTimeFromStore() }} and time: {{ time }} </span -->
         </td>
       </tr>
     </table>

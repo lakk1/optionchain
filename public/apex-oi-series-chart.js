@@ -15,16 +15,25 @@ export default {
     };
   },
   methods: {
-    updateOptions() {
-      console.log("Updating OI series for:", this.symbol);
-      // this.chart.updateSeries(this.getSeries());
-
-      // this.chart.updateOptions({
-      //   series: this.getSeries(),
-      //   xaxis: {
-      //     categories: this.series,
-      //   },
-      // });
+    getSeries() {
+      return [
+        {
+          name: "Put Change",
+          data: this.PEoiChange,
+        },
+        {
+          name: "Call Change",
+          data: this.CEoiChange,
+        },
+        // {
+        //   name: "Put Volume",
+        //   data: this.PEoiVolume,
+        // },
+        // {
+        //   name: "Call Volume",
+        //   data: this.CEoiVolume,
+        // },
+      ];
     },
     drawOptionsChart() {
       let symbol = this.symbol;
@@ -32,28 +41,10 @@ export default {
       console.log(
         `Drawing OI Series for ${this.symbol} : ${this.strikePrice} of date: ${this.date}`
       );
-      console.log("OI Series : ", this.oiSeriesData);
 
       if (this.oiSeriesData) {
         let options = {
-          series: [
-            {
-              name: "Put Change",
-              data: this.PEoiChange,
-            },
-            {
-              name: "Call Change",
-              data: this.CEoiChange,
-            },
-            // {
-            //   name: "Put Volume",
-            //   data: this.PEoiVolume,
-            // },
-            // {
-            //   name: "Call Volume",
-            //   data: this.CEoiVolume,
-            // },
-          ],
+          series: this.getSeries(),
           chart: {
             height: 350,
             type: "line",
@@ -93,8 +84,14 @@ export default {
 
           xaxis: {
             categories: this.xAxisCategories,
-            title: {
-              text: "Time",
+            labels: {
+              hideOverlappingLabels: true,
+              style: {
+                fontSize: "8px",
+                fontFamily: "Helvetica, Arial, sans-serif",
+                fontWeight: 400,
+                cssClass: "apexcharts-xaxis-label",
+              },
             },
           },
           yaxis: {
@@ -124,6 +121,16 @@ export default {
         this.chart.render();
       }
     },
+    updateOptions() {
+      // console.log("Updating chart series for:", this.symbol);
+      // this.chart.updateSeries(this.getSeries());
+      this.chart.updateOptions({
+        series: this.getSeries(),
+        xaxis: {
+          categories: this.xAxisCategories,
+        },
+      });
+    },
     async getOiSeriesData() {
       console.log(
         `Fetching OI Series for ${this.symbol} : ${this.strikePrice} of date: ${this.date}`
@@ -136,8 +143,6 @@ export default {
       });
 
       if (response.data) {
-        console.log(response.data);
-
         this.oiSeriesData = response.data;
 
         // Generate data for Chart
@@ -156,8 +161,9 @@ export default {
           this.CEoiVolume.push(e.CE.volume);
           this.PEoiVolume.push(e.PE.volume);
         });
-
         this.drawOptionsChart();
+
+        // this.updateOptions();
       } else {
         console.log("Failed to get OI series for symbol", symbol);
       }
@@ -165,8 +171,10 @@ export default {
   },
   beforeUpdate() {
     console.log("OI Series Chart beforeUpdate....");
-    // this.updateOptions();
     this.getOiSeriesData();
+  },
+  afterUpdate() {
+    // this.updateOptions();
   },
   mounted() {
     console.log("OI Series Chart mounted...");
@@ -175,7 +183,6 @@ export default {
     this.getOiSeriesData();
   },
   beforeUnmount() {
-    // console.log("Unmounting chart....");
     clearInterval(this.intervalHandler);
   },
   template: `
@@ -184,7 +191,6 @@ export default {
         <td style="width:100%">
           <div :id="symbol + '_' + strikePrice + '_oiseries_div'" style="width: 1000px; height: 300px;"></div>
           <!--
-            <span> Updated At: {{ getUpdatedTimeFromStore() }} and time: {{ time }} </span>
             <pre> {{ oiSeriesData }}</pre>
           -->
         </td>

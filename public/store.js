@@ -31,17 +31,19 @@ export const store = reactive({
     }
     return this.data[sym] ? this.data[sym].currentExpiry : "";
   },
-  getUpdatedTime() {
-    return this.updatesAt;
+  getFetchTime(sym = "NIFTY") {
+    return this.data[sym] ? this.data[sym].fetchTime : {};
+  },
+  getFetchDate(sym = "NIFTY") {
+    return this.data[sym] && this.data[sym].fetchTime
+      ? this.data[sym].fetchTime.substring(0, 11)
+      : {};
   },
   getChartData(sym = "NIFTY") {
     return this.data[sym] ? this.data[sym].totals.chart : {};
   },
   getOIChartData(sym = "NIFTY") {
     return this.data[sym] ? this.data[sym].totals.apexChart : {};
-  },
-  getGoogleChartData(sym = "NIFTY") {
-    return this.data[sym] ? this.data[sym].totals.googleData : [];
   },
   getTotalOiDiff(sym = "NIFTY") {
     return this.data[sym] ? this.data[sym].totalOiDiff : {};

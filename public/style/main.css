@@ -84,6 +84,7 @@ table.report tr {
   display:flex;
   flex-wrap: wrap;
   justify-content: center;
+  border: 1px solid silver;
 }
 .innerContainer {
   flex: 49%;

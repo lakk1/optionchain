@@ -57,7 +57,7 @@ export default {
           <hr />
           <div class="headerActions">
             <div class="timestamp">
-              NSE data valid as on: <span class="red">{{fetchTime()}}</span>
+              NSE data valid as on: <span class="red">{{store.getFetchTime()}}</span>
             </div>
             <div class="actions">
                 <label for="lotMultiplier">Show OI with Quantity</label>
@@ -74,8 +74,8 @@ export default {
 
         <hr />
         <div class="oiSeries">
-          <apex-oi-series-chart :symbol="symbol" :time="Date.now()" :date="'15-Jul-2022'" :strikePrice="store.getATM(symbol)+strikeInterval*2">Place for OI Series Line Chart</apex-oi-series-chart>
-          <apex-oi-series-chart :symbol="symbol" :time="Date.now()" :date="'15-Jul-2022'" :strikePrice="store.getATM(symbol)+strikeInterval">Place for OI Series Line Chart</apex-oi-series-chart>
+          <apex-oi-series-chart :symbol="symbol" :time="Date.now()" :date="store.getFetchDate()" :strikePrice="store.getATM(symbol)+strikeInterval*2">Place for OI Series Line Chart</apex-oi-series-chart>
+          <apex-oi-series-chart :symbol="symbol" :time="Date.now()" :date="store.getFetchDate()" :strikePrice="store.getATM(symbol)+strikeInterval">Place for OI Series Line Chart</apex-oi-series-chart>
         </div>
         <div class="oiSeries">
           <apex-oi-series-chart :symbol="symbol" :time="Date.now()" :date="'15-Jul-2022'" :strikePrice="store.getATM(symbol)">Place for OI Series Line Chart</apex-oi-series-chart>

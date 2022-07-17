@@ -46,10 +46,6 @@ export default {
       let data = this.store.data;
       return data[sym] ? data[sym].spotPrice : 0;
     },
-    fetchTime(sym) {
-      let data = this.store.data;
-      return data[sym] ? data[sym].fetchTime : 0;
-    },
     getData(sym, callOrPut) {
       let data = this.store.data;
       if (data[sym] && data[sym][callOrPut]) {
