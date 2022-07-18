@@ -83,11 +83,11 @@ export default {
               <apex-oi-series-chart :symbol="symbol" :time="Date.now()" :date="store.getFetchDate()" :strikePrice="store.getATM(symbol)+strikeInterval">Place for OI Series Line Chart</apex-oi-series-chart>
           </div>
           <div class="oiSeries">
-            <apex-oi-series-chart :symbol="symbol" :time="Date.now()" :date="'15-Jul-2022'" :strikePrice="store.getATM(symbol)">Place for OI Series Line Chart</apex-oi-series-chart>
+            <apex-oi-series-chart :symbol="symbol" :time="Date.now()" :date="store.getFetchDate()" :strikePrice="store.getATM(symbol)">Place for OI Series Line Chart</apex-oi-series-chart>
           </div>
           <div class="oiSeries">
-              <apex-oi-series-chart :symbol="symbol" :time="Date.now()" :date="'15-Jul-2022'" :strikePrice="store.getATM(symbol)-strikeInterval">Place for OI Series Line Chart</apex-oi-series-chart>
-              <apex-oi-series-chart :symbol="symbol" :time="Date.now()" :date="'15-Jul-2022'" :strikePrice="store.getATM(symbol)-strikeInterval*2">Place for OI Series Line Chart</apex-oi-series-chart>
+              <apex-oi-series-chart :symbol="symbol" :time="Date.now()" :date="store.getFetchDate()" :strikePrice="store.getATM(symbol)-strikeInterval">Place for OI Series Line Chart</apex-oi-series-chart>
+              <apex-oi-series-chart :symbol="symbol" :time="Date.now()" :date="store.getFetchDate()" :strikePrice="store.getATM(symbol)-strikeInterval*2">Place for OI Series Line Chart</apex-oi-series-chart>
           </div>
           <hr />
         </template>
