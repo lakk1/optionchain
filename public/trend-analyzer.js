@@ -38,6 +38,7 @@ export default {
         console.log("Displaying: ", this.display);
         this.fetchOptions(this.display);
       }
+      document.title = "OptionChain -  " + this.display;
     },
     isDataAvailable(sym) {
       return this.store.data && this.store.data[sym] ? true : false;
