@@ -101,7 +101,7 @@ export default {
         </template>
 
         <template v-if="showOptionChain">
-          <div class="stats" v-if="!showOnlyOiSeries">
+          <div class="stats">
             Total PUT OI: {{ Number(store.getOiTotal(symbol, 'PE')).toLocaleString() }}
             &nbsp;
             Total PUT Volume: {{ Number(store.getVolumeTotal(symbol, 'PE')).toLocaleString() }}
@@ -110,7 +110,7 @@ export default {
             &nbsp;
             Total CALL Volume: {{ Number(store.getVolumeTotal(symbol, 'CE')).toLocaleString() }}
           </div>
-          <div class="chainTabContainer" v-if="!showOnlyOiSeries">
+          <div class="chainTabContainer">
             <table id="optionAnalyzer" class="report">
               <tr>
                 <th colspan="9" class="call">CALL</th>
