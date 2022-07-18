@@ -8,6 +8,7 @@ export default {
       store,
       multiply: false,
       showSeries: false,
+      showOnlyOiSeries: false,
     };
   },
   methods: {
@@ -61,6 +62,9 @@ export default {
               NSE data valid as on: <span class="red">{{store.getFetchTime()}}</span>
             </div>
             <div class="actions">
+                <label for="oiSeries">Show Only OI Series</label>
+                <input type="checkbox" id="oiSeries" v-model="showOnlyOiSeries" @change="showSeries = true"/>
+                &nbsp;
                 <label for="oiSeries">Show OI Series</label>
                 <input type="checkbox" id="oiSeries" v-model="showSeries" />
                 &nbsp;
@@ -72,7 +76,7 @@ export default {
         </div>
 
         <hr />
-        <div class="oichart">
+        <div class="oichart" v-if="!showOnlyOiSeries">
           <apex-oi-chart :symbol="symbol" :time="Date.now()">Place for OI Chart</apex-oi-chart>
         </div>
 
@@ -92,7 +96,7 @@ export default {
           <hr />
         </template>
 
-        <div class="stats">
+        <div class="stats" v-if="!showOnlyOiSeries">
           Total PUT OI: {{ Number(store.getOiTotal(symbol, 'PE')).toLocaleString() }}
           &nbsp;
           Total PUT Volume: {{ Number(store.getVolumeTotal(symbol, 'PE')).toLocaleString() }}
@@ -102,7 +106,7 @@ export default {
           Total CALL Volume: {{ Number(store.getVolumeTotal(symbol, 'CE')).toLocaleString() }}
         </div>
 
-        <div class="chainTabContainer">
+        <div class="chainTabContainer" v-if="!showOnlyOiSeries">
           <table id="optionAnalyzer" class="report">
             <tr>
               <th colspan="9" class="call">CALL</th>

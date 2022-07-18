@@ -87,7 +87,7 @@ export default {
             labels: {
               hideOverlappingLabels: true,
               style: {
-                fontSize: "8px",
+                fontSize: "10px",
                 fontFamily: "Helvetica, Arial, sans-serif",
                 fontWeight: 400,
                 cssClass: "apexcharts-xaxis-label",
