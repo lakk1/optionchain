@@ -63,17 +63,17 @@ export default {
               NSE data valid as on: <span class="red">{{store.getFetchTime()}}</span>
             </div>
             <div class="actions">
-                <label for="oiBars">Show OI Bars</label>
                 <input type="checkbox" id="oiBars" v-model="showOiBars"/>
-                &nbsp;
-                <label for="oiSeries">Show OI Series</label>
+                <label for="oiBars">Show OI Bars</label>
+                &nbsp; | &nbsp;
                 <input type="checkbox" id="oiSeries" v-model="showOiSeries" />
-                &nbsp;
-                <label for="oiChain">Show OI Chain</label>
+                <label for="oiSeries">Show OI Series</label>
+                &nbsp; | &nbsp;
                 <input type="checkbox" id="oiChain" v-model="showOptionChain" />
-                &nbsp;
-                <label for="lotMultiplier">Show OI with Quantity</label>
+                <label for="oiChain">Show OI Chain</label>
+                &nbsp; | &nbsp;
                 <input type="checkbox" id="lotMultiplier" v-model="multiply" />
+                <label for="lotMultiplier">Show OI with Quantity</label>
                 Lot size : {{ lotSize }}
             </div>
           </div>
