@@ -85,6 +85,7 @@ export default {
           xaxis: {
             categories: this.xAxisCategories,
             labels: {
+              show: false,
               hideOverlappingLabels: true,
               style: {
                 fontSize: "10px",

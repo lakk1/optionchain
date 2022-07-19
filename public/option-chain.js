@@ -22,6 +22,7 @@ export default {
       if (response.data) {
         this.stockList = response.data;
       }
+      return this.stockList;
       // fetch("/symbols")
       //   .then((response) => {
       //     let jsonData = response.json();
@@ -55,12 +56,18 @@ export default {
   },
   computed: {
     lotSize() {
+      if (!this.stockList) {
+        this.getStockList();
+      }
       let symbolDetails = this.stockList.filter(
         (s) => s.symbol == this.symbol
       )[0];
       return symbolDetails.lotsize;
     },
     strikeInterval() {
+      if (!this.stockList) {
+        this.getStockList();
+      }
       let symbolDetails = this.stockList.filter(
         (s) => s.symbol == this.symbol
       )[0];
