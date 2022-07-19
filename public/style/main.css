@@ -65,6 +65,9 @@ html {
 .actions {
   justify-content: right;
 }
+.actions label {
+  cursor: pointer;
+}
 
 table.report,
 table.report td,

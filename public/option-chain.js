@@ -2,7 +2,7 @@ import { store } from "./store.js";
 import stockList from "./data.js";
 
 export default {
-  props: ["symbol"],
+  props: ["symbol", "display"],
   data() {
     return {
       store,
@@ -60,17 +60,18 @@ export default {
           <hr />
           <div class="headerActions">
             <div class="timestamp">
-              NSE data valid as on: <span class="red">{{store.getFetchTime()}}</span>
+              NSE data valid as on: <span class="red"> {{store.getFetchTime()}} </span>
             </div>
             <div class="actions">
+                Display:
                 <input type="checkbox" id="oiBars" v-model="showOiBars"/>
-                <label for="oiBars">Show OI Bars</label>
+                <label for="oiBars">OI Bars</label>
                 &nbsp; | &nbsp;
                 <input type="checkbox" id="oiSeries" v-model="showOiSeries" />
-                <label for="oiSeries">Show OI Series</label>
+                <label for="oiSeries">OI Series</label>
                 &nbsp; | &nbsp;
                 <input type="checkbox" id="oiChain" v-model="showOptionChain" />
-                <label for="oiChain">Show OI Chain</label>
+                <label for="oiChain">OI Chain</label>
                 &nbsp; | &nbsp;
                 <input type="checkbox" id="lotMultiplier" v-model="multiply" />
                 <label for="lotMultiplier">Show OI with Quantity</label>
@@ -92,6 +93,7 @@ export default {
           </div>
           <div class="oiSeries">
             <apex-oi-series-chart :symbol="symbol" :time="Date.now()" :date="store.getFetchDate()" :strikePrice="store.getATM(symbol)">Place for OI Series Line Chart</apex-oi-series-chart>
+              <apex-oi-chart :symbol="symbol" :time="Date.now()" v-if="display != 'both' ">Place for OI Chart</apex-oi-chart>
           </div>
           <div class="oiSeries">
               <apex-oi-series-chart :symbol="symbol" :time="Date.now()" :date="store.getFetchDate()" :strikePrice="store.getATM(symbol)-strikeInterval">Place for OI Series Line Chart</apex-oi-series-chart>
