@@ -133,13 +133,14 @@ export default {
       });
     },
     async getOiSeriesData() {
+      let fetchDate = this.date || store.getFetchDate();
       console.log(
-        `Fetching OI Series for ${this.symbol} : ${this.strikePrice} of date: ${this.date}`
+        `Fetching OI Series for ${this.symbol} : ${this.strikePrice} of date: ${fetchDate}`
       );
 
       const response = await axios.post("/nse/filteredData/", {
         symbol: this.symbol,
-        date: this.date,
+        date: fetchDate,
         strikePrices: this.strikePrice,
       });
 

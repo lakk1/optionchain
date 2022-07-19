@@ -37,7 +37,7 @@ export const store = reactive({
   getFetchDate(sym = "NIFTY") {
     return this.data[sym] && this.data[sym].fetchTime
       ? this.data[sym].fetchTime.substring(0, 11)
-      : {};
+      : "";
   },
   getChartData(sym = "NIFTY") {
     return this.data[sym] ? this.data[sym].totals.chart : {};
