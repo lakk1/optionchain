@@ -11,6 +11,8 @@ export default {
       showOiBars: true,
       showOptionChain: true,
       stockList: undefined,
+      lotSize: 0,
+      strikeInterval: 0,
     };
   },
   mounted() {
@@ -21,8 +23,12 @@ export default {
       let response = await axios.get("/symbols");
       if (response.data) {
         this.stockList = response.data;
+        let symbolDetails = this.stockList.filter(
+          (s) => s.symbol == this.symbol
+        )[0];
+        this.lotSize = symbolDetails.lotsize;
+        this.strikeInterval = symbolDetails.steps;
       }
-      return this.stockList;
       // fetch("/symbols")
       //   .then((response) => {
       //     let jsonData = response.json();
@@ -55,24 +61,6 @@ export default {
     },
   },
   computed: {
-    lotSize() {
-      if (!this.stockList) {
-        this.getStockList();
-      }
-      let symbolDetails = this.stockList.filter(
-        (s) => s.symbol == this.symbol
-      )[0];
-      return symbolDetails.lotsize;
-    },
-    strikeInterval() {
-      if (!this.stockList) {
-        this.getStockList();
-      }
-      let symbolDetails = this.stockList.filter(
-        (s) => s.symbol == this.symbol
-      )[0];
-      return symbolDetails.steps;
-    },
     oiMultiplier() {
       return this.multiply ? this.lotSize : 1;
     },
