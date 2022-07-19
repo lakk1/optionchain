@@ -36,6 +36,7 @@ if (cluster.isMaster) {
 } else {
   require("./database"); // Establish connection with DB
   // Actual program
+  const compression = require("compression");
   const bodyParser = require("body-parser");
   const parseurl = require("parseurl");
   const express = require("express");
@@ -45,6 +46,9 @@ if (cluster.isMaster) {
 
   const port = process.env.PORT || 3000;
   const app = express();
+  // Compress all HTTP responses
+  app.use(compression());
+
   let router = express.Router();
 
   app.use(router);

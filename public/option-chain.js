@@ -1,5 +1,5 @@
 import { store } from "./store.js";
-import stockList from "./data.js";
+// import stockList from "./data.js";
 
 export default {
   props: ["symbol", "display"],
@@ -10,9 +10,30 @@ export default {
       showOiSeries: false,
       showOiBars: true,
       showOptionChain: true,
+      stockList: undefined,
     };
   },
+  mounted() {
+    this.getStockList();
+  },
   methods: {
+    async getStockList() {
+      let response = await axios.get("/symbols");
+      if (response.data) {
+        this.stockList = response.data;
+      }
+      // fetch("/symbols")
+      //   .then((response) => {
+      //     let jsonData = response.json();
+      //     console.log("Fetch Response: ", jsonData);
+      //     this.stockList = jsonData;
+      //     return jsonData;
+      //   })
+      //   .then((data) => {
+      //     console.log("Fetch Data", data);
+      //     console.log(data);
+      //   });
+    },
     isDataAvailable() {
       return this.store.data && this.store.data[this.symbol] ? true : false;
     },
@@ -34,11 +55,15 @@ export default {
   },
   computed: {
     lotSize() {
-      let symbolDetails = stockList.filter((s) => s.symbol == this.symbol)[0];
+      let symbolDetails = this.stockList.filter(
+        (s) => s.symbol == this.symbol
+      )[0];
       return symbolDetails.lotsize;
     },
     strikeInterval() {
-      let symbolDetails = stockList.filter((s) => s.symbol == this.symbol)[0];
+      let symbolDetails = this.stockList.filter(
+        (s) => s.symbol == this.symbol
+      )[0];
       return symbolDetails.steps;
     },
     oiMultiplier() {
