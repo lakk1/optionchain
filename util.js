@@ -290,6 +290,7 @@ function getDataForCurrentExpiry(response, symbol, range = 10, expiry = 0) {
       pcrOI,
       pcrVolume,
       totalOiDiff,
+      STRIKES,
     };
   }
   return {

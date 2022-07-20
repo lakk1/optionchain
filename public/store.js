@@ -19,6 +19,9 @@ export const store = reactive({
     this.data[symbol] = data;
     this.loading = false;
   },
+  getStrikes(sym = "NIFTY") {
+    return this.data[sym] ? this.data[sym].STRIKES : [];
+  },
   getStrikesDetails(sym = "NIFTY") {
     return this.data[sym] ? this.data[sym].filteredStrikes : [];
   },

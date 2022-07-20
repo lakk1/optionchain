@@ -1,7 +1,15 @@
 import { store } from "./store.js";
+import stockList from "./data.js";
 
 export default {
-  props: ["symbol", "strikePrice", "time"],
+  props: [
+    "symbol",
+    "strikePrice",
+    "time",
+    "chartID",
+    "strikeInterval",
+    "multiplier",
+  ],
   data() {
     return {
       chart: undefined,
@@ -14,9 +22,18 @@ export default {
       PEoiVolume: [],
       date: undefined,
       lastFetchTime: undefined,
+      previousStrike: undefined,
+      previousSymbol: undefined,
+      seriesStrikePrice: undefined,
+      STRIKES: [],
+      interval: 0,
     };
   },
   methods: {
+    getStrikeInterval() {
+      let symbolDetails = stockList.filter((s) => s.symbol == this.symbol)[0];
+      return symbolDetails.steps;
+    },
     getSeries() {
       return [
         {
@@ -27,14 +44,6 @@ export default {
           name: "Call Change",
           data: this.CEoiChange,
         },
-        // {
-        //   name: "Put Volume",
-        //   data: this.PEoiVolume,
-        // },
-        // {
-        //   name: "Call Volume",
-        //   data: this.CEoiVolume,
-        // },
       ];
     },
     drawOptionsChart() {
@@ -42,7 +51,7 @@ export default {
       let fetchDate = this.date || store.getFetchDate();
 
       console.log(
-        `Drawing OI Series for ${this.symbol} : ${this.strikePrice} of date: ${fetchDate}`
+        `Drawing OI Series for ${this.symbol} : ${this.seriesStrikePrice} of date: ${fetchDate}`
       );
 
       if (this.oiSeriesData) {
@@ -71,7 +80,7 @@ export default {
             width: [2, 2],
           },
           title: {
-            text: `OI Series for ${this.strikePrice} - ${this.lastFetchTime}`,
+            text: `${this.symbol} OI Series for ${this.seriesStrikePrice} - ${this.lastFetchTime}`,
             align: "left",
           },
           grid: {
@@ -114,7 +123,8 @@ export default {
           },
         };
 
-        let selector = "#" + symbol + "_" + this.strikePrice + "_oiseries_div";
+        let selector =
+          "#" + symbol + "_" + this.seriesStrikePrice + "_oiseries_div";
 
         let elem = document.querySelector(selector);
 
@@ -135,16 +145,24 @@ export default {
         },
       });
     },
-    async getOiSeriesData() {
+    async getOiSeriesData(calledFrom) {
       let fetchDate = this.date || store.getFetchDate();
-      console.log(
-        `Fetching OI Series for ${this.symbol} : ${this.strikePrice} of date: ${fetchDate}`
-      );
+      this.STRIKES = store.getStrikes(this.symbol);
+
+      if (this.strikeInterval == 0) {
+        console.log("Updating interval...");
+        let interval = this.getStrikeInterval();
+        this.seriesStrikePrice = this.strikePrice + interval * this.multiplier;
+      }
+
+      // console.log(
+      //   `${calledFrom} ===== Fetching OI Series for ${this.symbol} : ${this.seriesStrikePrice} of date: ${fetchDate}`
+      // );
 
       const response = await axios.post("/nse/filteredData/", {
         symbol: this.symbol,
         date: fetchDate,
-        strikePrices: this.strikePrice,
+        strikePrices: this.seriesStrikePrice,
       });
 
       if (response.data) {
@@ -153,15 +171,18 @@ export default {
         let totalRecords = response.data.records.length;
         if (totalRecords == 0) return;
 
-        console.log("TOTAL Records in OI Series: ", totalRecords);
-
         let maxFetchTime = response.data.records[totalRecords - 1].timeStamp;
-        if (this.lastFetchTime == maxFetchTime) {
-          console.log("No new records to redraw OI Series");
-          return;
-        }
+        // if (
+        //   this.lastFetchTime == maxFetchTime &&
+        //   this.previousStrike == this.seriesStrikePrice
+        // ) {
+        //   console.log("No new records to redraw OI Series");
+        //   return;
+        // }
 
         this.lastFetchTime = maxFetchTime;
+        this.previousStrike = this.seriesStrikePrice;
+        this.previousSymbol = this.symbol;
         store.updateFetchTime(this.symbol, this.lastFetchTime);
 
         // Generate data for Chart
@@ -193,33 +214,60 @@ export default {
     },
   },
   beforeUpdate() {
-    console.log("OI Series Chart beforeUpdate : ", this.symbol, this.time);
-    this.getOiSeriesData();
+    // console.log("STRIKES: ", store.getStrikes(this.symbol));
+    // console.log(
+    //   this.chartID,
+    //   "------------ OI SERIES before Update: ",
+    //   this.symbol,
+    //   this.strikePrice,
+    //   this.seriesStrikePrice
+    // );
+
+    if (this.previousSymbol != this.symbol) {
+      // console.log(        "Inside before Update - updating prev symbol and strike price"      );
+      this.previousSymbol = this.symbol;
+      this.seriesStrikePrice = this.strikePrice;
+      this.getOiSeriesData("From Before Update");
+    }
   },
-  afterUpdate() {
-    // this.updateOptions();
+  created() {
+    // console.log(
+    //   this.chartID,
+    //   "OI SERIES CREATED: ",
+    //   this.symbol,
+    //   this.strikePrice,
+    //   " Interval: ",
+    //   this.strikeInterval
+    // );
   },
   mounted() {
-    console.log("OI Series Chart mounted...");
-    this.intervalHandler = setInterval(this.getOiSeriesData, 60000);
-
-    // this.drawOptionsChart();
-    this.getOiSeriesData();
-    if (!this.date) {
-      this.date = store.getFetchDate();
+    if (this.seriesStrikePrice != this.strikePrice) {
+      this.seriesStrikePrice = this.strikePrice;
+      this.STRIKES = store.getStrikes(this.symbol);
+      if (!this.date) {
+        this.date = store.getFetchDate();
+      }
     }
+    this.intervalHandler = setInterval(() => {
+      this.getOiSeriesData("From SetInterval");
+    }, 60000);
   },
   beforeUnmount() {
     clearInterval(this.intervalHandler);
   },
   template: `
-  <table class="columns">
-      <tr>
-        <td style="width:100%">
-          <div :id="symbol + '_' + strikePrice + '_oiseries_div'" style="width: 1000px; height: 300px;"></div>
-        </td>
-      </tr>
-    </table>
+  <div class="oiSeriesContainer">
+    <div>
+      Strike Price
+      <select v-model="seriesStrikePrice" @change="getOiSeriesData('On DropDown Change')">
+        <template v-for="s in STRIKES">
+            <option :value="s">
+              {{s}}
+            </option>
+        </template></select>
+    </div>
+    <div :id="symbol + '_' + seriesStrikePrice + '_oiseries_div'" style="width: 1000px; height: 300px;"></div>
+  </div>
   `,
   // <td><div :id="symbol+'_div'" class="" style="border: 1px solid #ccc"> SOMTHING HERE for {{symbol}}</div></td>
 };

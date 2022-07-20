@@ -183,3 +183,8 @@ table.report tr th {
   font-size: large;
   color: brown;
 }
+
+.oiSeriesContainer {
+  display: flex;
+  flex-direction: column;
+}
