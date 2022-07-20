@@ -38,9 +38,10 @@ export default {
     },
     drawOptionsChart() {
       let symbol = this.symbol;
-      let strikePrice = this.strikePrice;
+      let fetchDate = this.date || store.getFetchDate();
+
       console.log(
-        `Drawing OI Series for ${this.symbol} : ${this.strikePrice} of date: ${this.date}`
+        `Drawing OI Series for ${this.symbol} : ${this.strikePrice} of date: ${fetchDate}`
       );
 
       if (this.oiSeriesData) {
@@ -69,7 +70,7 @@ export default {
             width: [2, 2],
           },
           title: {
-            text: `OI Series for ${strikePrice} - ${this.date}`,
+            text: `OI Series for ${this.strikePrice} - ${fetchDate}`,
             align: "left",
           },
           grid: {
@@ -112,7 +113,7 @@ export default {
           },
         };
 
-        let selector = "#" + symbol + "_" + strikePrice + "_oiseries_div";
+        let selector = "#" + symbol + "_" + this.strikePrice + "_oiseries_div";
 
         let elem = document.querySelector(selector);
 
@@ -182,6 +183,7 @@ export default {
   mounted() {
     console.log("OI Series Chart mounted...");
     this.intervalHandler = setInterval(this.getOiSeriesData, 60000);
+
     // this.drawOptionsChart();
     this.getOiSeriesData();
     if (!this.date) {
@@ -196,9 +198,6 @@ export default {
       <tr>
         <td style="width:100%">
           <div :id="symbol + '_' + strikePrice + '_oiseries_div'" style="width: 1000px; height: 300px;"></div>
-          <!--
-            <pre> {{ oiSeriesData }}</pre>
-          -->
         </td>
       </tr>
     </table>
