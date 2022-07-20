@@ -7,9 +7,9 @@ export default {
     return {
       store,
       multiply: false,
-      showOiSeries: false,
-      showOiBars: true,
-      showOptionChain: true,
+      showOiSeries: true,
+      showOiBars: false,
+      showOptionChain: false,
       stockList: undefined,
       lotSize: 0,
       strikeInterval: 0,
@@ -95,16 +95,16 @@ export default {
             </div>
             <div class="actions">
                 Display:
-                <input type="checkbox" id="oiBars" v-model="showOiBars"/>
-                <label for="oiBars">OI Bars</label>
+                <input type="checkbox" :id="symbol+ '_oiBars'" v-model="showOiBars"/>
+                <label :for="symbol+ '_oiBars'">OI Bars</label>
                 &nbsp; | &nbsp;
-                <input type="checkbox" id="oiSeries" v-model="showOiSeries" />
-                <label for="oiSeries">OI Series</label>
+                <input type="checkbox" :id="symbol+ '_oiSeries'" v-model="showOiSeries" />
+                <label :for="symbol+ '_oiSeries'">OI Series</label>
                 &nbsp; | &nbsp;
-                <input type="checkbox" id="oiChain" v-model="showOptionChain" />
-                <label for="oiChain">OI Chain</label>
+                <input type="checkbox" :id="symbol+ '_oiChain'" v-model="showOptionChain" />
+                <label :for="symbol+ '_oiChain'">OI Chain</label>
                 &nbsp; | &nbsp;
-                <input type="checkbox" id="lotMultiplier" v-model="multiply" />
+                <input type="checkbox" :id="symbol+ '_lotMultiplier'" v-model="multiply" />
                 <label for="lotMultiplier">Show OI with Quantity</label>
                 Lot size : {{ lotSize }}
             </div>
