@@ -66,7 +66,7 @@ export default {
             type: "line",
             stacked: false,
             animations: {
-              enabled: true,
+              enabled: false,
             },
           },
           dataLabels: {
