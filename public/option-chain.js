@@ -24,6 +24,7 @@ export default {
   },
   beforeUpdate() {
     if (!this.ATM) this.ATM = this.getATM(this.symbol);
+    this.fetchDate = this.store.getFetchDate();
   },
 
   methods: {
