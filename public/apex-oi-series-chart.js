@@ -13,6 +13,7 @@ export default {
       CEoiVolume: [],
       PEoiVolume: [],
       date: undefined,
+      lastFetchTime: undefined,
     };
   },
   methods: {
@@ -70,7 +71,7 @@ export default {
             width: [2, 2],
           },
           title: {
-            text: `OI Series for ${this.strikePrice} - ${fetchDate}`,
+            text: `OI Series for ${this.strikePrice} - ${this.lastFetchTime}`,
             align: "left",
           },
           grid: {
@@ -149,10 +150,21 @@ export default {
       if (response.data) {
         this.oiSeriesData = response.data;
 
+        let totalRecords = response.data.records.length;
+        if (totalRecords == 0) return;
+
+        console.log("TOTAL Records in OI Series: ", totalRecords);
+
+        let maxFetchTime = response.data.records[totalRecords - 1].timeStamp;
+        if (this.lastFetchTime == maxFetchTime) {
+          console.log("No new records to redraw OI Series");
+          return;
+        }
+
+        this.lastFetchTime = maxFetchTime;
+        store.updateFetchTime(this.symbol, this.lastFetchTime);
+
         // Generate data for Chart
-        // this.xAxisCategories = response.data.records.map((e) =>
-        //   e.timeStamp.substring(12, 17)
-        // );
         this.xAxisCategories = [];
         this.CEoiChange = [];
         this.PEoiChange = [];
@@ -165,6 +177,7 @@ export default {
           this.CEoiVolume.push(e.CE.volume);
           this.PEoiVolume.push(e.PE.volume);
         });
+
         this.drawOptionsChart();
 
         // this.updateOptions();

@@ -31,6 +31,9 @@ export const store = reactive({
     }
     return this.data[sym] ? this.data[sym].currentExpiry : "";
   },
+  updateFetchTime(sym = "NIFTY", fetchTime) {
+    this.data[sym].fetchTime = fetchTime;
+  },
   getFetchTime(sym = "NIFTY") {
     return this.data[sym] ? this.data[sym].fetchTime : {};
   },
