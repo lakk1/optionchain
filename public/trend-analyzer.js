@@ -38,7 +38,9 @@ export default {
         console.log("Displaying: ", this.display);
         this.fetchOptions(this.display);
       }
-      document.title = "OptionChain -  " + this.display;
+      let title =
+        this.display == "both" ? "INDICIES" : this.display.toUpperCase();
+      document.title = "OptionChain -  " + title;
     },
     isDataAvailable(sym) {
       return this.store.data && this.store.data[sym] ? true : false;
