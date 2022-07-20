@@ -165,18 +165,24 @@ export default {
         store.updateFetchTime(this.symbol, this.lastFetchTime);
 
         // Generate data for Chart
-        this.xAxisCategories = [];
-        this.CEoiChange = [];
-        this.PEoiChange = [];
-        this.CEoiVolume = [];
-        this.PEoiVolume = [];
+        let xAxisCategories = [];
+        let CEoiChange = [];
+        let PEoiChange = [];
+        let CEoiVolume = [];
+        let PEoiVolume = [];
         response.data.records.forEach((e) => {
-          this.xAxisCategories.push(e.timeStamp.substring(12, 17));
-          this.CEoiChange.push(e.CE.changeInOI);
-          this.PEoiChange.push(e.PE.changeInOI);
-          this.CEoiVolume.push(e.CE.volume);
-          this.PEoiVolume.push(e.PE.volume);
+          xAxisCategories.push(e.timeStamp.substring(12, 17));
+          CEoiChange.push(e.CE.changeInOI);
+          PEoiChange.push(e.PE.changeInOI);
+          CEoiVolume.push(e.CE.volume);
+          PEoiVolume.push(e.PE.volume);
         });
+
+        this.xAxisCategories = xAxisCategories;
+        this.CEoiChange = CEoiChange;
+        this.PEoiChange = PEoiChange;
+        this.CEoiVolume = CEoiVolume;
+        this.PEoiVolume = PEoiVolume;
 
         this.drawOptionsChart();
 
@@ -187,8 +193,8 @@ export default {
     },
   },
   beforeUpdate() {
-    // console.log("OI Series Chart beforeUpdate....");
-    // this.getOiSeriesData();
+    console.log("OI Series Chart beforeUpdate : ", this.symbol, this.time);
+    this.getOiSeriesData();
   },
   afterUpdate() {
     // this.updateOptions();

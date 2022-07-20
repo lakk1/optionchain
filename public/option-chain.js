@@ -19,11 +19,8 @@ export default {
   mounted() {
     this.getStockList();
     this.fetchDate = this.store.getFetchDate();
-    this.ATM = this.getATM(this.symbol);
   },
   beforeUpdate() {
-    if (!this.ATM) this.ATM = this.getATM(this.symbol);
-    console.log("ATM FOR ", this.symbol, ": ", this.ATM);
     this.fetchDate = this.store.getFetchDate();
   },
 
@@ -98,7 +95,7 @@ export default {
           <hr />
           <div class="headerActions">
             <div class="timestamp">
-              NSE data valid as on: <span class="red"> {{store.getFetchTime()}} </span>
+              NSE data valid as on: <span class="red"> {{fetchTime(symbol)}} </span>
             </div>
             <div class="actions">
                 Display:
@@ -120,22 +117,22 @@ export default {
 
         <hr />
         <div class="oichart" v-if="showOiBars">
-          <apex-oi-chart :symbol="symbol" :time="Date.now()">Place for OI Chart</apex-oi-chart>
+          <apex-oi-chart :symbol="symbol" :time="fetchTime(symbol)">Place for OI Chart</apex-oi-chart>
         </div>
 
         <hr />
         <template v-if="showOiSeries" >
           <div class="oiSeries" >
-              <apex-oi-series-chart :symbol="symbol" :time="Date.now()" :strikePrice="getATM(symbol)+strikeInterval*2">Place for OI Series Line Chart</apex-oi-series-chart>
-              <apex-oi-series-chart :symbol="symbol" :time="Date.now()" :strikePrice="getATM(symbol)+strikeInterval">Place for OI Series Line Chart</apex-oi-series-chart>
+              <apex-oi-series-chart :symbol="symbol" :time="fetchTime(symbol)" :strikePrice="getATM(symbol)+strikeInterval*2">Place for OI Series Line Chart</apex-oi-series-chart>
+              <apex-oi-series-chart :symbol="symbol" :time="fetchTime(symbol)" :strikePrice="getATM(symbol)+strikeInterval">Place for OI Series Line Chart</apex-oi-series-chart>
           </div>
           <div class="oiSeries">
-            <apex-oi-series-chart :symbol="symbol" :time="Date.now()" :strikePrice="getATM(symbol)">Place for OI Series Line Chart</apex-oi-series-chart>
-            <apex-oi-chart :symbol="symbol" :time="Date.now()" v-if="display != 'both' ">Place for OI Chart</apex-oi-chart>
+            <apex-oi-series-chart :symbol="symbol" :time="fetchTime(symbol)" :strikePrice="getATM(symbol)">Place for OI Series Line Chart</apex-oi-series-chart>
+            <apex-oi-chart :symbol="symbol" :time="fetchTime(symbol)" v-if="display != 'both' ">Place for OI Chart</apex-oi-chart>
           </div>
           <div class="oiSeries">
-              <apex-oi-series-chart :symbol="symbol" :time="Date.now()" :strikePrice="getATM(symbol)-strikeInterval">Place for OI Series Line Chart</apex-oi-series-chart>
-              <apex-oi-series-chart :symbol="symbol" :time="Date.now()" :strikePrice="getATM(symbol)-strikeInterval*2">Place for OI Series Line Chart</apex-oi-series-chart>
+              <apex-oi-series-chart :symbol="symbol" :time="fetchTime(symbol)" :strikePrice="getATM(symbol)-strikeInterval">Place for OI Series Line Chart</apex-oi-series-chart>
+              <apex-oi-series-chart :symbol="symbol" :time="fetchTime(symbol)" :strikePrice="getATM(symbol)-strikeInterval*2">Place for OI Series Line Chart</apex-oi-series-chart>
           </div>
           <hr />
         </template>
