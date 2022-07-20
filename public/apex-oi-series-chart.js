@@ -1,7 +1,7 @@
 import { store } from "./store.js";
 
 export default {
-  props: ["symbol", "date", "strikePrice", "time"],
+  props: ["symbol", "strikePrice", "time"],
   data() {
     return {
       chart: undefined,
@@ -12,6 +12,7 @@ export default {
       PEoiChange: [],
       CEoiVolume: [],
       PEoiVolume: [],
+      date: undefined,
     };
   },
   methods: {
@@ -46,7 +47,7 @@ export default {
         let options = {
           series: this.getSeries(),
           chart: {
-            height: 350,
+            height: 300,
             type: "line",
             animations: {
               enabled: false,
@@ -68,7 +69,7 @@ export default {
             width: [2, 2],
           },
           title: {
-            text: `OI Series for ${strikePrice}`,
+            text: `OI Series for ${strikePrice} - ${this.date}`,
             align: "left",
           },
           grid: {
@@ -183,6 +184,9 @@ export default {
     this.intervalHandler = setInterval(this.getOiSeriesData, 60000);
     // this.drawOptionsChart();
     this.getOiSeriesData();
+    if (!this.date) {
+      this.date = store.getFetchDate();
+    }
   },
   beforeUnmount() {
     clearInterval(this.intervalHandler);

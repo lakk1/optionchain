@@ -484,6 +484,7 @@ export default [
     symbol: "HCLTECH",
     steps: 10,
     lotsize: 700,
+    scan: "yes",
   },
   {
     underlying: "HDFC LTD",
