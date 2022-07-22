@@ -7,8 +7,8 @@ export default {
     return {
       store,
       multiply: false,
-      showOiSeries: true,
-      showOiBars: false,
+      showOiSeries: false,
+      showOiBars: true,
       showOptionChain: false,
       stockList: undefined,
       lotSize: 0,
