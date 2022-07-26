@@ -65,6 +65,8 @@ export default {
             PCR (volume): {{ store.getVolumePCR(symbol) }}
             &nbsp;
             Put OI - Call OI : <span :class="{ red: store.getTotalOiDiff(symbol) < 0 }">{{ Number(store.getTotalOiDiff(symbol) * oiMultiplier).toLocaleString() }}</span>
+            &nbsp;
+            ATM: {{ getATM(symbol) }}
           <span/>
         </span>
           <hr />
