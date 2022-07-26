@@ -76,7 +76,7 @@ export default {
             </div>
             <div class="actions">
                 Display:
-                <input type="checkbox" :id="symbol+ '_oiBars'" v-model="showOiBars"/>
+                <input type="checkbox" :id="symbol+ '_oiBars'" v-model="showOiBars" @change="!showOiBars ? showOiSeries = true: 1"/>
                 <label :for="symbol+ '_oiBars'">OI Bars</label>
                 &nbsp; | &nbsp;
                 <input type="checkbox" :id="symbol+ '_oiSeries'" v-model="showOiSeries" />
