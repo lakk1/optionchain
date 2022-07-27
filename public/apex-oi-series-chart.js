@@ -58,7 +58,7 @@ export default {
         let options = {
           series: this.getSeries(),
           chart: {
-            height: 300,
+            // height: 300,
             type: "line",
             animations: {
               enabled: false,
@@ -80,7 +80,7 @@ export default {
             width: [2, 2],
           },
           title: {
-            text: `${this.symbol} OI Series for ${this.seriesStrikePrice} - ${this.lastFetchTime}`,
+            text: `${this.symbol} OI Change ${this.seriesStrikePrice} ${this.lastFetchTime}`,
             align: "left",
           },
           grid: {
@@ -115,7 +115,7 @@ export default {
             // max: 40,
           },
           legend: {
-            position: "top",
+            position: "bottom",
             horizontalAlign: "right",
             floating: true,
             offsetY: -25,
@@ -172,13 +172,15 @@ export default {
         if (totalRecords == 0) return;
 
         let maxFetchTime = response.data.records[totalRecords - 1].timeStamp;
-        // if (
-        //   this.lastFetchTime == maxFetchTime &&
-        //   this.previousStrike == this.seriesStrikePrice
-        // ) {
-        //   console.log("No new records to redraw OI Series");
-        //   return;
-        // }
+
+        // Check this in the live - whether it is ingoring all or only duplicates
+        if (
+          this.lastFetchTime == maxFetchTime &&
+          this.previousStrike == this.seriesStrikePrice
+        ) {
+          console.log("No new records to redraw OI Series for ", this.symbol);
+          return;
+        }
 
         this.lastFetchTime = maxFetchTime;
         this.previousStrike = this.seriesStrikePrice;
@@ -266,7 +268,7 @@ export default {
             </option>
         </template></select>
     </div>
-    <div :id="symbol + '_' + seriesStrikePrice + '_oiseries_div'" style="width: 1000px; height: 300px;"></div>
+    <div :id="symbol + '_' + seriesStrikePrice + '_oiseries_div'" style="width: 640px; height: 400px;"></div>
   </div>
   `,
   // <td><div :id="symbol+'_div'" class="" style="border: 1px solid #ccc"> SOMTHING HERE for {{symbol}}</div></td>
