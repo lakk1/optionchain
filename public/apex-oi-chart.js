@@ -55,6 +55,8 @@ export default {
       // console.log("Drawing Apex Chart for : ", symbol);
 
       let chartData = store.getOIChartData(this.symbol);
+      let OIChgdifference = store.getTotals(this.symbol).OIChgdifference;
+      let pcr = store.getFilteredPCR(this.symbol);
       // let ticks = this.store.getChartData(symbol).series;
       if (chartData) {
         let { CEoi, PEoi, CEoiChg, PEoiChg, series, PEvolume, CEvolume } =
@@ -122,6 +124,10 @@ export default {
           },
           xaxis: {
             categories: this.series,
+          },
+          title: {
+            text: `${this.symbol} - OI Change (PE - CE): ${OIChgdifference}, PCR: ${pcr}`,
+            align: "left",
           },
         };
 

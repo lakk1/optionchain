@@ -6,7 +6,7 @@ export default {
       store,
       stockList: [],
       symbol: "BANKNIFTY",
-      range: 10,
+      range: 7,
       expiry: 0,
       refreshInterval: 30, // seconds
       display: "both",
