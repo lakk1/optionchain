@@ -43,8 +43,9 @@ if (cluster.isMaster) {
   const fs = require("fs");
   const path = require("path");
   const symbols = require("./symbols.json");
+  let https = require("https");
 
-  const port = process.env.PORT || 3000;
+  const port = process.env.PORT || 80;
   const app = express();
   // Compress all HTTP responses
   app.use(compression());
@@ -69,9 +70,26 @@ if (cluster.isMaster) {
   app.use(function (req, res, next) {
     let url = parseurl(req);
     console.log("Requesting Data for", url.path);
+
+    // res.setHeader("ngrok-skip-browser-warning", "skipme");
+    // res.setHeader("User-Agent", "ngrok-skip-browser-warning");
     next();
   });
 
+  app.get("/h", (req, res) => {
+    res.send("Hello, CG!");
+  });
+
+  /*
+  let certfile = fs.readFileSync(path.join(__dirname, "ssl", "cert.pem"));
+  let keyfile = fs.readFileSync(path.join(__dirname, "ssl", "key.pem"));
+  const secureserver = https.createServer(
+    { cert: certfile, key: keyfile, passphrase: "secret" },
+    app
+  );
+  //*/
+
+  // secureserver.listen(port, (e) => {
   app.listen(port, (e) => {
     if (e) {
       return console.log("Failed to start server", e);
