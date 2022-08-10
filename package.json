@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "start http://localhost:3000 && nodemon --ignore ./OISTATS/ --ignore ./DATA/ server.js",
-    "stub": "start http://localhost:3000 && nodemon --ignore ./OISTATS/ --ignore ./DATA/ server.js stub ",
-    "start": "start http://localhost:3000 && node server.js"
+    "dev": "start http://localhost && nodemon --ignore ./OISTATS/ --ignore ./DATA/ server.js",
+    "stub": "start http://localhost && nodemon --ignore ./OISTATS/ --ignore ./DATA/ server.js stub ",
+    "start": "start http://localhost && node server.js"
   },
   "keywords": [],
   "author": "",
