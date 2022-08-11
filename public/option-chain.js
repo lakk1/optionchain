@@ -106,7 +106,13 @@ export default {
           </div>
           <div class="oiSeries">
             <apex-oi-series-chart :symbol="symbol" :time="fetchTime(symbol)" :strikePrice="getATM(symbol)" chartID=4 :strikeInterval="strikeInterval" multiplier=0 >OI Series Line Chart</apex-oi-series-chart>
-            <apex-oi-chart :symbol="symbol" :time="fetchTime(symbol)" v-if="display != 'both' ">Place for OI Chart</apex-oi-chart>
+            <div class="oiSeriesHeader">
+              <span class="symbol">{{ symbol }} </span> :  <span class="spotprice">{{spotPrice()}} </span>
+              ATM: {{ getATM(symbol) }}
+              OI Change PE - CE : <span :class="{ red: store.getTotals(symbol).OIChgdifference < 0 }">{{ Number(store.getTotals(symbol).OIChgdifference * oiMultiplier).toLocaleString() }}</span>
+              PCR (Filtered): <span> {{ Number(store.getFilteredPCR(symbol)) }}</span>
+              <apex-oi-chart :symbol="symbol" :time="fetchTime(symbol)" v-if="display != 'both' ">Place for OI Chart</apex-oi-chart>
+            </div>
           </div>
           <div class="oiSeries">
               <apex-oi-series-chart :symbol="symbol" :time="fetchTime(symbol)" :strikePrice="getATM(symbol)-strikeInterval" chartID=5 :strikeInterval="strikeInterval" multiplier=-1 >OI Series Line Chart</apex-oi-series-chart>

@@ -83,11 +83,19 @@ table.report tr {
   justify-content: center;
   /* align-items: center; */
 }
+
+.oiSeriesContainer {
+  display: flex;
+  flex-direction: column;
+}
 .oiSeries {
   display:flex;
   flex-wrap: wrap;
   justify-content: center;
   border: 1px solid silver;
+}
+.oiSeriesHeader {
+  font-size: 12px;
 }
 .innerContainer {
   flex: 49%;
@@ -182,9 +190,4 @@ table.report tr th {
 .expiry, .timer {
   font-size: large;
   color: brown;
-}
-
-.oiSeriesContainer {
-  display: flex;
-  flex-direction: column;
 }

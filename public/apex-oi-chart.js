@@ -125,10 +125,10 @@ export default {
           xaxis: {
             categories: this.series,
           },
-          title: {
-            text: `${this.symbol} - OI Change (PE - CE): ${OIChgdifference}, PCR: ${pcr}`,
-            align: "left",
-          },
+          // title: {
+          //   text: `${this.symbol} - OI Change (PE - CE): ${OIChgdifference}, PCR: ${pcr}`,
+          //   align: "left",
+          // },
         };
 
         this.chart = new ApexCharts(
