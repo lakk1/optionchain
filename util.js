@@ -19,6 +19,14 @@ function getStrikePriceRange(symbol = "NIFTY", spotPrice = 10000, range = 10) {
   return { ATM, STRIKES: [...pe, ATM, ...ce] };
 }
 
+function calculateOIaction({ oiChange, priceChange } = options) {
+  if (priceChange > 0 && oiChange > 0) return "LB";
+  if (priceChange > 0 && oiChange < 0) return "SC";
+  if (priceChange < 0 && oiChange < 0) return "LU";
+  if (priceChange < 0 && oiChange > 0) return "SB";
+  return "";
+}
+
 function calculateTotals(filteredStrikes) {
   let totals = {
     CE: {
@@ -65,9 +73,9 @@ function calculateTotals(filteredStrikes) {
     // If LTP is lesser than actual value it is supposed to be then you are getting that strike price in DISCOUNTED price
 
     // This is to write the x axis
-    strike.CE
-      ? totals.chart.series.push(strike.CE.strikePrice)
-      : totals.chart.series.push(strike.PE.strikePrice);
+    // strike.CE
+    //   ? totals.chart.series.push(strike.CE.strikePrice)
+    //   : totals.chart.series.push(strike.PE.strikePrice);
     strike.CE
       ? totals.apexChart.series.push(strike.CE.strikePrice)
       : totals.apexChart.series.push(strike.PE.strikePrice);
@@ -80,6 +88,11 @@ function calculateTotals(filteredStrikes) {
       strike.CE.premium = strike.CE.lastPrice - strike.CE.actualValue;
       strike.CE.premiumPercent =
         (100 * strike.CE.premium) / strike.CE.lastPrice;
+
+      strike.CE.action = calculateOIaction({
+        priceChange: strike.CE.change,
+        oiChange: strike.CE.changeinOpenInterest,
+      });
       // Calculate Totals
       totals.CE.oi += strike.CE.openInterest;
       totals.CE.oiChange += strike.CE.changeinOpenInterest;
@@ -125,6 +138,11 @@ function calculateTotals(filteredStrikes) {
       strike.PE.premiumPercent =
         (100 * strike.PE.premium) / strike.PE.lastPrice;
 
+      strike.PE.action = calculateOIaction({
+        priceChange: strike.PE.change,
+        oiChange: strike.PE.changeinOpenInterest,
+      });
+
       totals.PE.oi += strike.PE.openInterest;
       totals.PE.oiChange += strike.PE.changeinOpenInterest;
       totals.PE.volume += strike.PE.totalTradedVolume;
@@ -159,6 +177,30 @@ function calculateTotals(filteredStrikes) {
         strike.PE.openInterest =
         strike.PE.totalTradedVolume =
           0;
+    }
+    strike.strength = "";
+    if (
+      strike.PE.changeinOpenInterest - strike.CE.changeinOpenInterest >
+      strike.PE.changeinOpenInterest * 0.3
+    ) {
+      strike.strength = "S S";
+    } else if (
+      strike.PE.changeinOpenInterest - strike.CE.changeinOpenInterest > 0 &&
+      strike.PE.changeinOpenInterest - strike.CE.changeinOpenInterest <
+        strike.PE.changeinOpenInterest * 0.3
+    ) {
+      strike.strength = "Support";
+    } else if (
+      strike.PE.changeinOpenInterest - strike.CE.changeinOpenInterest <
+      -strike.CE.changeinOpenInterest * 0.3
+    ) {
+      strike.strength = "S R";
+    } else if (
+      strike.PE.changeinOpenInterest - strike.CE.changeinOpenInterest < 0 &&
+      strike.PE.changeinOpenInterest - strike.CE.changeinOpenInterest >
+        -strike.CE.changeinOpenInterest * 0.3
+    ) {
+      strike.strength = "Resistance";
     }
 
     let gc_data = [

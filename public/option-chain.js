@@ -135,13 +135,14 @@ export default {
           <div class="chainTabContainer">
             <table id="optionAnalyzer" class="report">
               <tr>
-                <th colspan="9" class="call">CALL</th>
+                <th colspan="10" class="call">CALL</th>
                 <th>
                   <span class="symbol">{{ symbol }} </span> <br/>
                   <span class="spotprice">{{spotPrice()}} </span></th>
-                <th colspan="9" class="put">PUT</th>
+                <th colspan="10" class="put">PUT</th>
               </tr>
               <tr class="tabHeader">
+                <th>Action</th>
                 <th>Delta</th>
                 <th>IV</th>
                 <th>OI Chg</th>
@@ -163,9 +164,11 @@ export default {
                 <th>OI Chg</th>
                 <th>IV</th>
                 <th>Delta</th>
+                <th>Action</th>
               </tr>
 
               <tr v-for="strikes in store.getStrikesDetails(symbol)" :class="{atm: strikes.strikePrice == getATM(symbol)}">
+                <td :class="{itm: strikes.strikePrice < getATM(symbol)}">{{ strikes.CE.action }} </td>
                 <td :class="{itm: strikes.strikePrice < getATM(symbol)}"><span v-if="strikes.CE.greeks" > {{ parseFloat(strikes.CE.greeks.delta).toFixed(3)  }} </span> </td>
                 <td :class="{itm: strikes.strikePrice < getATM(symbol)}">{{ parseFloat(strikes.CE.impliedVolatility).toFixed(2)  }}</td>
                 <td :class="{ red: strikes.CE.changeinOpenInterest < 0, itm: strikes.strikePrice < getATM(symbol), highOIchgCall: store.getTotals(symbol).CE.highOIchgStrike == strikes.strikePrice }">{{ Number(strikes.CE.changeinOpenInterest * oiMultiplier).toLocaleString() }}</td>
@@ -176,7 +179,9 @@ export default {
                 <td :class="{itm: strikes.strikePrice < getATM(symbol)}">{{ parseFloat(strikes.CE.actualValue).toFixed(2) }}</td>
                 <td :class="{itm: strikes.strikePrice < getATM(symbol), discount: strikes.CE.premium < 0}">{{ parseFloat(strikes.CE.lastPrice).toFixed(2) }}</td>
 
-                <td class="strikePrice">{{ strikes.strikePrice }}</td>
+                <td class="strikePrice">
+                  {{ strikes.strikePrice }} {{ strikes.strength }}
+                </td>
 
                 <td :class="{itm: strikes.strikePrice > getATM(symbol), discount: strikes.PE.premium < 0 }">{{ parseFloat(strikes.PE.lastPrice).toFixed(2) }}</td>
                 <td :class="{itm: strikes.strikePrice > getATM(symbol)}">{{ parseFloat(strikes.PE.actualValue).toFixed(2) }}</td>
@@ -187,9 +192,11 @@ export default {
                 <td :class="{ red: strikes.PE.changeinOpenInterest < 0, itm: strikes.strikePrice > getATM(symbol), highOIchgPut: store.getTotals(symbol).PE.highOIchgStrike == strikes.strikePrice }">{{ Number(strikes.PE.changeinOpenInterest * oiMultiplier).toLocaleString() }}</td>
                 <td :class="{itm: strikes.strikePrice > getATM(symbol)}">{{ parseFloat(strikes.PE.impliedVolatility).toFixed(2)  }}</td>
                 <td :class="{itm: strikes.strikePrice > getATM(symbol)}"><span v-if="strikes.CE.greeks" > {{ parseFloat(strikes.PE.greeks.delta).toFixed(3) }} </span> </td>
+                <td :class="{itm: strikes.strikePrice > getATM(symbol)}">{{ strikes.PE.action }} </td>
+
               </tr>
               <tr class="totals">
-                <td colspan=2>&nbsp;</td>
+                <td colspan=3>&nbsp;</td>
                 <td>&Sigma; OI Chg <hr />
                   <span :class="{ red: store.getTotals(symbol).CE.oiChange < 0 }">{{ Number(store.getTotals(symbol).CE.oiChange * oiMultiplier).toLocaleString() }}</span>
                 </td>
@@ -206,9 +213,15 @@ export default {
                 <td>&Sigma; OI Chg <hr />
                   <span :class="{ red: store.getTotals(symbol).PE.oiChange < 0 }">{{ Number(store.getTotals(symbol).PE.oiChange * oiMultiplier).toLocaleString() }}</span>
                 </td>
-                <td colspan=2>&nbsp;</td>
+                <td colspan=3>&nbsp;</td>
               </tr>
             </table>
+          </div>
+          <div class="tips">
+            NOTE: If LTP is lesser than Actual value, then you are getting that strike price in DISCOUNTED price
+            <br />S S: Strong Support, S R: Strong Resistance
+            <br />LB: Long Buildup (OI Change > 0, Price Change > 0), LW: Long Unwinding (OI Change < 0, Price Change < 0)
+            <br />SB: Short Buildup (OI Change > 0, Price Change < 0) , SC: Short Covering (OI Change < 0, Price Change > 0)
           </div>
         </template>
 
