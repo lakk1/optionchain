@@ -136,7 +136,9 @@ export default {
             <table id="optionAnalyzer" class="report">
               <tr>
                 <th colspan="9" class="call">CALL</th>
-                <th><span>BOTTOM</span></th>
+                <th>
+                  <span class="symbol">{{ symbol }} </span> <br/>
+                  <span class="spotprice">{{spotPrice()}} </span></th>
                 <th colspan="9" class="put">PUT</th>
               </tr>
               <tr class="tabHeader">

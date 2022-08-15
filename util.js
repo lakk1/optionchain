@@ -2,32 +2,6 @@ const fs = require("fs");
 const path = require("path");
 const stockList = require("./symbols.json");
 
-const config = { collectStats: false };
-
-(function createOIstatsFolder() {
-  let dirName = path.join(__dirname, "OISTATS");
-  fs.mkdir(dirName, { recursive: true }, (err) => {
-    if (err) {
-      throw err;
-      exit;
-    } else {
-      console.log("Created Directory", dirName);
-    }
-  });
-})();
-
-function storeOIdiffernece(data) {
-  let dirName = path.join(__dirname, "OISTATS");
-  let fileDate = data.fetchTime.replace(/\s.*/, "");
-
-  let baseName = data.symbol;
-  let fileName = path.join(dirName, `${baseName}_${fileDate}.json`);
-
-  fs.writeFileSync(fileName, JSON.stringify(data) + ",\n", {
-    flag: "a",
-  });
-}
-
 function getStrikePriceRange(symbol = "NIFTY", spotPrice = 10000, range = 10) {
   let symbolDetails = stockList.filter((s) => s.symbol == symbol)[0];
   const strikeInterval = symbolDetails.steps;
@@ -264,20 +238,6 @@ function getDataForCurrentExpiry(response, symbol, range = 10, expiry = 0) {
   // Calculate totals and high and low of each columns
   if (filteredStrikes.length > 0) {
     let totals = calculateTotals(filteredStrikes);
-
-    // Store the OIDifference with timestamp for future use
-    if (config.collectStats == true) {
-      storeOIdiffernece({
-        fetchTime,
-        symbol,
-        OIChgdifference: totals.OIChgdifference,
-        currentExpiry,
-        pcrVolume,
-        pcrOI,
-        peTotalVolume: PE.totVol,
-        ceTotalVolume: CE.totVol,
-      });
-    }
 
     return {
       ATM,

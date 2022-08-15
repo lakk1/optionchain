@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "start http://localhost && nodemon --ignore ./OISTATS/ --ignore ./DATA/ server.js",
-    "stub": "start http://localhost && nodemon --ignore ./OISTATS/ --ignore ./DATA/ server.js stub ",
+    "dev": "start http://localhost && nodemon --ignore ./DATA/ server.js",
     "start": "start http://localhost && node server.js"
   },
   "keywords": [],
