@@ -191,3 +191,37 @@ table.report tr th {
   font-size: large;
   color: brown;
 }
+
+
+.LB {
+  background-color: green;
+  color: yellow;
+}
+.LU {
+  background-color: orange;
+  color: black;
+}
+.SB {
+  background-color: red;
+  color: black;
+}
+.SC {
+  background-color: darkblue;
+  color: white;
+}
+.DOWN:before {
+  /* content: "↓"; */
+  /* content: "🠗"; */
+  content: "▼";
+  font-size: 12px;
+  font-family:u1f800;
+  padding-right: 5px;
+}
+.UP:before {
+  /* content: "↑"; */
+  /* content: "🠕"; */
+  content: "▲";
+  font-size: 12px;
+  font-family:u1f800;
+  padding-right: 5px;
+}

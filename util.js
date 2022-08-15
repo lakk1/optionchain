@@ -20,10 +20,12 @@ function getStrikePriceRange(symbol = "NIFTY", spotPrice = 10000, range = 10) {
 }
 
 function calculateOIaction({ oiChange, priceChange } = options) {
-  if (priceChange > 0 && oiChange > 0) return "LB";
-  if (priceChange > 0 && oiChange < 0) return "SC";
-  if (priceChange < 0 && oiChange < 0) return "LU";
-  if (priceChange < 0 && oiChange > 0) return "SB";
+  if (priceChange > 0 && oiChange > 0) return { action: "LB", direction: "UP" };
+  if (priceChange > 0 && oiChange < 0) return { action: "SC", direction: "UP" };
+  if (priceChange < 0 && oiChange < 0)
+    return { action: "LU", direction: "DOWN" };
+  if (priceChange < 0 && oiChange > 0)
+    return { action: "SB", direction: "DOWN" };
   return "";
 }
 
@@ -89,10 +91,14 @@ function calculateTotals(filteredStrikes) {
       strike.CE.premiumPercent =
         (100 * strike.CE.premium) / strike.CE.lastPrice;
 
-      strike.CE.action = calculateOIaction({
+      let opt = calculateOIaction({
         priceChange: strike.CE.change,
         oiChange: strike.CE.changeinOpenInterest,
       });
+
+      strike.CE.action = opt.action;
+      strike.CE.direction = opt.direction;
+
       // Calculate Totals
       totals.CE.oi += strike.CE.openInterest;
       totals.CE.oiChange += strike.CE.changeinOpenInterest;
@@ -138,10 +144,13 @@ function calculateTotals(filteredStrikes) {
       strike.PE.premiumPercent =
         (100 * strike.PE.premium) / strike.PE.lastPrice;
 
-      strike.PE.action = calculateOIaction({
+      let opt = calculateOIaction({
         priceChange: strike.PE.change,
         oiChange: strike.PE.changeinOpenInterest,
       });
+
+      strike.PE.action = opt.action;
+      strike.PE.direction = opt.direction;
 
       totals.PE.oi += strike.PE.openInterest;
       totals.PE.oiChange += strike.PE.changeinOpenInterest;
