@@ -59,6 +59,47 @@ NSE.getOptionChain = async (req, res) => {
   //   return res.json({ NSEData: { a: 1, b: 2 } });
 };
 
+NSE.getPutCallOiSum = async (req, res) => {
+  let symbol = req.body.symbol || "NIFTY";
+  let date = req.body.date || today();
+  let strikePrices = req.body.strikePrices;
+
+  console.log("strikePrices", strikePrices);
+  try {
+    let records = await filteredDataModel.aggregate([
+      {
+        $match: {
+          symbol: symbol,
+          date: date,
+          strikePrice: {
+            $in: strikePrices,
+          },
+        },
+      },
+      {
+        $group: {
+          _id: "$timeStamp",
+          CE_OI_SUM: {
+            $sum: "$CE.OI",
+          },
+          PE_OI_SUM: {
+            $sum: "$PE.OI",
+          },
+        },
+      },
+      {
+        $sort: {
+          _id: 1,
+        },
+      },
+    ]);
+
+    res.json({ records });
+  } catch (e) {
+    res.status(401).send(e);
+  }
+};
+
 NSE.getfilteredData = async (req, res) => {
   // GET: http://localhost:3000/nse/optionChain/BANKNIFTY/10/0
   console.log("Fetching OI Series data with ", req.body);
