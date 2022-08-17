@@ -219,7 +219,7 @@ export default {
           </div>
           <div class="tips">
             NOTE: If LTP is lesser than Actual value, then you are getting that strike price in DISCOUNTED price
-            <br />S S: Strong Support, S R: Strong Resistance
+            <br />S S: Strong Support, S R: Strong Resistance, W S: Support stronger than Resistance, W R : Resistance stronger than Support
             <br />LB: Long Buildup (OI Change > 0, Price Change > 0), LW: Long Unwinding (OI Change < 0, Price Change < 0)
             <br />SB: Short Buildup (OI Change > 0, Price Change < 0) , SC: Short Covering (OI Change < 0, Price Change > 0)
           </div>

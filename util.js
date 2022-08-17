@@ -198,7 +198,7 @@ function calculateTotals(filteredStrikes) {
       strike.PE.changeinOpenInterest - strike.CE.changeinOpenInterest <
         strike.PE.changeinOpenInterest * 0.3
     ) {
-      strike.strength = "Support";
+      strike.strength = "W S";
     } else if (
       strike.PE.changeinOpenInterest - strike.CE.changeinOpenInterest <
       -strike.CE.changeinOpenInterest * 0.3
@@ -209,7 +209,7 @@ function calculateTotals(filteredStrikes) {
       strike.PE.changeinOpenInterest - strike.CE.changeinOpenInterest >
         -strike.CE.changeinOpenInterest * 0.3
     ) {
-      strike.strength = "Resistance";
+      strike.strength = "W R";
     }
 
     let gc_data = [
