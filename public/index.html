@@ -58,9 +58,9 @@
         &nbsp; Current Time: <span class="timer"><timer></timer></span>
 
         &nbsp;
-        <template v-if="store.getExpiry() !== '' ">
-          <button @click="refreshData()">Refresh</button> &nbsp; Option Chain
-          for Expiry Date:
+        <template v-if="store.getExpiry(display) !== '' ">
+          <button @click="refreshData()">Refresh</button>
+          &nbsp; Data for Expiry Date:
           <span class="expiry">{{ store.getExpiry(display) }} </span>
         </template>
       </div>
