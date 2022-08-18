@@ -315,8 +315,8 @@ function calculateTotals(filteredStrikes) {
       totals[optionType].volumeStrength =
         totals[optionType].secondHighVolStrike >
         totals[optionType].highVolStrike
-          ? "Volume bullish"
-          : "Volume bearish";
+          ? "Volume bullish, week resistance"
+          : "Volume bearish, week support";
 
       totals[optionType].analysis +=
         totals[optionType].volumeStrength +
@@ -332,8 +332,8 @@ function calculateTotals(filteredStrikes) {
     } else {
       totals[optionType].oiStrength =
         totals[optionType].secondHighOIStrike > totals[optionType].highOIStrike
-          ? "OI is bullish"
-          : "OI is bearish";
+          ? "OI is bullish, week resistance"
+          : "OI is bearish, week support";
 
       totals[optionType].analysis +=
         totals[optionType].oiStrength +

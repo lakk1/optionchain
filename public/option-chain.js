@@ -75,18 +75,20 @@ export default {
               NSE data valid as on: <span class="red"> {{fetchTime(symbol)}} </span>
             </div>
             <div class="actions">
-                Display:
+                Display OI:
                 <input type="checkbox" :id="symbol+ '_oiBars'" v-model="showOiBars" @change="!showOiBars ? showOiSeries = true: 1"/>
-                <label :for="symbol+ '_oiBars'">OI Bars</label>
+                <label :for="symbol+ '_oiBars'">Bars</label>
                 &nbsp; | &nbsp;
                 <input type="checkbox" :id="symbol+ '_oiSeries'" v-model="showOiSeries" />
-                <label :for="symbol+ '_oiSeries'">OI Series</label>
+                <label :for="symbol+ '_oiSeries'">Series</label>
                 &nbsp; | &nbsp;
                 <input type="checkbox" :id="symbol+ '_oiChain'" v-model="showOptionChain" />
-                <label :for="symbol+ '_oiChain'">OI Chain</label>
+                <label :for="symbol+ '_oiChain'">Chain</label>
                 &nbsp; | &nbsp;
                 <input type="checkbox" :id="symbol+ '_lotMultiplier'" v-model="multiply" />
-                <label for="lotMultiplier">Show OI with Quantity</label>
+
+                <label :for="symbol+  '_lotMultiplier'">Show by Quantity</label>
+                &nbsp; | &nbsp;
                 Lot size : {{ lotSize }}
             </div>
           </div>
