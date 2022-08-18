@@ -22,6 +22,11 @@ html {
 .atm {
   background-color: orange;
 }
+.atmStrike {
+  font-size: 120%;
+  background-color: darkorchid !important;
+  color: white;
+}
 .call {
   background-color: greenyellow;
   font-size: 120%;

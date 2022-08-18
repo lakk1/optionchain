@@ -187,7 +187,7 @@ export default {
                 <td :class="{itm: strikes.strikePrice < getATM(symbol)}">{{ parseFloat(strikes.CE.actualValue).toFixed(2) }}</td>
                 <td :class="{itm: strikes.strikePrice < getATM(symbol), discount: strikes.CE.premium < 0}">{{ parseFloat(strikes.CE.lastPrice).toFixed(2) }}</td>
 
-                <td class="strikePrice">
+                <td class="strikePrice" :class="{atmStrike: getATM(symbol) == strikes.strikePrice}">
                   {{ strikes.strikePrice }} {{ strikes.strength }}
                 </td>
 
