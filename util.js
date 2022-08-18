@@ -292,8 +292,14 @@ function calculateTotals(filteredStrikes, ATM, INTERVAL) {
       totals[optionType].volumeStrength =
         totals[optionType].secondHighVolStrike >
         totals[optionType].highVolStrike
-          ? "Volume can shift high to " + totals[optionType].secondHighVolStrike
-          : "Volume can drop down to " + totals[optionType].secondHighVolStrike;
+          ? "Volume can shift high from " +
+            totals[optionType].highVolStrike +
+            " to " +
+            totals[optionType].secondHighVolStrike
+          : "Volume can drop down from " +
+            totals[optionType].highVolStrike +
+            " to " +
+            totals[optionType].secondHighVolStrike;
 
       totals[optionType].analysis +=
         totals[optionType].volumeStrength +
@@ -309,8 +315,14 @@ function calculateTotals(filteredStrikes, ATM, INTERVAL) {
     } else {
       totals[optionType].oiStrength =
         totals[optionType].secondHighOIStrike > totals[optionType].highOIStrike
-          ? "OI can shift high to " + totals[optionType].secondHighOIStrike
-          : "OI can drop down to " + totals[optionType].secondHighOIStrike;
+          ? "OI can shift high from " +
+            totals[optionType].highOIStrike +
+            " to " +
+            totals[optionType].secondHighOIStrike
+          : "OI can drop down from " +
+            totals[optionType].highOIStrike +
+            " to " +
+            totals[optionType].secondHighOIStrike;
 
       totals[optionType].analysis +=
         totals[optionType].oiStrength +
