@@ -303,7 +303,7 @@ function calculateTotals(filteredStrikes, ATM, INTERVAL) {
       } else {
         totals[optionType].volumeStrength = "WTB"; // Week Towards Bottom
         totals[optionType].analysis +=
-          "Volume can drop down from " +
+          "Volume can drop from " +
           totals[optionType].highVolStrike +
           " to " +
           totals[optionType].secondHighVolStrike;
@@ -331,7 +331,7 @@ function calculateTotals(filteredStrikes, ATM, INTERVAL) {
       } else {
         totals[optionType].oiStrength = "WTB";
         totals[optionType].analysis +=
-          "OI can drop down from " +
+          "OI can drop from " +
           totals[optionType].highOIStrike +
           " to " +
           totals[optionType].secondHighOIStrike;
