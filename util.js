@@ -1,3 +1,4 @@
+const e = require("express");
 const fs = require("fs");
 const path = require("path");
 const stockList = require("./symbols.json");
@@ -229,39 +230,121 @@ function calculateTotals(filteredStrikes) {
     });
   };
   // Sort the list by High to Low
-  totals.CE.volumeList = mySort(totals.CE.volumeList, "volume");
-  totals.CE.oiList = mySort(totals.CE.oiList, "oi");
-  totals.CE.oiChgList = mySort(totals.CE.oiChgList, "oiChg");
+  // totals.CE.volumeList = mySort(totals.CE.volumeList, "volume");
+  // totals.CE.oiList = mySort(totals.CE.oiList, "oi");
+  // totals.CE.oiChgList = mySort(totals.CE.oiChgList, "oiChg");
 
-  totals.PE.volumeList = mySort(totals.PE.volumeList, "volume");
-  totals.PE.oiList = mySort(totals.PE.oiList, "oi");
-  totals.PE.oiChgList = mySort(totals.PE.oiChgList, "oiChg");
+  // totals.PE.volumeList = mySort(totals.PE.volumeList, "volume");
+  // totals.PE.oiList = mySort(totals.PE.oiList, "oi");
+  // totals.PE.oiChgList = mySort(totals.PE.oiChgList, "oiChg");
 
   // First High values
-  totals.CE.highOIStrike = totals.CE.oiList[0].strikePrice;
-  totals.CE.highVolStrike = totals.CE.volumeList[0].strikePrice;
-  totals.CE.highOIchgStrike = totals.CE.oiChgList[0].strikePrice;
+  // totals.CE.highOIStrike = totals.CE.oiList[0].strikePrice;
+  // totals.CE.highVolStrike = totals.CE.volumeList[0].strikePrice;
+  // totals.CE.highOIchgStrike = totals.CE.oiChgList[0].strikePrice;
 
-  totals.PE.highOIStrike = totals.PE.oiList[0].strikePrice;
-  totals.PE.highVolStrike = totals.PE.volumeList[0].strikePrice;
-  totals.PE.highOIchgStrike = totals.PE.oiChgList[0].strikePrice;
+  // totals.PE.highOIStrike = totals.PE.oiList[0].strikePrice;
+  // totals.PE.highVolStrike = totals.PE.volumeList[0].strikePrice;
+  // totals.PE.highOIchgStrike = totals.PE.oiChgList[0].strikePrice;
 
   // Second High values
-  totals.CE.secondHighOIStrike = totals.CE.oiList[1].strikePrice;
-  totals.CE.secondHighVolStrike = totals.CE.volumeList[1].strikePrice;
+  // totals.CE.secondHighOIStrike = totals.CE.oiList[1].strikePrice;
+  // totals.CE.secondHighVolStrike = totals.CE.volumeList[1].strikePrice;
 
-  totals.PE.secondHighOIStrike = totals.PE.oiList[1].strikePrice;
-  totals.PE.secondHighVolStrike = totals.PE.volumeList[1].strikePrice;
+  // totals.PE.secondHighOIStrike = totals.PE.oiList[1].strikePrice;
+  // totals.PE.secondHighVolStrike = totals.PE.volumeList[1].strikePrice;
 
   // Third High values
-  totals.CE.thirdHighOIStrike = totals.CE.oiList[2].strikePrice;
-  totals.CE.thirdHighVolStrike = totals.CE.volumeList[2].strikePrice;
+  // totals.CE.thirdHighOIStrike = totals.CE.oiList[2].strikePrice;
+  // totals.CE.thirdHighVolStrike = totals.CE.volumeList[2].strikePrice;
 
-  totals.PE.thirdHighOIStrike = totals.PE.oiList[2].strikePrice;
-  totals.PE.thirdHighVolStrike = totals.PE.volumeList[2].strikePrice;
+  // totals.PE.thirdHighOIStrike = totals.PE.oiList[2].strikePrice;
+  // totals.PE.thirdHighVolStrike = totals.PE.volumeList[2].strikePrice;
 
   totals.OIdifference = totals.PE.oi - totals.CE.oi;
   totals.OIChgdifference = totals.PE.oiChange - totals.CE.oiChange;
+
+  // Now calculate if it is Strong or Week towards High strike or Low strike (Top or Bottom)
+
+  function calculateStrength(totals, optionType = "CE") {
+    // Sort the list by High to Low
+    totals[optionType].volumeList = mySort(
+      totals[optionType].volumeList,
+      "volume"
+    );
+    totals[optionType].oiList = mySort(totals[optionType].oiList, "oi");
+    totals[optionType].oiChgList = mySort(
+      totals[optionType].oiChgList,
+      "oiChg"
+    );
+
+    // First High values
+    totals[optionType].highOIStrike = totals[optionType].oiList[0].strikePrice;
+    totals[optionType].highVolStrike =
+      totals[optionType].volumeList[0].strikePrice;
+    totals[optionType].highOIchgStrike =
+      totals[optionType].oiChgList[0].strikePrice;
+    // Second High values
+    totals[optionType].secondHighOIStrike =
+      totals[optionType].oiList[1].strikePrice;
+    totals[optionType].secondHighVolStrike =
+      totals[optionType].volumeList[1].strikePrice;
+
+    // Third High values
+    totals[optionType].thirdHighOIStrike =
+      totals[optionType].oiList[2].strikePrice;
+    totals[optionType].thirdHighVolStrike =
+      totals[optionType].volumeList[2].strikePrice;
+
+    totals[optionType].volumeDiffPercentage = (
+      (100 * totals[optionType].volumeList[1].volume) /
+      totals[optionType].volumeList[0].volume
+    ).toFixed(2);
+
+    totals[optionType].oiDiffPercentage = (
+      (100 * totals[optionType].oiList[1].oi) /
+      totals[optionType].oiList[0].oi
+    ).toFixed(2);
+
+    totals[optionType].analysis = "";
+
+    if (totals[optionType].volumeDiffPercentage < 75) {
+      totals[optionType].volumeStrength = "Volume is strong ";
+      totals[optionType].analysis += totals[optionType].volumeStrength;
+    } else {
+      totals[optionType].volumeStrength =
+        totals[optionType].secondHighVolStrike >
+        totals[optionType].highVolStrike
+          ? "Volume bullish"
+          : "Volume bearish";
+
+      totals[optionType].analysis +=
+        totals[optionType].volumeStrength +
+        ": " +
+        totals[optionType].volumeDiffPercentage +
+        "% ";
+    }
+    totals[optionType].analysis += ", ";
+
+    if (totals[optionType].oiDiffPercentage < 75) {
+      totals[optionType].oiStrength = "OI is strong ";
+      totals[optionType].analysis += totals[optionType].oiStrength;
+    } else {
+      totals[optionType].oiStrength =
+        totals[optionType].secondHighOIStrike > totals[optionType].highOIStrike
+          ? "OI is bullish"
+          : "OI is bearish";
+
+      totals[optionType].analysis +=
+        totals[optionType].oiStrength +
+        ": " +
+        totals[optionType].oiDiffPercentage +
+        "% ";
+    }
+  }
+
+  calculateStrength(totals, "CE");
+  calculateStrength(totals, "PE");
 
   return totals;
 }

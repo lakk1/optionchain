@@ -9,7 +9,7 @@ export default {
       range: 7,
       expiry: 0,
       refreshInterval: 30, // seconds
-      display: "both",
+      display: "BANKNIFTY",
     };
   },
   methods: {

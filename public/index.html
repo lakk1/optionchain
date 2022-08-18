@@ -30,7 +30,7 @@
         <label>Display: </label>
         <select v-model="display" @change="refreshData()">
           <option disabled value="">Select Indices</option>
-          <option value="both">INDICES</option>
+          <option value="both" autofocus>INDICES</option>
           <template v-for="stock in stockList">
             <option v-if="stock.scan == 'yes'" :value="stock.symbol">
               {{stock.underlying}}

@@ -28,6 +28,10 @@ export const store = reactive({
   getTotals(sym = "NIFTY") {
     return this.data[sym] ? this.data[sym].totals : {};
   },
+  getAnalysis(sym = "NIFTY", optionType = "CE") {
+    let p = this.data[sym].totals[optionType].analysis;
+    return this.data[sym] ? this.data[sym].totals[optionType].analysis : "";
+  },
   getFilteredPCR(sym = "NIFTY") {
     return this.data[sym]
       ? Number(

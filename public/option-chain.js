@@ -135,11 +135,17 @@ export default {
           <div class="chainTabContainer">
             <table id="optionAnalyzer" class="report">
               <tr>
-                <th colspan="10" class="call">CALL</th>
+                <th colspan="10" class="call">
+                  CALL
+                  <br/>{{ store.getAnalysis(symbol, 'CE') }}
+                </th>
                 <th>
                   <span class="symbol">{{ symbol }} </span> <br/>
                   <span class="spotprice">{{spotPrice()}} </span></th>
-                <th colspan="10" class="put">PUT</th>
+                <th colspan="10" class="put">
+                  PUT
+                  <br/>{{ store.getAnalysis(symbol, 'PE') }}
+                </th>
               </tr>
               <tr class="tabHeader">
                 <th>Action</th>
