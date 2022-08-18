@@ -21,6 +21,9 @@ function getStrikePriceRange(symbol = "NIFTY", spotPrice = 10000, range = 10) {
 }
 
 function calculateOIaction({ oiChange, priceChange } = options) {
+  // LB: Long Buildup (OI Change > 0, Price Change > 0), LU: Long Unwinding (OI Change < 0, Price Change < 0)
+  // SB: Short Buildup (OI Change > 0, Price Change < 0) , SC: Short Covering (OI Change < 0, Price Change > 0)
+
   if (priceChange > 0 && oiChange > 0) return { action: "LB", direction: "UP" };
   if (priceChange > 0 && oiChange < 0) return { action: "SC", direction: "UP" };
   if (priceChange < 0 && oiChange < 0)
@@ -30,7 +33,7 @@ function calculateOIaction({ oiChange, priceChange } = options) {
   return "";
 }
 
-function calculateTotals(filteredStrikes) {
+function calculateTotals(filteredStrikes, ATM) {
   let totals = {
     CE: {
       oi: 0,
@@ -106,9 +109,6 @@ function calculateTotals(filteredStrikes) {
       totals.CE.volume += strike.CE.totalTradedVolume;
 
       // Data For Graph
-      totals.chart.CEoiChg.push(strike.CE.changeinOpenInterest);
-      totals.chart.CEoi.push(strike.CE.openInterest);
-      totals.chart.CEvolume.push(strike.CE.totalTradedVolume);
       totals.apexChart.CEoiChg.push(strike.CE.changeinOpenInterest);
       totals.apexChart.CEoi.push(strike.CE.openInterest);
       totals.apexChart.CEvolume.push(strike.CE.totalTradedVolume);
@@ -158,10 +158,6 @@ function calculateTotals(filteredStrikes) {
       totals.PE.volume += strike.PE.totalTradedVolume;
 
       // Data For Graph
-      totals.chart.PEoiChg.push(strike.PE.changeinOpenInterest);
-      totals.chart.PEoi.push(strike.PE.openInterest);
-      totals.chart.PEvolume.push(strike.PE.totalTradedVolume);
-
       totals.apexChart.PEoiChg.push(strike.PE.changeinOpenInterest);
       totals.apexChart.PEoi.push(strike.PE.openInterest);
       totals.apexChart.PEvolume.push(strike.PE.totalTradedVolume);
@@ -188,6 +184,9 @@ function calculateTotals(filteredStrikes) {
         strike.PE.totalTradedVolume =
           0;
     }
+
+    // Now find the strendth of the strike price
+    // S S: Strong Support, S R: Strong Resistance, W S: Support stronger than Resistance, W R : Resistance stronger than Support
     strike.strength = "";
     if (
       strike.PE.changeinOpenInterest - strike.CE.changeinOpenInterest >
@@ -213,14 +212,14 @@ function calculateTotals(filteredStrikes) {
       strike.strength = "W R";
     }
 
-    let gc_data = [
-      strike.CE.strikePrice,
-      strike.PE.changeinOpenInterest,
-      strike.CE.changeinOpenInterest,
-      strike.PE.openInterest,
-      strike.CE.openInterest,
-    ];
-    totals.googleData.push(gc_data);
+    // let gc_data = [
+    //   strike.CE.strikePrice,
+    //   strike.PE.changeinOpenInterest,
+    //   strike.CE.changeinOpenInterest,
+    //   strike.PE.openInterest,
+    //   strike.CE.openInterest,
+    // ];
+    // totals.googleData.push(gc_data);
   });
 
   // Calculate top 1st and 2nd values
@@ -229,43 +228,11 @@ function calculateTotals(filteredStrikes) {
       return b[key] - a[key];
     });
   };
-  // Sort the list by High to Low
-  // totals.CE.volumeList = mySort(totals.CE.volumeList, "volume");
-  // totals.CE.oiList = mySort(totals.CE.oiList, "oi");
-  // totals.CE.oiChgList = mySort(totals.CE.oiChgList, "oiChg");
-
-  // totals.PE.volumeList = mySort(totals.PE.volumeList, "volume");
-  // totals.PE.oiList = mySort(totals.PE.oiList, "oi");
-  // totals.PE.oiChgList = mySort(totals.PE.oiChgList, "oiChg");
-
-  // First High values
-  // totals.CE.highOIStrike = totals.CE.oiList[0].strikePrice;
-  // totals.CE.highVolStrike = totals.CE.volumeList[0].strikePrice;
-  // totals.CE.highOIchgStrike = totals.CE.oiChgList[0].strikePrice;
-
-  // totals.PE.highOIStrike = totals.PE.oiList[0].strikePrice;
-  // totals.PE.highVolStrike = totals.PE.volumeList[0].strikePrice;
-  // totals.PE.highOIchgStrike = totals.PE.oiChgList[0].strikePrice;
-
-  // Second High values
-  // totals.CE.secondHighOIStrike = totals.CE.oiList[1].strikePrice;
-  // totals.CE.secondHighVolStrike = totals.CE.volumeList[1].strikePrice;
-
-  // totals.PE.secondHighOIStrike = totals.PE.oiList[1].strikePrice;
-  // totals.PE.secondHighVolStrike = totals.PE.volumeList[1].strikePrice;
-
-  // Third High values
-  // totals.CE.thirdHighOIStrike = totals.CE.oiList[2].strikePrice;
-  // totals.CE.thirdHighVolStrike = totals.CE.volumeList[2].strikePrice;
-
-  // totals.PE.thirdHighOIStrike = totals.PE.oiList[2].strikePrice;
-  // totals.PE.thirdHighVolStrike = totals.PE.volumeList[2].strikePrice;
 
   totals.OIdifference = totals.PE.oi - totals.CE.oi;
   totals.OIChgdifference = totals.PE.oiChange - totals.CE.oiChange;
 
   // Now calculate if it is Strong or Week towards High strike or Low strike (Top or Bottom)
-
   function calculateStrength(totals, optionType = "CE") {
     // Sort the list by High to Low
     totals[optionType].volumeList = mySort(
@@ -371,7 +338,7 @@ function getDataForCurrentExpiry(response, symbol, range = 10, expiry = 0) {
 
   // Calculate totals and high and low of each columns
   if (filteredStrikes.length > 0) {
-    let totals = calculateTotals(filteredStrikes);
+    let totals = calculateTotals(filteredStrikes, ATM);
 
     return {
       ATM,
