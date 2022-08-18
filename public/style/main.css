@@ -24,9 +24,11 @@ html {
 }
 .call {
   background-color: greenyellow;
+  font-size: 120%;
 }
 .put {
   background-color: orangered;
+  font-size: 120%;
 }
 .strikePrice {
   background-color: rgb(174, 243, 243);
@@ -46,7 +48,7 @@ html {
 }
 .spotprice,
 .symbol {
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .headerActions {

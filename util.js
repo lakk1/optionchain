@@ -17,7 +17,7 @@ function getStrikePriceRange(symbol = "NIFTY", spotPrice = 10000, range = 10) {
     ce.push(otm);
     pe.push(itm);
   }
-  return { ATM, STRIKES: [...pe, ATM, ...ce] };
+  return { ATM, INTERVAL: strikeInterval, STRIKES: [...pe, ATM, ...ce] };
 }
 
 function calculateOIaction({ oiChange, priceChange } = options) {
@@ -33,7 +33,7 @@ function calculateOIaction({ oiChange, priceChange } = options) {
   return "";
 }
 
-function calculateTotals(filteredStrikes, ATM) {
+function calculateTotals(filteredStrikes, ATM, INTERVAL) {
   let totals = {
     CE: {
       oi: 0,
@@ -211,15 +211,6 @@ function calculateTotals(filteredStrikes, ATM) {
     ) {
       strike.strength = "W R";
     }
-
-    // let gc_data = [
-    //   strike.CE.strikePrice,
-    //   strike.PE.changeinOpenInterest,
-    //   strike.CE.changeinOpenInterest,
-    //   strike.PE.openInterest,
-    //   strike.CE.openInterest,
-    // ];
-    // totals.googleData.push(gc_data);
   });
 
   // Calculate top 1st and 2nd values
@@ -239,7 +230,26 @@ function calculateTotals(filteredStrikes, ATM) {
       totals[optionType].volumeList,
       "volume"
     );
+
     totals[optionType].oiList = mySort(totals[optionType].oiList, "oi");
+
+    // volume is valid from 1 ITM to OTM, any volume higher than 1st ITM is not going to help
+    if (optionType == "CE") {
+      totals[optionType].volumeList = totals[optionType].volumeList.filter(
+        (x) => x.strikePrice >= ATM - INTERVAL
+      );
+      // totals[optionType].oiList = totals[optionType].oiList.filter(
+      //   (x) => x.strikePrice >= ATM - INTERVAL
+      // );
+    } else {
+      totals[optionType].volumeList = totals[optionType].volumeList.filter(
+        (x) => x.strikePrice <= ATM + INTERVAL
+      );
+      // totals[optionType].oiList = totals[optionType].oiList.filter(
+      //   (x) => x.strikePrice <= ATM + INTERVAL
+      // );
+    }
+
     totals[optionType].oiChgList = mySort(
       totals[optionType].oiChgList,
       "oiChg"
@@ -282,14 +292,14 @@ function calculateTotals(filteredStrikes, ATM) {
       totals[optionType].volumeStrength =
         totals[optionType].secondHighVolStrike >
         totals[optionType].highVolStrike
-          ? "Volume bullish, week resistance"
-          : "Volume bearish, week support";
+          ? "Volume can shift high to " + totals[optionType].secondHighVolStrike
+          : "Volume can drop down to " + totals[optionType].secondHighVolStrike;
 
       totals[optionType].analysis +=
         totals[optionType].volumeStrength +
-        ": " +
+        " (" +
         totals[optionType].volumeDiffPercentage +
-        "% ";
+        "%) ";
     }
     totals[optionType].analysis += ", ";
 
@@ -299,14 +309,14 @@ function calculateTotals(filteredStrikes, ATM) {
     } else {
       totals[optionType].oiStrength =
         totals[optionType].secondHighOIStrike > totals[optionType].highOIStrike
-          ? "OI is bullish, week resistance"
-          : "OI is bearish, week support";
+          ? "OI can shift high to " + totals[optionType].secondHighOIStrike
+          : "OI can drop down to " + totals[optionType].secondHighOIStrike;
 
       totals[optionType].analysis +=
         totals[optionType].oiStrength +
-        ": " +
+        " (" +
         totals[optionType].oiDiffPercentage +
-        "% ";
+        "%) ";
     }
   }
 
@@ -314,7 +324,7 @@ function calculateTotals(filteredStrikes, ATM) {
   calculateStrength(totals, "PE");
 
   return totals;
-}
+} // End of calculateTotals
 
 function getDataForCurrentExpiry(response, symbol, range = 10, expiry = 0) {
   let currentExpiry = response.records.expiryDates[expiry];
@@ -324,7 +334,11 @@ function getDataForCurrentExpiry(response, symbol, range = 10, expiry = 0) {
 
   let spotPrice = response.records.underlyingValue;
 
-  let { ATM, STRIKES } = getStrikePriceRange(symbol, spotPrice, range);
+  let { ATM, STRIKES, INTERVAL } = getStrikePriceRange(
+    symbol,
+    spotPrice,
+    range
+  );
 
   let filteredStrikes = data.filter(
     (item) =>
@@ -338,7 +352,23 @@ function getDataForCurrentExpiry(response, symbol, range = 10, expiry = 0) {
 
   // Calculate totals and high and low of each columns
   if (filteredStrikes.length > 0) {
-    let totals = calculateTotals(filteredStrikes, ATM);
+    let totals = calculateTotals(filteredStrikes, ATM, INTERVAL);
+
+    let strongResistance =
+      ATM - totals.CE.highVolStrike == INTERVAL ||
+      ATM - totals.CE.highOIStrike == INTERVAL ||
+      totals.CE.highOIStrike < 2 * ATM ||
+      totals.CE.highVolStrike < totals.CE.highOIStrike
+        ? totals.CE.highVolStrike
+        : totals.CE.highOIStrike;
+
+    let strongSupport =
+      ATM + totals.PE.highVolStrike == INTERVAL ||
+      ATM + totals.PE.highOIStrike == INTERVAL ||
+      totals.PE.highOIStrike > 2 * ATM ||
+      totals.PE.highVolStrike > totals.PE.highOIStrike
+        ? totals.PE.highVolStrike
+        : totals.PE.highOIStrike;
 
     return {
       ATM,
@@ -352,6 +382,8 @@ function getDataForCurrentExpiry(response, symbol, range = 10, expiry = 0) {
       pcrVolume,
       totalOiDiff,
       STRIKES,
+      strongResistance,
+      strongSupport,
     };
   }
   return {
