@@ -286,49 +286,57 @@ function calculateTotals(filteredStrikes, ATM, INTERVAL) {
     totals[optionType].analysis = "";
 
     if (totals[optionType].volumeDiffPercentage < 75) {
-      totals[optionType].volumeStrength = "Volume is strong ";
-      totals[optionType].analysis += totals[optionType].volumeStrength;
+      totals[optionType].volumeStrength = "STRONG";
+      totals[optionType].analysis += "Volume is strong ";
     } else {
-      totals[optionType].volumeStrength =
+      if (
         totals[optionType].secondHighVolStrike >
         totals[optionType].highVolStrike
-          ? "Volume can shift high from " +
-            totals[optionType].highVolStrike +
-            " to " +
-            totals[optionType].secondHighVolStrike
-          : "Volume can drop down from " +
-            totals[optionType].highVolStrike +
-            " to " +
-            totals[optionType].secondHighVolStrike;
+      ) {
+        totals[optionType].volumeStrength = "WTT"; // Week Towards Top
+        totals[optionType].analysis +=
+          "Volume can shift high from " +
+          totals[optionType].highVolStrike +
+          " to " +
+          totals[optionType].secondHighVolStrike;
+      } else {
+        totals[optionType].volumeStrength = "WTB"; // Week Towards Bottom
+        totals[optionType].analysis +=
+          "Volume can drop down from " +
+          totals[optionType].highVolStrike +
+          " to " +
+          totals[optionType].secondHighVolStrike;
+      }
 
       totals[optionType].analysis +=
-        totals[optionType].volumeStrength +
-        " (" +
-        totals[optionType].volumeDiffPercentage +
-        "%) ";
+        " (" + totals[optionType].volumeDiffPercentage + "%) ";
     }
     totals[optionType].analysis += ", ";
 
     if (totals[optionType].oiDiffPercentage < 75) {
-      totals[optionType].oiStrength = "OI is strong ";
-      totals[optionType].analysis += totals[optionType].oiStrength;
+      totals[optionType].oiStrength = "STRONG";
+      totals[optionType].analysis += "OI is strong ";
     } else {
-      totals[optionType].oiStrength =
+      if (
         totals[optionType].secondHighOIStrike > totals[optionType].highOIStrike
-          ? "OI can shift high from " +
-            totals[optionType].highOIStrike +
-            " to " +
-            totals[optionType].secondHighOIStrike
-          : "OI can drop down from " +
-            totals[optionType].highOIStrike +
-            " to " +
-            totals[optionType].secondHighOIStrike;
+      ) {
+        totals[optionType].oiStrength = "WTT";
+        totals[optionType].analysis +=
+          "OI can shift high from " +
+          totals[optionType].highOIStrike +
+          " to " +
+          totals[optionType].secondHighOIStrike;
+      } else {
+        totals[optionType].oiStrength = "WTB";
+        totals[optionType].analysis +=
+          "OI can drop down from " +
+          totals[optionType].highOIStrike +
+          " to " +
+          totals[optionType].secondHighOIStrike;
+      }
 
       totals[optionType].analysis +=
-        totals[optionType].oiStrength +
-        " (" +
-        totals[optionType].oiDiffPercentage +
-        "%) ";
+        " (" + totals[optionType].oiDiffPercentage + "%) ";
     }
   }
 
@@ -382,6 +390,21 @@ function getDataForCurrentExpiry(response, symbol, range = 10, expiry = 0) {
         ? totals.PE.highVolStrike
         : totals.PE.highOIStrike;
 
+    let supportStrength = (resistanceStrength = "WEEK");
+    // Calculate the Chart of Accuracy based on oiStrength and volumeStrength
+    if (
+      totals.PE.volumeStrength == "STRONG" ||
+      totals.PE.volumeStrength == "WTT"
+    ) {
+      supportStrength = "STRONG";
+    }
+    if (
+      totals.CE.volumeStrength == "STRONG" ||
+      totals.CE.volumeStrength == "WTB"
+    ) {
+      resistanceStrength = "STRONG";
+    }
+
     return {
       ATM,
       currentExpiry,
@@ -396,6 +419,8 @@ function getDataForCurrentExpiry(response, symbol, range = 10, expiry = 0) {
       STRIKES,
       strongResistance,
       strongSupport,
+      supportStrength,
+      resistanceStrength,
     };
   }
   return {

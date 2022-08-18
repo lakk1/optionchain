@@ -22,6 +22,12 @@ export const store = reactive({
   getStrikes(sym = "NIFTY") {
     return this.data[sym] ? this.data[sym].STRIKES : [];
   },
+  getResistanceStrength(sym = "NIFTY") {
+    return this.data[sym] ? this.data[sym].resistanceStrength : "";
+  },
+  getSupportStrength(sym = "NIFTY") {
+    return this.data[sym] ? this.data[sym].supportStrength : "";
+  },
   getStrongResistance(sym = "NIFTY") {
     return this.data[sym] ? this.data[sym].strongResistance : 0;
   },

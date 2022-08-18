@@ -138,14 +138,14 @@ export default {
             <table id="optionAnalyzer" class="report">
               <tr>
                 <th colspan="10" class="call">
-                  CALL (Resistance at {{ store.getStrongResistance(symbol) }})
+                  CALL (Resistance is {{ store.getResistanceStrength(symbol) }} at {{ store.getStrongResistance(symbol) }})
                   <br/>{{ store.getAnalysis(symbol, 'CE') }}
                 </th>
                 <th>
                   <span class="symbol">{{ symbol }} </span> <br/>
                   <span class="spotprice">{{spotPrice()}} </span></th>
                 <th colspan="10" class="put">
-                  PUT (Support at {{ store.getStrongSupport(symbol) }})
+                  PUT (Support is {{ store.getSupportStrength(symbol) }} at {{ store.getStrongSupport(symbol) }})
                   <br/>{{ store.getAnalysis(symbol, 'PE') }}
                 </th>
               </tr>
