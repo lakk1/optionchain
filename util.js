@@ -287,7 +287,8 @@ function calculateTotals(filteredStrikes, ATM, INTERVAL) {
 
     if (totals[optionType].volumeDiffPercentage < 75) {
       totals[optionType].volumeStrength = "STRONG";
-      totals[optionType].analysis += "Volume is strong ";
+      totals[optionType].analysis +=
+        "Volume is strong at " + totals[optionType].highVolStrike;
     } else {
       if (
         totals[optionType].secondHighVolStrike >
@@ -315,7 +316,8 @@ function calculateTotals(filteredStrikes, ATM, INTERVAL) {
 
     if (totals[optionType].oiDiffPercentage < 75) {
       totals[optionType].oiStrength = "STRONG";
-      totals[optionType].analysis += "OI is strong ";
+      totals[optionType].analysis +=
+        "OI is strong at " + totals[optionType].highOIStrike;
     } else {
       if (
         totals[optionType].secondHighOIStrike > totals[optionType].highOIStrike
@@ -393,18 +395,34 @@ function getDataForCurrentExpiry(response, symbol, range = 10, expiry = 0) {
     let supportStrength = (resistanceStrength = "WEEK");
     // Calculate the Chart of Accuracy based on oiStrength and volumeStrength
     if (
-      totals.PE.volumeStrength == "STRONG" ||
-      totals.PE.volumeStrength == "WTT"
+      totals.CE.volumeStrength == "STRONG" &&
+      totals.CE.oiStrength == "STRONG"
     ) {
-      supportStrength = "STRONG";
-    }
-    if (
+      resistanceStrength =
+        totals.CE.highVolStrike == totals.CE.highOIStrike
+          ? "SUPER STRONG"
+          : "VERY STRONG";
+    } else if (
       totals.CE.volumeStrength == "STRONG" ||
-      totals.CE.volumeStrength == "WTB"
+      totals.CE.volumeStrength == "WTB" // Week towards bottom
     ) {
       resistanceStrength = "STRONG";
     }
 
+    if (
+      totals.PE.volumeStrength == "STRONG" &&
+      totals.PE.oiStrength == "STRONG"
+    ) {
+      supportStrength =
+        totals.PE.highVolStrike == totals.PE.highOIStrike
+          ? "SUPER STRONG"
+          : "VERY STRONG";
+    } else if (
+      totals.PE.volumeStrength == "STRONG" ||
+      totals.PE.volumeStrength == "WTT" // Week towards top
+    ) {
+      supportStrength = "STRONG";
+    }
     return {
       ATM,
       currentExpiry,
