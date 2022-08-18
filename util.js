@@ -296,7 +296,7 @@ function calculateTotals(filteredStrikes, ATM, INTERVAL) {
       ) {
         totals[optionType].volumeStrength = "WTT"; // Week Towards Top
         totals[optionType].analysis +=
-          "Volume can shift high from " +
+          "Volume can move high from " +
           totals[optionType].highVolStrike +
           " to " +
           totals[optionType].secondHighVolStrike;
@@ -324,7 +324,7 @@ function calculateTotals(filteredStrikes, ATM, INTERVAL) {
       ) {
         totals[optionType].oiStrength = "WTT";
         totals[optionType].analysis +=
-          "OI can shift high from " +
+          "OI can move high from " +
           totals[optionType].highOIStrike +
           " to " +
           totals[optionType].secondHighOIStrike;
