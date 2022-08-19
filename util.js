@@ -349,13 +349,13 @@ function calculateTotals(filteredStrikes, ATM, INTERVAL) {
 } // End of calculateTotals
 
 function getDataForCurrentExpiry(response, symbol, range = 10, expiry = 0) {
-  let currentExpiry = response.records.expiryDates[expiry];
+  let currentExpiry = response.records.expiryDates[0];
   let expTime = new Date(currentExpiry).getTime();
   let curTime = new Date().getTime();
   if (expTime < curTime) {
     expiry++;
+    currentExpiry = response.records.expiryDates[expiry];
   }
-  currentExpiry = response.records.expiryDates[expiry];
 
   let data = expiry == 0 ? response.filtered.data : response.records.data;
   let fetchTime = response.records.timestamp;
