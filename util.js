@@ -223,7 +223,7 @@ function calculateTotals(filteredStrikes, ATM, INTERVAL) {
   totals.OIdifference = totals.PE.oi - totals.CE.oi;
   totals.OIChgdifference = totals.PE.oiChange - totals.CE.oiChange;
 
-  // Now calculate if it is Strong or Week towards High strike or Low strike (Top or Bottom)
+  // Now calculate if it is Strong or WEAK towards High strike or Low strike (Top or Bottom)
   function calculateStrength(totals, optionType = "CE") {
     // Sort the list by High to Low
     totals[optionType].volumeList = mySort(
@@ -294,14 +294,14 @@ function calculateTotals(filteredStrikes, ATM, INTERVAL) {
         totals[optionType].secondHighVolStrike >
         totals[optionType].highVolStrike
       ) {
-        totals[optionType].volumeStrength = "WTT"; // Week Towards Top
+        totals[optionType].volumeStrength = "WTT"; // WEAK Towards Top
         totals[optionType].analysis +=
           "Volume can move high from " +
           totals[optionType].highVolStrike +
           " to " +
           totals[optionType].secondHighVolStrike;
       } else {
-        totals[optionType].volumeStrength = "WTB"; // Week Towards Bottom
+        totals[optionType].volumeStrength = "WTB"; // WEAK Towards Bottom
         totals[optionType].analysis +=
           "Volume can drop from " +
           totals[optionType].highVolStrike +
@@ -392,7 +392,7 @@ function getDataForCurrentExpiry(response, symbol, range = 10, expiry = 0) {
         ? totals.PE.highVolStrike
         : totals.PE.highOIStrike;
 
-    let supportStrength = (resistanceStrength = "WEEK");
+    let supportStrength = (resistanceStrength = "WEAK");
     // Calculate the Chart of Accuracy based on oiStrength and volumeStrength
     if (
       totals.CE.volumeStrength == "STRONG" &&
@@ -404,7 +404,7 @@ function getDataForCurrentExpiry(response, symbol, range = 10, expiry = 0) {
           : "VERY STRONG";
     } else if (
       totals.CE.volumeStrength == "STRONG" ||
-      totals.CE.volumeStrength == "WTB" // Week towards bottom
+      totals.CE.volumeStrength == "WTB" // WEAK towards bottom
     ) {
       resistanceStrength = "STRONG";
     }
@@ -419,7 +419,7 @@ function getDataForCurrentExpiry(response, symbol, range = 10, expiry = 0) {
           : "VERY STRONG";
     } else if (
       totals.PE.volumeStrength == "STRONG" ||
-      totals.PE.volumeStrength == "WTT" // Week towards top
+      totals.PE.volumeStrength == "WTT" // WEAK towards top
     ) {
       supportStrength = "STRONG";
     }
