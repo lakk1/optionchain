@@ -9,7 +9,7 @@ export default {
       multiply: false,
       showOiSeries: false,
       showOiBars: true,
-      showOptionChain: false,
+      showOptionChain: true,
       stockList: undefined,
       lotSize: 0,
       strikeInterval: 0,

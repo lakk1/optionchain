@@ -32,7 +32,7 @@ html {
   font-size: 120%;
 }
 .put {
-  background-color: orangered;
+  background-color: #FF7F50;
   font-size: 120%;
 }
 .strikePrice {
@@ -201,19 +201,19 @@ table.report tr th {
 
 
 .LB {
-  background-color: green;
-  color: yellow;
+  background-color: greenyellow;
+  color: black;
 }
 .LU {
   background-color: orange;
   color: black;
 }
 .SB {
-  background-color: red;
+  background-color: #FF7F50 ;
   color: black;
 }
 .SC {
-  background-color: darkblue;
+  background-color: #6495ED;
   color: white;
 }
 .DOWN:before {

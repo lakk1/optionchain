@@ -354,8 +354,8 @@ function getDataForCurrentExpiry(response, symbol, range = 10, expiry = 0) {
   let curTime = new Date().getTime();
   if (expTime < curTime) {
     expiry++;
-    currentExpiry = response.records.expiryDates[expiry];
   }
+  currentExpiry = response.records.expiryDates[expiry];
 
   let data = expiry == 0 ? response.filtered.data : response.records.data;
   let fetchTime = response.records.timestamp;
