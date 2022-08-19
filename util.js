@@ -92,8 +92,9 @@ function calculateTotals(filteredStrikes, ATM, INTERVAL) {
           ? strike.CE.underlyingValue - strike.CE.strikePrice
           : 0;
       strike.CE.premium = strike.CE.lastPrice - strike.CE.actualValue;
-      strike.CE.premiumPercent =
-        (100 * strike.CE.premium) / strike.CE.lastPrice;
+      strike.CE.premiumPercent = strike.CE.lastPrice
+        ? (100 * strike.CE.premium) / strike.CE.lastPrice
+        : 0;
 
       let opt = calculateOIaction({
         priceChange: strike.CE.change,
