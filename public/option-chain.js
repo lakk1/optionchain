@@ -230,7 +230,7 @@ export default {
           <div class="tips">
             <b>NOTE</b>: If LTP is lesser than Actual value, then you are getting that strike price in DISCOUNTED price
             <p><b>S S:</b> Strong Support, <b>S R:</b> Strong Resistance, <b>W S:</b> Support stronger than Resistance, <b>W R :</b> Resistance stronger than Support</p>
-
+            <p> Avoid any buying trades when IV is greater than 30 (only premium erosion will happen) <p>
             <hr/>
             <div class="notes">
               <div>
