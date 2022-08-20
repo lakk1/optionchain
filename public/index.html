@@ -26,7 +26,7 @@
     </script>
 
     <div id="app">
-      <div>
+      <div class="menu">
         <label>Display: </label>
         <select v-model="display" @change="refreshData()">
           <option disabled value="">Select Indices</option>
@@ -49,6 +49,7 @@
         &nbsp; Strikes:
         <select v-model="range" @change="refreshData()">
           <option disabled value="">Number of Strikes</option>
+          <option>5</option>
           <option>7</option>
           <option>10</option>
           <option>15</option>
@@ -79,9 +80,9 @@
           <option-chain :symbol="display" :display="display"> </option-chain>
         </div>
       </div>
-      <div>
-        <!-- <pre>{{store}}</pre></td> -->
-      </div>
+      <!-- <div>
+        <pre>{{store}}</pre></td>
+      </div> -->
     </div>
     <script type="module" src="index.js"></script>
   </body>

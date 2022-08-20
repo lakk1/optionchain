@@ -76,10 +76,10 @@ export default {
             </div>
             <div class="actions">
                 Display OI:
-                <input type="checkbox" :id="symbol+ '_oiBars'" v-model="showOiBars" @change="!showOiBars ? showOiSeries = true: 1"/>
+                <input type="checkbox" :id="symbol+ '_oiBars'" v-model="showOiBars" @change="!showOiBars && !showOiSeries ? showOiSeries = true: showOiSeries = false"/>
                 <label :for="symbol+ '_oiBars'">Bars</label>
                 &nbsp; | &nbsp;
-                <input type="checkbox" :id="symbol+ '_oiSeries'" v-model="showOiSeries" />
+                <input type="checkbox" :id="symbol+ '_oiSeries'" v-model="showOiSeries" @change="showOiBars = false" />
                 <label :for="symbol+ '_oiSeries'">Series</label>
                 &nbsp; | &nbsp;
                 <input type="checkbox" :id="symbol+ '_oiChain'" v-model="showOptionChain" />
@@ -113,7 +113,7 @@ export default {
               ATM: {{ getATM(symbol) }}
               OI Change PE - CE : <span :class="{ red: store.getTotals(symbol).OIChgdifference < 0 }">{{ Number(store.getTotals(symbol).OIChgdifference * oiMultiplier).toLocaleString() }}</span>
               PCR (Filtered): <span> {{ Number(store.getFilteredPCR(symbol)) }}</span>
-              <apex-oi-chart :symbol="symbol" :time="fetchTime(symbol)" v-if="display != 'both' ">Place for OI Chart</apex-oi-chart>
+              <apex-oi-chart :symbol="symbol" :time="fetchTime(symbol)" :prefix="'_inner'" v-if="display != 'both' ">Place for OI Chart</apex-oi-chart>
             </div>
           </div>
           <div class="oiSeries">
@@ -225,11 +225,45 @@ export default {
               </tr>
             </table>
           </div>
+
+          <hr/>
           <div class="tips">
-            NOTE: If LTP is lesser than Actual value, then you are getting that strike price in DISCOUNTED price
-            <br />S S: Strong Support, S R: Strong Resistance, W S: Support stronger than Resistance, W R : Resistance stronger than Support
-            <br />LB: Long Buildup (OI Change > 0, Price Change > 0), LU: Long Unwinding (OI Change < 0, Price Change < 0)
-            <br />SB: Short Buildup (OI Change > 0, Price Change < 0) , SC: Short Covering (OI Change < 0, Price Change > 0)
+            <b>NOTE</b>: If LTP is lesser than Actual value, then you are getting that strike price in DISCOUNTED price
+            <p><b>S S:</b> Strong Support, <b>S R:</b> Strong Resistance, <b>W S:</b> Support stronger than Resistance, <b>W R :</b> Resistance stronger than Support</p>
+
+            <hr/>
+            <div class="notes">
+              <div>
+                <p><b>LB - Long Buildup</b> - <span class='UP'>Price Increases</span>, <span class='UP'>OI Increases</span>
+                  <br />OI Change > 0, Price Change > 0
+                  <br/>Call side: Investor wants to take market UP, new contracts gets added
+                  <br/>Put side: Investor wants to take market DOWN, new contracts gets added
+                <p/>
+              </div>
+              <div>
+                <p><b>SB - Short Buildup</b> - <span class='DOWN'>Price Decreases<span>, <span class='UP'>OI Increases</span>
+                  <br />OI Change > 0, Price Change < 0
+                  <br/>Call side: Writers want to take market DOWN - stop/resist, new contracts get added
+                  <br/>Put side: Writers want to take market UP - support market, new contracts get added
+                </p>
+              </div>
+            </div>
+            <div class="notes">
+              <div>
+                <p><b>LU - Long Unwinding</b>: <span class='DOWN'>Price Decreases<span>, <span class='DOWN'>OI Decreases<span>
+                  <br/>OI Change < 0, Price Change < 0
+                  <br/>Call side: Writers want to either book profit or fear of market going DOWN - they will close the contract
+                  <br/>Put side: Writers want to either book profit or fear of market going UP - they will close the contract
+                <p/>
+              </div>
+              <div>
+                <p><b>SC - Short Covering</b>: <span class='UP'>Price Increases</span>, <span class='DOWN'>OI Decreases<span>
+                  <br/>OI Change < 0, Price Change > 0
+                  <br/>Call side: Writers close contracts fearing market will go UP
+                  <br/>Put side: Writers close contracts fearing market will go DOWN
+                <p/>
+              </div>
+            </div>
           </div>
         </template>
 

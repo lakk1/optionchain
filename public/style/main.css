@@ -3,7 +3,19 @@ html {
   font-size: 10px;
   height: 100vh;
 }
-
+body {
+  display: flex;
+  flex-direction: column;
+}
+#app {
+  display: flex;
+  flex-direction: column;
+}
+.menu {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
 .priceRed, .priceGreen {
   font-weight: bold;
 }
@@ -105,7 +117,7 @@ table.report tr {
   font-size: 12px;
 }
 .innerContainer {
-  flex: 49%;
+  /* flex: 49%; */
   border: 1px solid grey;
   padding: 3px;
 }
@@ -222,7 +234,7 @@ table.report tr th {
   content: "▼";
   font-size: 12px;
   font-family:u1f800;
-  padding-right: 5px;
+  padding-right: 3px;
 }
 .UP:before {
   /* content: "↑"; */
@@ -230,5 +242,15 @@ table.report tr th {
   content: "▲";
   font-size: 12px;
   font-family:u1f800;
-  padding-right: 5px;
+  padding-right: 3px;
+}
+
+.notes {
+  display: flex;
+}
+.notes div {
+  flex-basis: 50%;
+  padding: 3px 5px;
+  margin: 2px;
+  border: 1px solid gray;
 }

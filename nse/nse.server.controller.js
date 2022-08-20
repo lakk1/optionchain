@@ -105,7 +105,13 @@ NSE.getfilteredData = async (req, res) => {
   console.log("Fetching OI Series data with ", req.body);
 
   let symbol = req.body.symbol || "NIFTY";
-  let date = req.body.date || today();
+  // let date = req.body.date || today();
+  let timeStamp = await lastCheckedModel.findOne(
+    { symbol },
+    "lastCheckedOn -_id"
+  );
+  let date = timeStamp.lastCheckedOn.split(" ")[0];
+
   let strikePrices = req.body.strikePrices;
 
   try {

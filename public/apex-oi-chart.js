@@ -1,7 +1,7 @@
 import { store } from "./store.js";
 
 export default {
-  props: ["symbol", "time"],
+  props: ["symbol", "time", "prefix"],
   data() {
     return {
       chart: undefined,
@@ -132,11 +132,13 @@ export default {
         };
 
         this.chart = new ApexCharts(
-          document.querySelector("#" + symbol + "_barchart_div"),
+          document.querySelector("#" + symbol + "_barchart_div" + this.prefix),
           options
         );
 
-        document.querySelector("#" + symbol + "_barchart_div").innerHTML = "";
+        document.querySelector(
+          "#" + symbol + "_barchart_div" + this.prefix
+        ).innerHTML = "";
         this.chart.render();
       }
     },
@@ -159,7 +161,7 @@ export default {
   <table class="columns">
       <tr>
         <td style="width:100%">
-          <div :id="symbol+'_barchart_div'" style="width: 1000px; height: 300px;"></div>
+          <div :id="symbol+'_barchart_div'+prefix" style="width: 1000px; height: 300px;"></div>
         </td>
       </tr>
     </table>
