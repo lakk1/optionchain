@@ -1,7 +1,7 @@
-.COLORS_URL{
-/* URL : https://upload.wikimedia.org/wikipedia/commons/e/e7/SVG1.1_Color_Swatch.svg */
+.COLORS_URL {
+  /* URL : https://upload.wikimedia.org/wikipedia/commons/e/e7/SVG1.1_Color_Swatch.svg */
+  color: red;
 }
-
 
 html {
   font-family: Roboto, sans-serif;
@@ -11,6 +11,7 @@ html {
 body {
   display: flex;
   flex-direction: column;
+  /* font-size: 16px; */
 }
 #app {
   display: flex;
@@ -21,10 +22,12 @@ body {
   justify-content: left;
   align-items: center;
 }
-.priceRed, .priceGreen {
+.priceRed,
+.priceGreen {
   font-weight: bold;
 }
-.priceRed, .red {
+.priceRed,
+.red {
   color: red;
 }
 .priceGreen {
@@ -49,7 +52,7 @@ body {
   font-size: 120%;
 }
 .put {
-  background-color: #FF7F50;
+  background-color: #ff7f50;
   font-size: 120%;
 }
 .strikePrice {
@@ -63,7 +66,7 @@ body {
   font-weight: bold;
 }
 .pcr {
-  font-size: small;
+  font-size: 80%;
 }
 .spotprice {
   color: brown;
@@ -101,7 +104,8 @@ table.report tr {
   border: 1px solid rgba(206, 205, 205, 0.5);
   white-space: nowrap;
 }
-.container,.oichart,
+.container,
+.oichart,
 .chainTabContainer {
   display: flex;
   justify-content: center;
@@ -113,7 +117,7 @@ table.report tr {
   flex-direction: column;
 }
 .oiSeries {
-  display:flex;
+  display: flex;
   flex-wrap: wrap;
   justify-content: center;
   border: 1px solid silver;
@@ -211,26 +215,26 @@ table.report tr th {
   font-weight: bold;
   color: rgb(21, 72, 129);
 }
-.expiry, .timer {
+.expiry,
+.timer {
   font-size: large;
   color: brown;
 }
-
 
 .LB {
   background-color: greenyellow;
   color: black;
 }
 .LU {
-  background-color: #FFDAB9 ;
+  background-color: #ffdab9;
   color: black;
 }
 .SB {
-  background-color: #FF7F50 ;
+  background-color: #ff7f50;
   color: black;
 }
 .SC {
-  background-color: #87CEFA ;
+  background-color: #87cefa;
   color: black;
 }
 .DOWN:before {
@@ -238,7 +242,7 @@ table.report tr th {
   /* content: "🠗"; */
   content: "▼";
   font-size: 12px;
-  font-family:u1f800;
+  font-family: u1f800;
   padding-right: 3px;
 }
 .UP:before {
@@ -246,7 +250,7 @@ table.report tr th {
   /* content: "🠕"; */
   content: "▲";
   font-size: 12px;
-  font-family:u1f800;
+  font-family: u1f800;
   padding-right: 3px;
 }
 
