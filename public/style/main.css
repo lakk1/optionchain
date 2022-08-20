@@ -1,3 +1,8 @@
+.COLORS_URL{
+/* URL : https://upload.wikimedia.org/wikipedia/commons/e/e7/SVG1.1_Color_Swatch.svg */
+}
+
+
 html {
   font-family: Roboto, sans-serif;
   font-size: 10px;
@@ -217,7 +222,7 @@ table.report tr th {
   color: black;
 }
 .LU {
-  background-color: orange;
+  background-color: #FFDAB9 ;
   color: black;
 }
 .SB {
@@ -225,8 +230,8 @@ table.report tr th {
   color: black;
 }
 .SC {
-  background-color: #6495ED;
-  color: white;
+  background-color: #87CEFA ;
+  color: black;
 }
 .DOWN:before {
   /* content: "↓"; */
