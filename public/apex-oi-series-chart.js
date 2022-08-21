@@ -27,6 +27,7 @@ export default {
       seriesStrikePrice: undefined,
       STRIKES: [],
       interval: 0,
+      updated: false,
     };
   },
   methods: {
@@ -252,10 +253,15 @@ export default {
     }
     this.intervalHandler = setInterval(() => {
       this.getOiSeriesData("From SetInterval");
-    }, 60000);
+    }, 15000);
   },
   beforeUnmount() {
     clearInterval(this.intervalHandler);
+  },
+  updated() {
+    console.log("OI Series Updated at ", this.time);
+    this.updated = this.time;
+    this.getOiSeriesData("From SetInterval");
   },
   template: `
   <div class="oiSeriesContainer">

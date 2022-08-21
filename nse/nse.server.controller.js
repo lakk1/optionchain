@@ -50,7 +50,6 @@ NSE.getOptionChain = async (req, res) => {
 
   try {
     let data = await fetchNSEdata(symbol, range, expiry);
-    console.log("");
     res.send(data);
   } catch (e) {
     res.status(401).send(e);
@@ -69,7 +68,7 @@ NSE.getPutCallOiSum = async (req, res) => {
   );
   let date = timeStamp.lastCheckedOn.split(" ")[0];
 
-  console.log("strikePrices", strikePrices);
+  // console.log("strikePrices", strikePrices);
   try {
     let records = await filteredDataModel.aggregate([
       {

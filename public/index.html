@@ -71,15 +71,33 @@
       <hr />
       <div class="container" v-if="display == 'both' ">
         <div class="innerContainer">
-          <option-chain symbol="BANKNIFTY" :display="display"> </option-chain>
+          <option-chain
+            symbol="BANKNIFTY"
+            :display="display"
+            :range="range"
+            :time="time"
+          >
+          </option-chain>
         </div>
         <div class="innerContainer">
-          <option-chain symbol="NIFTY" :display="display"> </option-chain>
+          <option-chain
+            symbol="NIFTY"
+            :display="display"
+            :range="range"
+            :time="time"
+          >
+          </option-chain>
         </div>
       </div>
       <div class="container" v-else>
         <div class="innerContainer">
-          <option-chain :symbol="display" :display="display"> </option-chain>
+          <option-chain
+            :symbol="display"
+            :display="display"
+            :range="range"
+            :time="time"
+          >
+          </option-chain>
         </div>
       </div>
       <!-- <div>

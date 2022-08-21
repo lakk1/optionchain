@@ -6,6 +6,7 @@ export default {
     return {
       chart: undefined,
       series: [],
+      updated: false,
     };
   },
   methods: {
@@ -156,6 +157,11 @@ export default {
   beforeUnmount() {
     // console.log("Unmounting chart....");
     clearInterval(this.intervalHandler);
+  },
+  updated() {
+    console.log("OI Chart Updated at ", this.time);
+    this.updated = this.time;
+    this.updateOptions();
   },
   template: `
   <table class="columns">

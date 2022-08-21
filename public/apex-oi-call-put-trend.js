@@ -2,7 +2,7 @@ import { store } from "./store.js";
 import stockList from "./data.js";
 
 export default {
-  props: ["symbol", "time", "chartID"],
+  props: ["symbol", "time", "range"],
   data() {
     return {
       chart: undefined,
@@ -14,7 +14,9 @@ export default {
       date: undefined,
       lastFetchTime: undefined,
       previousSymbol: undefined,
+      previousRange: undefined,
       STRIKES: [],
+      updated: false,
     };
   },
   methods: {
@@ -36,9 +38,7 @@ export default {
       let symbol = this.symbol;
       let fetchDate = this.date || store.getFetchDate();
 
-      console.log(
-        `Drawing OI CALL PUT trend for ${this.symbol}, date: ${fetchDate}`
-      );
+      console.log(`Drawing OI CALL PUT trend for ${this.symbol}`);
 
       if (this.oiOiCallPutTrend) {
         let options = {
@@ -66,7 +66,9 @@ export default {
             width: [2, 2],
           },
           title: {
-            text: `${this.symbol} OI Call Put Trend for selected Strikes at ${this.lastFetchTime}`,
+            text: `${this.symbol} OI Call Put Trend for ${
+              this.range * 2 + 1
+            } Strikes at ${this.lastFetchTime}`,
             align: "left",
           },
           grid: {
@@ -148,9 +150,10 @@ export default {
         let maxFetchTime = response.data.records[totalRecords - 1]._id;
 
         // Check this in the live - whether it is ingoring all or only duplicates
-        if (this.lastFetchTime == maxFetchTime) {
-          console.log("OI C P Trend ... 5");
-
+        if (
+          this.lastFetchTime == maxFetchTime &&
+          this.previousRange == this.range
+        ) {
           console.log(
             "No new records to redraw OI Call Put Trend for ",
             this.symbol
@@ -160,6 +163,7 @@ export default {
 
         this.lastFetchTime = maxFetchTime;
         this.previousSymbol = this.symbol;
+        this.previousRange = this.range;
         store.updateFetchTime(this.symbol, this.lastFetchTime);
 
         // Generate data for Chart
@@ -185,9 +189,13 @@ export default {
     },
   },
   beforeUpdate() {
-    if (this.previousSymbol != this.symbol) {
-      // console.log(        "Inside before Update - updating prev symbol and strike price"      );
-      this.previousSymbol = this.symbol;
+    if (
+      this.previousSymbol != this.symbol ||
+      this.range != this.previousRange
+    ) {
+      console.log(
+        "Inside OI Call put trend before Update - updating prev symbol and strike price"
+      );
       this.getOiCallPutTrendData("From Before Update");
     }
   },
@@ -196,11 +204,20 @@ export default {
 
     this.intervalHandler = setInterval(() => {
       this.getOiCallPutTrendData("From SetInterval");
-    }, 60000);
-    this.getOiCallPutTrendData();
+    }, 15000);
+    this.getOiCallPutTrendData("From Mounted");
   },
   beforeUnmount() {
     clearInterval(this.intervalHandler);
+  },
+  updated() {
+    console.log(
+      "OI Call Put Trend Updated at ",
+      this.time,
+      "range:",
+      this.range
+    );
+    this.updated = this.time;
   },
   template: `
   <div class="oiSeriesContainer">

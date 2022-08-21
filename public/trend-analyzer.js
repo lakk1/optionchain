@@ -10,6 +10,7 @@ export default {
       expiry: 0,
       refreshInterval: 30, // seconds
       display: "BANKNIFTY",
+      time: "",
     };
   },
   methods: {
@@ -68,6 +69,7 @@ export default {
     // Call every 30 seconds to refresh data
     this.intervalHandler = setInterval(this.refreshData, interval);
     this.getStockList();
+    this.time = new Date().getTime();
   },
   beforeUnmount() {
     console.log("Unmounting Option Chain analyzer");

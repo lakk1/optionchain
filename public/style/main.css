@@ -89,7 +89,7 @@ body {
 .actions {
   font-size: 12px;
   color: rgb(86, 109, 109, 0.9);
-  flex-basis: 50%;
+  /* flex-basis: 50%; */
   display: flex;
   align-items: center;
   white-space: nowrap;
@@ -99,6 +99,7 @@ body {
 }
 .actions {
   justify-content: right;
+  flex: auto;
 }
 .actions label {
   cursor: pointer;
