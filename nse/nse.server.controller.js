@@ -61,8 +61,13 @@ NSE.getOptionChain = async (req, res) => {
 
 NSE.getPutCallOiSum = async (req, res) => {
   let symbol = req.body.symbol || "NIFTY";
-  let date = req.body.date || today();
+  // let date = req.body.date || today();
   let strikePrices = req.body.strikePrices;
+  let timeStamp = await lastCheckedModel.findOne(
+    { symbol },
+    "lastCheckedOn -_id"
+  );
+  let date = timeStamp.lastCheckedOn.split(" ")[0];
 
   console.log("strikePrices", strikePrices);
   try {

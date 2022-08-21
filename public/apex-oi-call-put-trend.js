@@ -2,59 +2,45 @@ import { store } from "./store.js";
 import stockList from "./data.js";
 
 export default {
-  props: [
-    "symbol",
-    "strikePrice",
-    "time",
-    "chartID",
-    "strikeInterval",
-    "multiplier",
-  ],
+  props: ["symbol", "time", "chartID"],
   data() {
     return {
       chart: undefined,
       series: [],
-      oiSeriesData: undefined,
+      oiOiCallPutTrend: undefined,
       xAxisCategories: [],
-      CEoiChange: [],
-      PEoiChange: [],
-      CEoiVolume: [],
-      PEoiVolume: [],
+      callSum: [],
+      putSum: [],
       date: undefined,
       lastFetchTime: undefined,
-      previousStrike: undefined,
       previousSymbol: undefined,
-      seriesStrikePrice: undefined,
       STRIKES: [],
-      interval: 0,
     };
   },
   methods: {
-    getStrikeInterval() {
-      let symbolDetails = stockList.filter((s) => s.symbol == this.symbol)[0];
-      return symbolDetails.steps;
-    },
     getSeries() {
-      return [
+      let seriesData = [
         {
-          name: "Put Change",
-          data: this.PEoiChange,
+          name: "Put OI",
+          data: this.putSum,
         },
         {
-          name: "Call Change",
-          data: this.CEoiChange,
+          name: "Call OI",
+          data: this.callSum,
         },
       ];
+      // console.log("Call put trend series: ", seriesData);
+      return seriesData;
     },
     drawOptionsChart() {
       let symbol = this.symbol;
       let fetchDate = this.date || store.getFetchDate();
 
       console.log(
-        `Drawing OI CALL PUT trend for ${this.symbol} : ${this.seriesStrikePrice} of date: ${fetchDate}`
+        `Drawing OI CALL PUT trend for ${this.symbol}, date: ${fetchDate}`
       );
 
-      if (this.oiSeriesData) {
+      if (this.oiOiCallPutTrend) {
         let options = {
           series: this.getSeries(),
           chart: {
@@ -80,7 +66,7 @@ export default {
             width: [2, 2],
           },
           title: {
-            text: `${this.symbol} OI Change ${this.seriesStrikePrice} ${this.lastFetchTime}`,
+            text: `${this.symbol} OI Call Put Trend for selected Strikes at ${this.lastFetchTime}`,
             align: "left",
           },
           grid: {
@@ -123,8 +109,7 @@ export default {
           },
         };
 
-        let selector =
-          "#" + symbol + "_" + this.seriesStrikePrice + "_oiseries_div";
+        let selector = "#" + symbol + "_oiCallPutTrend";
 
         let elem = document.querySelector(selector);
 
@@ -145,131 +130,81 @@ export default {
         },
       });
     },
-    async getOiSeriesData(calledFrom) {
-      let fetchDate = this.date || store.getFetchDate();
+    async getOiCallPutTrendData(calledFrom) {
       this.STRIKES = store.getStrikes(this.symbol);
 
-      if (this.strikeInterval == 0) {
-        console.log("Updating interval...");
-        let interval = this.getStrikeInterval();
-        this.seriesStrikePrice = this.strikePrice + interval * this.multiplier;
-      }
-
-      // console.log(
-      //   `${calledFrom} ===== Fetching OI Series for ${this.symbol} : ${this.seriesStrikePrice} of date: ${fetchDate}`
-      // );
-
-      const response = await axios.post("/nse/filteredData/", {
+      const response = await axios.post("/nse/getPutCallOiSum/", {
         symbol: this.symbol,
-        date: fetchDate,
-        strikePrices: this.seriesStrikePrice,
+        // date: fetchDate,
+        strikePrices: this.STRIKES,
       });
 
       if (response.data) {
-        this.oiSeriesData = response.data;
+        this.oiOiCallPutTrend = response.data;
 
         let totalRecords = response.data.records.length;
         if (totalRecords == 0) return;
 
-        let maxFetchTime = response.data.records[totalRecords - 1].timeStamp;
+        let maxFetchTime = response.data.records[totalRecords - 1]._id;
 
         // Check this in the live - whether it is ingoring all or only duplicates
-        if (
-          this.lastFetchTime == maxFetchTime &&
-          this.previousStrike == this.seriesStrikePrice
-        ) {
-          console.log("No new records to redraw OI Series for ", this.symbol);
+        if (this.lastFetchTime == maxFetchTime) {
+          console.log("OI C P Trend ... 5");
+
+          console.log(
+            "No new records to redraw OI Call Put Trend for ",
+            this.symbol
+          );
           return;
         }
 
         this.lastFetchTime = maxFetchTime;
-        this.previousStrike = this.seriesStrikePrice;
         this.previousSymbol = this.symbol;
         store.updateFetchTime(this.symbol, this.lastFetchTime);
 
         // Generate data for Chart
         let xAxisCategories = [];
-        let CEoiChange = [];
-        let PEoiChange = [];
-        let CEoiVolume = [];
-        let PEoiVolume = [];
+        let callSum = [];
+        let putSum = [];
+
         response.data.records.forEach((e) => {
-          xAxisCategories.push(e.timeStamp.substring(12, 17));
-          CEoiChange.push(e.CE.changeInOI);
-          PEoiChange.push(e.PE.changeInOI);
-          CEoiVolume.push(e.CE.volume);
-          PEoiVolume.push(e.PE.volume);
+          xAxisCategories.push(e._id.substring(12, 17));
+          callSum.push(e.CE_OI_SUM);
+          putSum.push(e.PE_OI_SUM);
         });
 
         this.xAxisCategories = xAxisCategories;
-        this.CEoiChange = CEoiChange;
-        this.PEoiChange = PEoiChange;
-        this.CEoiVolume = CEoiVolume;
-        this.PEoiVolume = PEoiVolume;
+        this.callSum = callSum;
+        this.putSum = putSum;
 
         this.drawOptionsChart();
-
         // this.updateOptions();
       } else {
-        console.log("Failed to get OI series for symbol", symbol);
+        console.log("Failed to get OI Call Put OI Trend for symbol", symbol);
       }
     },
   },
   beforeUpdate() {
-    // console.log("STRIKES: ", store.getStrikes(this.symbol));
-    // console.log(
-    //   this.chartID,
-    //   "------------ OI SERIES before Update: ",
-    //   this.symbol,
-    //   this.strikePrice,
-    //   this.seriesStrikePrice
-    // );
-
     if (this.previousSymbol != this.symbol) {
       // console.log(        "Inside before Update - updating prev symbol and strike price"      );
       this.previousSymbol = this.symbol;
-      this.seriesStrikePrice = this.strikePrice;
-      this.getOiSeriesData("From Before Update");
+      this.getOiCallPutTrendData("From Before Update");
     }
-  },
-  created() {
-    // console.log(
-    //   this.chartID,
-    //   "OI SERIES CREATED: ",
-    //   this.symbol,
-    //   this.strikePrice,
-    //   " Interval: ",
-    //   this.strikeInterval
-    // );
   },
   mounted() {
-    if (this.seriesStrikePrice != this.strikePrice) {
-      this.seriesStrikePrice = this.strikePrice;
-      this.STRIKES = store.getStrikes(this.symbol);
-      if (!this.date) {
-        this.date = store.getFetchDate();
-      }
-    }
+    console.log("OI C P Trend mounted");
+
     this.intervalHandler = setInterval(() => {
-      this.getOiSeriesData("From SetInterval");
+      this.getOiCallPutTrendData("From SetInterval");
     }, 60000);
+    this.getOiCallPutTrendData();
   },
   beforeUnmount() {
     clearInterval(this.intervalHandler);
   },
   template: `
   <div class="oiSeriesContainer">
-    <div>
-      Strike Price
-      <select v-model="seriesStrikePrice" @change="getOiSeriesData('On DropDown Change')">
-        <template v-for="s in STRIKES">
-            <option :value="s">
-              {{s}}
-            </option>
-        </template></select>
-    </div>
-    <div :id="symbol + '_' + seriesStrikePrice + '_oiseries_div'" style="width: 640px; height: 400px;"></div>
+    <div :id="symbol + '_oiCallPutTrend'" style="width: 640px; height: 400px;"></div>
   </div>
   `,
-  // <td><div :id="symbol+'_div'" class="" style="border: 1px solid #ccc"> SOMTHING HERE for {{symbol}}</div></td>
 };

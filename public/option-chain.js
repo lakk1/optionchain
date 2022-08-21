@@ -10,6 +10,7 @@ export default {
       showOiSeries: false,
       showOiBars: true,
       showOptionChain: true,
+      showOiCallPutTrend: true,
       stockList: undefined,
       lotSize: 0,
       strikeInterval: 0,
@@ -85,6 +86,9 @@ export default {
                 <input type="checkbox" :id="symbol+ '_oiChain'" v-model="showOptionChain" />
                 <label :for="symbol+ '_oiChain'">Chain</label>
                 &nbsp; | &nbsp;
+                <input type="checkbox" :id="symbol+ '_oiCPTrend'" v-model="showOiCallPutTrend" />
+                <label :for="symbol+ '_oiCPTrend'">Call Put Trend</label>
+                &nbsp; | &nbsp;
                 <input type="checkbox" :id="symbol+ '_lotMultiplier'" v-model="multiply" />
 
                 <label :for="symbol+  '_lotMultiplier'">Show by Quantity</label>
@@ -92,6 +96,11 @@ export default {
                 Lot size : {{ lotSize }}
             </div>
           </div>
+        </div>
+
+        <hr />
+        <div class="oiSeries" v-if="showOiCallPutTrend">
+        <apex-oi-call-put-trend :symbol="symbol" :time="fetchTime(symbol)">OI Call Put Trend Line Chart</apex-oi-call-put-trend>
         </div>
 
         <hr />

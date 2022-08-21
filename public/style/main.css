@@ -92,6 +92,10 @@ body {
   flex-basis: 50%;
   display: flex;
   align-items: center;
+  white-space: nowrap;
+}
+.timestamp {
+  flex-basis: 25%;
 }
 .actions {
   justify-content: right;
