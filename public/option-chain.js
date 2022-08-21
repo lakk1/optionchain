@@ -198,7 +198,7 @@ export default {
                 <td :class="{itm: strikes.strikePrice > getATM(symbol), highVolumePut: store.getTotals(symbol).PE.highVolStrike == strikes.strikePrice, secondHigh: store.getTotals(symbol).PE.secondHighVolStrike == strikes.strikePrice, thirdHigh: store.getTotals(symbol).PE.thirdHighVolStrike == strikes.strikePrice}">{{ Number(strikes.PE.totalTradedVolume * oiMultiplier).toLocaleString() }}</td>
                 <td :class="{itm: strikes.strikePrice > getATM(symbol), highOIPut: store.getTotals(symbol).PE.highOIStrike == strikes.strikePrice, secondHigh: store.getTotals(symbol).PE.secondHighOIStrike == strikes.strikePrice, thirdHigh: store.getTotals(symbol).PE.thirdHighOIStrike == strikes.strikePrice}">{{ Number(strikes.PE.openInterest * oiMultiplier).toLocaleString() }}</td>
                 <td :class="{ red: strikes.PE.changeinOpenInterest < 0, itm: strikes.strikePrice > getATM(symbol), highOIchgPut: store.getTotals(symbol).PE.highOIchgStrike == strikes.strikePrice }">{{ Number(strikes.PE.changeinOpenInterest * oiMultiplier).toLocaleString() }}</td>
-                <td :class="{itm: strikes.strikePrice > getATM(symbol)}, red: strikes.PE.impliedVolatility > 25">{{ parseFloat(strikes.PE.impliedVolatility).toFixed(2) }}</td>
+                <td :class="{itm: strikes.strikePrice > getATM(symbol), red: strikes.PE.impliedVolatility > 25}">{{ parseFloat(strikes.PE.impliedVolatility).toFixed(2) }}</td>
                 <td :class="{itm: strikes.strikePrice > getATM(symbol)}"><span v-if="strikes.CE.greeks" > {{ parseFloat(strikes.PE.greeks.delta).toFixed(3) }} </span> </td>
                 <td :class="[strikes.PE.action, strikes.PE.direction]">{{ strikes.PE.action }} </td>
 
