@@ -279,6 +279,7 @@ table.report tr th {
 .oiTrendContainer {
   display: flex;
   justify-content: center;
+  flex-direction: column;
 }
 .analysis {
   display: flex;

@@ -226,6 +226,18 @@ export default {
   template: `
   <div class="oiTrendContainer">
     <div :id="symbol + '_oiCallPutOIChangeTrend'" style="width: 640px; height: 400px;"></div>
+    <div class='analysis'>
+      <p>
+        As long as Puts are Increasing and Calls are decreasing or not incrasing it will be <span class="UP bold priceGreen">RISE - BULLISH</span>
+      </p>
+      <p>
+        As long as Calls are Increasing and Puts are decreasing or not incrasing it will be <span class="DOWN bold priceRed">FALL - BEARISH</span>
+      </p>
+      <p>
+        If both Calls and Puts are increasing or decreasing - STAY away - wait and watch.
+        <br/>It will be tough fight between Bulls and Bears, leading to Sidewise or RANGE bound market.
+      </p>
+    </div>
   </div>
   `,
 };
