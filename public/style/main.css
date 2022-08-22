@@ -121,6 +121,9 @@ table.report tr {
   /* align-items: center; */
 }
 
+.oiTrendContainer {
+  display: flex;
+}
 .oiSeriesContainer {
   display: flex;
   flex-direction: column;
@@ -272,9 +275,15 @@ table.report tr th {
   margin: 2px;
   border: 1px solid gray;
 }
+
+.oiTrendContainer {
+  display: flex;
+  justify-content: center;
+}
 .analysis {
   display: flex;
   flex-direction: column;
+  flex-basis: 40%;
   justify-content: center;
   align-items: center;
 }

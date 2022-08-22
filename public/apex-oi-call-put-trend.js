@@ -221,7 +221,7 @@ export default {
     this.updated = this.time;
   },
   template: `
-  <div class="oiSeriesContainer">
+  <div class="oiTrendContainer">
     <div :id="symbol + '_oiCallPutTrend'" style="width: 640px; height: 400px;"></div>
     <div class='analysis'>
       <p>
