@@ -224,8 +224,15 @@ export default {
   <div class="oiSeriesContainer">
     <div :id="symbol + '_oiCallPutTrend'" style="width: 640px; height: 400px;"></div>
     <div class='analysis'>
-      <p> If <b>CALLS</b> are reducing (Short Covering - SC) and PUTS are increasing (Short Buildup - SB), Market will <span class="UP bold priceGreen">RISE - BULLISH</span> as Big Fishes are entering market with Big Fund.
-      <br/> If <b>PUTS</b> are reducing (Short Covering - SC) and CALLS are increasing (Short Buildup - SB), Market will <span class="DOWN bold priceRed">FALL - BEARISH</span> as Big Fishes are running away without supporting the market.</p>
+      <p>
+        If <b>CALLS</b> are reducing with Short Covering (SC) and PUTS are increasing with Short Buildup (SB), Market will <span class="UP bold priceGreen">RISE - BULLISH</span> as Big Fishes are entering market with Big Fund.
+        <br/>
+        If <b>CALLS</b> side Long Buildup (LB) and PUTS side Short Buildup (SB) is happening , Market will <span class="UP bold priceGreen">RISE - BULLISH</span> as Big Fishes are entering market with Big Fund.
+      </p>
+      <p>
+      If <b>PUTS</b> are reducing with Short Covering (SC) and CALLS are increasing with Short Buildup (SB), Market will <span class="DOWN bold priceRed">FALL - BEARISH</span> as Big Fishes are running away without supporting the market.
+      <br/>
+      If <b>PUTS</b> side Long Buildup (LB) and CALLS side Short Buildup (SB) is happening , Market will <span class="DOWN bold priceRed">FALL - BEARISH</span> as Big Fishes are running away without supporting the market.</p>
     </div>
   </div>
   `,
