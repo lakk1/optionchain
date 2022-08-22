@@ -224,8 +224,8 @@ export default {
   <div class="oiSeriesContainer">
     <div :id="symbol + '_oiCallPutTrend'" style="width: 640px; height: 400px;"></div>
     <div class='analysis'>
-      <p> If <b>CALLS</b> are reducing and PUTS are increasing, Market will <span class="UP bold priceGreen">RISE - BULLISH</span> as Big Fishes are entering market with Big Fund.
-      <br/> If <b>PUTS</b> are reducing and CALLS are increasing, Market will <span class="DOWN bold priceRed">FALL - BEARISH</span> as Big Fishes are running away without supporting the market.</p>
+      <p> If <b>CALLS</b> are reducing (Short Covering - SC) and PUTS are increasing (Short Buildup - SB), Market will <span class="UP bold priceGreen">RISE - BULLISH</span> as Big Fishes are entering market with Big Fund.
+      <br/> If <b>PUTS</b> are reducing (Short Covering - SC) and CALLS are increasing (Short Buildup - SB), Market will <span class="DOWN bold priceRed">FALL - BEARISH</span> as Big Fishes are running away without supporting the market.</p>
     </div>
   </div>
   `,
