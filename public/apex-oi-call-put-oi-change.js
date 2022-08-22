@@ -38,7 +38,7 @@ export default {
       let symbol = this.symbol;
       let fetchDate = this.date || store.getFetchDate();
 
-      console.log(`Drawing OI CALL PUT trend for ${this.symbol}`);
+      console.log(`Drawing OI CALL PUT OI Change for ${this.symbol}`);
 
       if (this.oiOiCallPutTrend) {
         let options = {
@@ -152,6 +152,7 @@ export default {
 
         // Check this in the live - whether it is ingoring all or only duplicates
         if (
+          this.previousSymbol == this.symbol &&
           this.lastFetchTime == maxFetchTime &&
           this.previousRange == this.range
         ) {

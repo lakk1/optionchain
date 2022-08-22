@@ -152,6 +152,7 @@ export default {
 
         // Check this in the live - whether it is ingoring all or only duplicates
         if (
+          this.previousSymbol == this.symbol &&
           this.lastFetchTime == maxFetchTime &&
           this.previousRange == this.range
         ) {
