@@ -23,11 +23,11 @@ export default {
     getSeries() {
       let seriesData = [
         {
-          name: "Put OI",
+          name: "Put OI Change",
           data: this.putSum,
         },
         {
-          name: "Call OI",
+          name: "Call OI Change",
           data: this.callSum,
         },
       ];
@@ -66,7 +66,7 @@ export default {
             width: [2, 2],
           },
           title: {
-            text: `${this.symbol} OI Call Put Contracts Trend For current expiry at ${this.lastFetchTime}`,
+            text: `${this.symbol} OI Put Call OI Change Trend for current expiry at ${this.lastFetchTime}`,
             // text: `${this.symbol} OI Call Put Trend for ${
             //   this.range * 2 + 1
             // } Strikes at ${this.lastFetchTime}`,
@@ -112,7 +112,7 @@ export default {
           },
         };
 
-        let selector = "#" + symbol + "_oiCallPutTrend";
+        let selector = "#" + symbol + "_oiCallPutOIChangeTrend";
 
         let elem = document.querySelector(selector);
 
@@ -136,7 +136,7 @@ export default {
     async getOiCallPutTrendData(calledFrom) {
       this.STRIKES = store.getStrikes(this.symbol);
 
-      const response = await axios.post("/nse/getPutCallOiSum/", {
+      const response = await axios.post("/nse/getPutCallOiChange/", {
         symbol: this.symbol,
         // date: fetchDate,
         strikePrices: this.STRIKES,
@@ -174,8 +174,8 @@ export default {
 
         response.data.records.forEach((e) => {
           xAxisCategories.push(e._id.substring(12, 17));
-          callSum.push(e.CE_OI_SUM);
-          putSum.push(e.PE_OI_SUM);
+          callSum.push(e.CE_OI_CHANGE_SUM);
+          putSum.push(e.PE_OI_CHANGE_SUM);
         });
 
         this.xAxisCategories = xAxisCategories;
@@ -185,7 +185,10 @@ export default {
         this.drawOptionsChart();
         // this.updateOptions();
       } else {
-        console.log("Failed to get OI Call Put OI Trend for symbol", symbol);
+        console.log(
+          "Failed to get OI Call Put OI Change Trend for symbol",
+          symbol
+        );
       }
     },
   },
@@ -195,13 +198,13 @@ export default {
       this.range != this.previousRange
     ) {
       console.log(
-        "Inside OI Call put trend before Update - updating prev symbol and strike price"
+        "Inside OI Call Put OI Change trend before Update - updating prev symbol and strike price"
       );
       this.getOiCallPutTrendData("From Before Update");
     }
   },
   mounted() {
-    console.log("OI C P Trend mounted");
+    console.log("OI C P OI Change Trend mounted");
 
     this.intervalHandler = setInterval(() => {
       this.getOiCallPutTrendData("From SetInterval");
@@ -213,7 +216,7 @@ export default {
   },
   updated() {
     console.log(
-      "OI Call Put Trend Updated at ",
+      "OI Call Put OI Change Trend Updated at ",
       this.time,
       "range:",
       this.range
@@ -222,8 +225,7 @@ export default {
   },
   template: `
   <div class="oiTrendContainer">
-    <div :id="symbol + '_oiCallPutTrend'" style="width: 640px; height: 400px;"></div>
-
+    <div :id="symbol + '_oiCallPutOIChangeTrend'" style="width: 640px; height: 400px;"></div>
   </div>
   `,
 };

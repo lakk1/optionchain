@@ -99,7 +99,19 @@ export default {
         </div>
 
         <div class="oiSeries" v-if="showOiCallPutTrend">
+          <apex-oi-call-put-oi-change :symbol="symbol" :time="time" :range="range">OI Call Put Trend Line Chart</apex-oi-call-put-oi-change>
           <apex-oi-call-put-trend :symbol="symbol" :time="time" :range="range">OI Call Put Trend Line Chart</apex-oi-call-put-trend>
+          <div class='analysis'>
+            <p>
+              If <b>CALLS</b> are reducing with Short Covering (SC) and PUTS are increasing with Short Buildup (SB), Market will <span class="UP bold priceGreen">RISE - BULLISH</span> as Big Fishes are entering market with Big Fund.
+              <br/>
+              If <b>CALLS</b> side Long Buildup (LB) and PUTS side Short Buildup (SB) is happening , Market will <span class="UP bold priceGreen">RISE - BULLISH</span> as Big Fishes are entering market with Big Fund.
+            </p>
+            <p>
+            If <b>PUTS</b> are reducing with Short Covering (SC) and CALLS are increasing with Short Buildup (SB), Market will <span class="DOWN bold priceRed">FALL - BEARISH</span> as Big Fishes are running away without supporting the market.
+            <br/>
+            If <b>PUTS</b> side Long Buildup (LB) and CALLS side Short Buildup (SB) is happening , Market will <span class="DOWN bold priceRed">FALL - BEARISH</span> as Big Fishes are running away without supporting the market.</p>
+          </div>
         </div>
 
         <template v-if="showOiBars">

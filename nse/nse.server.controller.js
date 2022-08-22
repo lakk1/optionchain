@@ -58,6 +58,53 @@ NSE.getOptionChain = async (req, res) => {
   //   return res.json({ NSEData: { a: 1, b: 2 } });
 };
 
+NSE.getPutCallOiChange = async (req, res) => {
+  let symbol = req.body.symbol || "NIFTY";
+  console.log("getPutCallOiChange invoked for ", symbol);
+  // let date = req.body.date || today();
+  let strikePrices = req.body.strikePrices;
+  let timeStamp = await lastCheckedModel.findOne(
+    { symbol },
+    "lastCheckedOn -_id"
+  );
+  let date = timeStamp.lastCheckedOn.split(" ")[0];
+
+  // console.log("strikePrices", strikePrices);
+  try {
+    let records = await filteredDataModel.aggregate([
+      {
+        $match: {
+          symbol: symbol,
+          date: date,
+          strikePrice: {
+            $in: strikePrices,
+          },
+        },
+      },
+      {
+        $group: {
+          _id: "$timeStamp",
+          CE_OI_CHANGE_SUM: {
+            $sum: "$CE.changeInOI",
+          },
+          PE_OI_CHANGE_SUM: {
+            $sum: "$PE.changeInOI",
+          },
+        },
+      },
+      {
+        $sort: {
+          _id: 1,
+        },
+      },
+    ]);
+
+    res.json({ records });
+  } catch (e) {
+    res.status(401).send(e);
+  }
+};
+
 NSE.getPutCallOiSum = async (req, res) => {
   let symbol = req.body.symbol || "NIFTY";
   // let date = req.body.date || today();
