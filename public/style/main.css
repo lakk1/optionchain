@@ -52,7 +52,7 @@ body {
   color: white;
 }
 .call {
-  background-color: greenyellow;
+  background-color: rgb(173, 225, 47);
   font-size: 120%;
 }
 .put {
@@ -271,4 +271,13 @@ table.report tr th {
   padding: 3px 5px;
   margin: 2px;
   border: 1px solid gray;
+}
+.analysis {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.bold {
+  font-weight: bold;
 }

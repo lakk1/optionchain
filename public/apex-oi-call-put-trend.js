@@ -66,9 +66,10 @@ export default {
             width: [2, 2],
           },
           title: {
-            text: `${this.symbol} OI Call Put Trend for ${
-              this.range * 2 + 1
-            } Strikes at ${this.lastFetchTime}`,
+            text: `${this.symbol} OI Call Put Trend For current expiry at ${this.lastFetchTime}`,
+            // text: `${this.symbol} OI Call Put Trend for ${
+            //   this.range * 2 + 1
+            // } Strikes at ${this.lastFetchTime}`,
             align: "left",
           },
           grid: {
@@ -222,6 +223,10 @@ export default {
   template: `
   <div class="oiSeriesContainer">
     <div :id="symbol + '_oiCallPutTrend'" style="width: 640px; height: 400px;"></div>
+    <div class='analysis'>
+      <p> If <b>CALLS</b> are reducing and PUTS are increasing, Market will <span class="UP bold priceGreen">RISE - BULLISH</span> as Big Fishes are entering market with Big Fund.
+      <br/> If <b>PUTS</b> are reducing and CALLS are increasing, Market will <span class="DOWN bold priceRed">FALL - BEARISH</span> as Big Fishes are running away without supporting the market.</p>
+    </div>
   </div>
   `,
 };
