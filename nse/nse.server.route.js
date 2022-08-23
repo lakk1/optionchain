@@ -7,4 +7,5 @@ module.exports = function (router) {
   router.post("/nse/filteredData/", NSE.getfilteredData);
   router.post("/nse/getPutCallOiSum/", NSE.getPutCallOiSum);
   router.post("/nse/getPutCallOiChange/", NSE.getPutCallOiChange);
+  router.post("/nse/getMarketPrice/", NSE.getMarketPrice);
 };

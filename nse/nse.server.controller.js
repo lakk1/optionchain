@@ -105,6 +105,32 @@ NSE.getPutCallOiChange = async (req, res) => {
   }
 };
 
+NSE.getMarketPrice = async (req, res) => {
+  let symbol = req.body.symbol || "NIFTY";
+  console.log("getMarketPrice invoked for ", symbol);
+  // let date = req.body.date || today();
+  let strikePrices = req.body.strikePrices;
+  let timeStamp = await lastCheckedModel.findOne(
+    { symbol },
+    "lastCheckedOn -_id"
+  );
+  let date = timeStamp.lastCheckedOn.split(" ")[0];
+
+  // console.log("strikePrices", strikePrices);
+  try {
+    let records = await filteredDataModel
+      .find(
+        { symbol: symbol, date: date },
+        "-_id marketPrice sequence timestamp"
+      )
+      .sort({ sequence: "asc" });
+
+    res.json({ records });
+  } catch (e) {
+    res.status(401).send(e);
+  }
+};
+
 NSE.getPutCallOiSum = async (req, res) => {
   let symbol = req.body.symbol || "NIFTY";
   // let date = req.body.date || today();

@@ -30,6 +30,7 @@ const filteredDataSchema = new Schema(
     expiryDate: String,
     CE: OptionSchema,
     PE: OptionSchema,
+    marketPrice: Number,
   },
   { collection: "filteredData" }
 );
