@@ -13,3 +13,4 @@ npm-debug.log
 __pycache__/marketData.cpython-39.pyc
 .vscode/extensions.json
 __pycache__/marketData.cpython-310.pyc
+test.mongodb
