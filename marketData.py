@@ -118,8 +118,9 @@ def prepareOCData(ceOrPe, data, timeStamp, totals):
         'volume': data['totalTradedVolume'],
         'OI': data['openInterest'],
         'changeInOI': data['changeinOpenInterest'],
-        'TotalOI': totals['totOI'],
-        'TotalVolume': totals['totVol'],
+        'totalOI': totals['totOI'],
+        'totalVolume': totals['totVol'],
+        'marketPrice': data['underlyingValue'],
         'greeks': calculateGreeks(data['underlyingValue'], data['strikePrice'], data['expiryDate'], ceOrPe, data['impliedVolatility'], timeStamp)
     }
     return ocData
