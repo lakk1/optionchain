@@ -21,7 +21,7 @@ export default {
       const response = await axios.get("/nse/getExpiryDates/" + symbol);
       if (response.data) {
         // console.log("Expiry date for ", symbol, response.data);
-        // this.store.updateExpiry(response.data, symbol);
+        this.store.updateExpiryDates(response.data, symbol);
         try {
           this.expiryDates = response.data;
           if (!this.expiryDate) {
@@ -33,7 +33,7 @@ export default {
       }
     },
 
-    async fetchOptions(sym) {
+    async fetchOptionChainDetails(sym) {
       let symbol = sym || this.display;
       // console.log("Fetching data for ", symbol);
       this.store.updateLoading(true);
@@ -52,13 +52,15 @@ export default {
     },
     refreshData() {
       if (this.display == "both") {
-        this.fetchOptions("NIFTY");
-        this.fetchOptions("BANKNIFTY");
+        this.fetchOptionChainDetails("NIFTY");
+        this.fetchOptionChainDetails("BANKNIFTY");
       } else {
         console.log("Displaying: ", this.display);
-        this.fetchOptions(this.display);
+        this.fetchOptionChainDetails(this.display);
         if (!this.store.getExpiryDates(this.display))
           this.getExpiryDates(this.display);
+
+        this.store.updateExpiry(this.expiryDate);
       }
       let title =
         this.display == "both" ? "INDICIES" : this.display.toUpperCase();

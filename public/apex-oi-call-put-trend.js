@@ -1,8 +1,7 @@
 import { store } from "./store.js";
-import stockList from "./data.js";
 
 export default {
-  props: ["symbol", "time", "range", "expiryDate"],
+  props: ["symbol", "time", "range"],
   data() {
     return {
       chart: undefined,
@@ -18,6 +17,7 @@ export default {
       STRIKES: [],
       updated: false,
       showDetails: true,
+      expiryDate: "",
     };
   },
   methods: {
@@ -37,7 +37,7 @@ export default {
     },
     drawOptionsChart() {
       let symbol = this.symbol;
-      let fetchDate = this.date || store.getFetchDate();
+      this.expiryDate = store.getExpiryDate();
 
       console.log(`Drawing OI CALL PUT trend for ${this.symbol}`);
 
@@ -67,11 +67,16 @@ export default {
             width: [2, 2],
           },
           title: {
-            text: `${this.symbol} OI contracts Trend for current expiry, received @ ${this.lastFetchTime}`,
+            text: `${this.symbol} OI OPEN contracts for ${this.expiryDate} expiry, received @ ${this.lastFetchTime}`,
             // text: `${this.symbol} OI Call Put Trend for ${
             //   this.range * 2 + 1
             // } Strikes at ${this.lastFetchTime}`,
             align: "left",
+            style: {
+              fontSize: "12px",
+              fontWeight: "bold",
+              color: "#263238",
+            },
           },
           grid: {
             borderColor: "#e7e7e7",
@@ -145,6 +150,7 @@ export default {
 
       if (response.data) {
         this.oiOiCallPutTrend = response.data;
+        this.expiryDate = store.getExpiryDate();
 
         let totalRecords = response.data.records.length;
         if (totalRecords == 0) return;

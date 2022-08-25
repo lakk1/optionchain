@@ -3,7 +3,7 @@ import { reactive } from "vue";
 export const store = reactive({
   loading: true,
   updatesAt: undefined,
-  data: {},
+  data: { expiryDate: "" },
   updateLoading(status = false) {
     this.loading = status;
     this.updatesAt = new Date().toLocaleDateString("en-GB", {
@@ -19,15 +19,22 @@ export const store = reactive({
     this.data[symbol] = data;
     this.loading = false;
   },
-  updateExpiry(expiryDates, symbol) {
+  updateExpiryDates(expiryDates, symbol) {
     if (!this.data[symbol]) {
       this.data[symbol] = {};
     }
     this.data[symbol].expiryDates = expiryDates;
   },
   getExpiryDates(sym = "NIFTY") {
-    console.log("Getting Expiry Dates in Store for : ", sym);
     return this.data[sym] ? this.data[sym].expiryDates : undefined;
+  },
+  updateExpiry(expiryDate) {
+    this.data.expiryDate = expiryDate;
+  },
+  getExpiryDate() {
+    return this.data.expiryDate !== undefined
+      ? this.data.expiryDate
+      : "current";
   },
   getStrikes(sym = "NIFTY") {
     return this.data[sym] ? this.data[sym].STRIKES : [];
@@ -51,8 +58,11 @@ export const store = reactive({
     return this.data[sym] ? this.data[sym].totals : {};
   },
   getAnalysis(sym = "NIFTY", optionType = "CE") {
-    let p = this.data[sym].totals[optionType].analysis;
-    return this.data[sym] ? this.data[sym].totals[optionType].analysis : "";
+    return this.data[sym] &&
+      this.data[sym].totals &&
+      this.data[sym].totals[optionType]
+      ? this.data[sym].totals[optionType].analysis
+      : "";
   },
   getFilteredPCR(sym = "NIFTY") {
     return this.data[sym]
@@ -94,12 +104,16 @@ export const store = reactive({
     return this.data[sym] ? this.data[sym].pcrOI : 0;
   },
   getOiTotal(sym = "NIFTY", optionType = "CE") {
-    return this.data[sym]
+    return this.data[sym] &&
+      this.data[sym].currentExpiryOIandVolumeTotal &&
+      this.data[sym].currentExpiryOIandVolumeTotal[optionType]
       ? this.data[sym].currentExpiryOIandVolumeTotal[optionType].totOI
       : 0;
   },
   getVolumeTotal(sym = "NIFTY", optionType = "CE") {
-    return this.data[sym]
+    return this.data[sym] &&
+      this.data[sym].currentExpiryOIandVolumeTotal &&
+      this.data[sym].currentExpiryOIandVolumeTotal[optionType]
       ? this.data[sym].currentExpiryOIandVolumeTotal[optionType].totVol
       : 0;
   },

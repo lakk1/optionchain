@@ -1,7 +1,7 @@
 import { store } from "./store.js";
 
 export default {
-  props: ["symbol", "time", "prefix", "expiryDate"],
+  props: ["symbol", "time", "prefix", "expiryDate", "range"],
   data() {
     return {
       chart: undefined,
@@ -42,7 +42,7 @@ export default {
       ];
     },
     updateOptions() {
-      // console.log("Updating chart series for:", this.symbol);
+      // console.log("Updating Bar chart series for:", this.symbol);
       // this.chart.updateSeries(this.getSeries());
       this.chart.updateOptions({
         series: this.getSeries(),
@@ -53,7 +53,7 @@ export default {
     },
     drawOptionsChart() {
       let symbol = this.symbol;
-      // console.log("Drawing Apex Chart for : ", symbol);
+      // console.log("Drawing Bar Chart for : ", symbol);
 
       let chartData = store.getOIChartData(this.symbol);
       let OIChgdifference = store.getTotals(this.symbol).OIChgdifference;
@@ -145,21 +145,27 @@ export default {
     },
   },
   beforeUpdate() {
-    // console.log("Apex Chart beforeUpdate....");
     this.updateOptions();
   },
   mounted() {
-    // console.log("Apex Chart mounted...");
-    this.intervalHandler = setInterval(this.updateOptions, 15000); // Call every 5 seconds, Updated function is not getting called
+    // console.log("Bar OI Chart mounted...");
+    this.intervalHandler = setInterval(this.updateOptions, 30000); // Updated function is not getting called
     this.drawOptionsChart();
     this.updateOptions();
+    // this.$watch("$props", this.updateOptions, { deep: true });
   },
   beforeUnmount() {
     // console.log("Unmounting chart....");
     clearInterval(this.intervalHandler);
   },
   updated() {
-    console.log("OI Chart Updated at ", this.time);
+    // console.log(
+    //   "Bar Chart updated....",
+    //   this.symbol,
+    //   this.time,
+    //   this.expiryDate,
+    //   this.range
+    // );
     this.updated = this.time;
     this.updateOptions();
   },
@@ -167,6 +173,7 @@ export default {
   <table class="columns">
       <tr>
         <td style="width:100%">
+        <hr/>
           <div :id="symbol+'_barchart_div'+prefix" style="width: 1000px; height: 300px;"></div>
         </td>
       </tr>
