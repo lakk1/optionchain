@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "start http://localhost && nodemon --ignore ./DATA/ server.js",
+    "dev": "start http://localhost:80 && set PORT=80 && nodemon --ignore ./DATA/ server.js",
     "start": "start http://localhost && node server.js"
   },
   "keywords": [],
