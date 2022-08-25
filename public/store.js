@@ -19,6 +19,16 @@ export const store = reactive({
     this.data[symbol] = data;
     this.loading = false;
   },
+  updateExpiry(expiryDates, symbol) {
+    if (!this.data[symbol]) {
+      this.data[symbol] = {};
+    }
+    this.data[symbol].expiryDates = expiryDates;
+  },
+  getExpiryDates(sym = "NIFTY") {
+    console.log("Getting Expiry Dates in Store for : ", sym);
+    return this.data[sym] ? this.data[sym].expiryDates : undefined;
+  },
   getStrikes(sym = "NIFTY") {
     return this.data[sym] ? this.data[sym].STRIKES : [];
   },

@@ -46,6 +46,7 @@ def thread_function(symbol):
 
         if now > datetime.time(15, 32, 59, 999999):
             break
+            # time.sleep(SLEEP_INTERVAL*1000)
         elif now > datetime.time(9, 5, 0, 999999):
             fetchData(symbol)
             time.sleep(SLEEP_INTERVAL)
@@ -80,6 +81,8 @@ def fetchData(symbol):
             if jsonResponse and jsonResponse["records"]:
                 if DB_ENABLED:
                     storeOptionChain(jsonResponse)
+
+                expiryDates = jsonResponse["records"]["expiryDates"];
                 nextExpiry = jsonResponse["records"]["expiryDates"][1]
                 futureExpiry = jsonResponse["records"]["expiryDates"][2]
                 timeStampStr = jsonResponse["records"]["timestamp"]
@@ -96,8 +99,14 @@ def fetchData(symbol):
                     with open(filename, 'w') as f:
                         f.write(json.dumps(filteredData)) # write only current expired data
 
-                    dir = os.path.join("DATA", symbol)
+                    dir = os.path.join("DATA", symbol);
+
+                    expiryDatesFilename = os.path.join(dir, symbol + "_expiry.json")
+                    with open(expiryDatesFilename, 'w') as fe:
+                        fe.write(json.dumps(expiryDates, indent=1))
+
                     filename = os.path.join(dir, symbol + ".json")
+
                     jsonResponse["filtered"] = appendGreeks(filteredData, timeStamp)
                     jsonResponse["records"] = appendGreeks(jsonResponse["records"], timeStamp, nextExpiry)
                     jsonResponse["records"] = appendGreeks(jsonResponse["records"], timeStamp, futureExpiry)

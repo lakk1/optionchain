@@ -1,7 +1,7 @@
 "use strict";
 const fs = require("fs");
 const path = require("path");
-const { getDataForCurrentExpiry, today } = require("../util");
+const { getNSEdata, today } = require("../util");
 const filteredDataModel = require("./filteredData.model");
 const lastCheckedModel = require("./lastChecked.model");
 const optionChainModel = require("./optionChainData.model");
@@ -10,7 +10,8 @@ module.exports = {
   NSE,
 };
 
-async function fetchNSEdata(symbol = "NIFTY", range = 10, expiry = 0) {
+async function fetchNSEdata(expiry, symbol = "NIFTY", range = 10) {
+  // console.log("Fetching NSE Data for ", symbol, range, expiry);
   let suffix =
     symbol == "NIFTY" || symbol == "BANKNIFTY" ? "indices" : "equities";
   let url = `https://www.nseindia.com/api/option-chain-${suffix}?symbol=${symbol}`;
@@ -29,7 +30,7 @@ async function fetchNSEdata(symbol = "NIFTY", range = 10, expiry = 0) {
     console.log("GOT DATA From file:", filename);
     try {
       data = JSON.parse(data);
-      let filteredData = getDataForCurrentExpiry(data, symbol, range, expiry);
+      let filteredData = getNSEdata(data, symbol, expiry, range);
       //   console.log("Returning filtered data", filteredData);
       return filteredData;
     } catch (e) {
@@ -46,16 +47,55 @@ NSE.getOptionChain = async (req, res) => {
 
   let symbol = req.params.symbol || "NIFTY";
   let range = req.params.range || 25;
-  let expiry = Number(req.params.expiry) || 0;
+  let expiry = req.params.expiry != "undefined" ? req.params.expiry : today();
 
   try {
-    let data = await fetchNSEdata(symbol, range, expiry);
+    let data = await fetchNSEdata(expiry, symbol, range);
     res.send(data);
   } catch (e) {
     res.status(401).send(e);
   }
 
   //   return res.json({ NSEData: { a: 1, b: 2 } });
+};
+
+async function getExpiryDatesFromFile(symbol) {
+  let filename = path.resolve(`./DATA/${symbol}/${symbol}_expiry.json`);
+  try {
+    let data = await fs.promises.readFile(filename, "utf8");
+    let expiryDates = JSON.parse(data);
+    let expTime = new Date(expiryDates[0] + " 15:35:00").getTime();
+    let curTime = new Date().getTime();
+    let count = 3;
+    if (expTime < curTime) {
+      count++;
+    }
+
+    expiryDates = expiryDates.slice(0, count);
+
+    if (data) {
+      return expiryDates;
+    } else {
+      return [];
+    }
+  } catch (e) {
+    console.log("ERROR finding expiry dates", e);
+    return [];
+  }
+}
+
+NSE.getExpiryDates = async (req, res) => {
+  console.log("Fetching Expiry Dates for ", req.params);
+  let symbol = req.params.symbol || "NIFTY";
+
+  try {
+    let data = await getExpiryDatesFromFile(symbol);
+
+    res.send(data);
+  } catch (e) {
+    console.log("ERROR finding expiry dates", e);
+    res.status(401).send(e);
+  }
 };
 
 NSE.getPutCallOiChange = async (req, res) => {

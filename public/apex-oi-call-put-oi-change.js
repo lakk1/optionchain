@@ -2,7 +2,7 @@ import { store } from "./store.js";
 import stockList from "./data.js";
 
 export default {
-  props: ["symbol", "time", "range"],
+  props: ["symbol", "time", "range", "expiryDate"],
   data() {
     return {
       chart: undefined,

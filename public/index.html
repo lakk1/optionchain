@@ -40,12 +40,10 @@
           </template>
         </select>
 
-        &nbsp; Expiry:
-        <select v-model="expiry" @change="refreshData()">
-          <option disabled value="">Select Expiry</option>
-          <option value="0">Current</option>
-          <option value="1">Next</option>
-          <option value="2">Future</option>
+        &nbsp; Expiry Dates:
+        <select v-model="expiryDate" @change="refreshData()">
+          <option disabled value="">Select Expiry Date</option>
+          <option v-for="e in expiryDates">{{e}}</option>
         </select>
 
         &nbsp; Strikes:
@@ -62,9 +60,9 @@
 
         &nbsp;
         <template v-if="store.getExpiry(display) !== '' ">
-          <button @click="refreshData()">Refresh</button>
+          <!-- button @click="refreshData()">Refresh</button -->
           &nbsp; Data for Expiry Date:
-          <span class="expiry">{{ store.getExpiry(display) }} </span>
+          <span class="expiry">{{ expiryDate }} </span>
         </template>
       </div>
 
@@ -76,6 +74,7 @@
             :display="display"
             :range="range"
             :time="time"
+            :expiryDate="expiryDate"
           >
           </option-chain>
         </div>
@@ -85,6 +84,7 @@
             :display="display"
             :range="range"
             :time="time"
+            :expiryDate="expiryDate"
           >
           </option-chain>
         </div>
@@ -96,6 +96,7 @@
             :display="display"
             :range="range"
             :time="time"
+            :expiryDate="expiryDate"
           >
           </option-chain>
         </div>

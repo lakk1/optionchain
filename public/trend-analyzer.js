@@ -8,19 +8,38 @@ export default {
       symbol: "BANKNIFTY",
       range: 7,
       expiry: 0,
+      expiryDate: undefined,
+      expiryDates: "",
       refreshInterval: 30, // seconds
       display: "BANKNIFTY",
       time: "",
     };
   },
   methods: {
+    async getExpiryDates(sym) {
+      let symbol = sym || this.display;
+      const response = await axios.get("/nse/getExpiryDates/" + symbol);
+      if (response.data) {
+        // console.log("Expiry date for ", symbol, response.data);
+        // this.store.updateExpiry(response.data, symbol);
+        try {
+          this.expiryDates = response.data;
+          if (!this.expiryDate) {
+            this.expiryDate = this.expiryDates[0];
+          }
+        } catch (e) {
+          console.log("Error parsing Expiry Dates");
+        }
+      }
+    },
+
     async fetchOptions(sym) {
       let symbol = sym || this.display;
-      console.log("Fetching data for ", this.display);
+      // console.log("Fetching data for ", symbol);
       this.store.updateLoading(true);
 
       const response = await axios.get(
-        "/nse/optionChain/" + symbol + "/" + this.range + "/" + this.expiry
+        "/nse/optionChain/" + symbol + "/" + this.range + "/" + this.expiryDate
       );
 
       if (response.data.fetchTime) {
@@ -38,6 +57,8 @@ export default {
       } else {
         console.log("Displaying: ", this.display);
         this.fetchOptions(this.display);
+        if (!this.store.getExpiryDates(this.display))
+          this.getExpiryDates(this.display);
       }
       let title =
         this.display == "both" ? "INDICIES" : this.display.toUpperCase();
@@ -64,6 +85,7 @@ export default {
     },
   },
   async mounted() {
+    this.getExpiryDates("NIFTY");
     let interval = this.refreshInterval * 1000;
     this.refreshData(); // Call once before starting interval
     // Call every 30 seconds to refresh data

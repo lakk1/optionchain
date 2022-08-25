@@ -2,15 +2,15 @@ import { store } from "./store.js";
 import stockList from "./data.js";
 
 export default {
-  props: ["symbol", "display", "range", "time"],
+  props: ["symbol", "display", "range", "time", "expiryDate"],
   data() {
     return {
       store,
       multiply: false,
       showOiSeries: false,
-      showOiBars: false,
+      showOiBars: true,
       showOptionChain: true,
-      showOiCallPutTrend: true,
+      showOiCallPutTrend: false,
       stockList: undefined,
       lotSize: 0,
       strikeInterval: 0,
@@ -99,36 +99,36 @@ export default {
         </div>
 
         <div class="oiSeries" v-if="showOiCallPutTrend">
-          <apex-oi-call-put-oi-change :symbol="symbol" :time="time" :range="range">OI Call Put Trend Line Chart</apex-oi-call-put-oi-change>
-          <apex-oi-call-put-trend :symbol="symbol" :time="time" :range="range">OI Call Put Trend Line Chart</apex-oi-call-put-trend>
+          <apex-oi-call-put-oi-change :symbol="symbol" :time="time" :range="range" :expiryDate="expiryDate">OI Call Put Trend Line Chart</apex-oi-call-put-oi-change>
+          <apex-oi-call-put-trend :symbol="symbol" :time="time" :range="range" :expiryDate="expiryDate">OI Call Put Trend Line Chart</apex-oi-call-put-trend>
         </div>
 
         <template v-if="showOiBars">
           <div class="oichart">
-            <apex-oi-chart :symbol="symbol" :time="time">Place for OI Chart</apex-oi-chart>
+            <apex-oi-chart :symbol="symbol" :time="time" :expiryDate="expiryDate">Place for OI Chart</apex-oi-chart>
           </div>
         </template>
 
         <template v-if="showOiSeries" >
           <div class="oiSeries">
-            <apex-oi-series-chart :symbol="symbol" :time="time" :strikePrice="getATM(symbol)+strikeInterval*3" chartID=1 :strikeInterval="strikeInterval" multiplier=3 >OI Series Line Chart</apex-oi-series-chart>
-            <apex-oi-series-chart :symbol="symbol" :time="time" :strikePrice="getATM(symbol)+strikeInterval*2" chartID=2 :strikeInterval="strikeInterval" multiplier=2 >OI Series Line Chart</apex-oi-series-chart>
-            <apex-oi-series-chart :symbol="symbol" :time="time" :strikePrice="getATM(symbol)+strikeInterval" chartID=3 :strikeInterval="strikeInterval" multiplier=1 >OI Series Line Chart</apex-oi-series-chart>
+            <apex-oi-series-chart :symbol="symbol" :time="time" :expiryDate="expiryDate" :strikePrice="getATM(symbol)+strikeInterval*3" chartID=1 :strikeInterval="strikeInterval" multiplier=3 >OI Series Line Chart</apex-oi-series-chart>
+            <apex-oi-series-chart :symbol="symbol" :time="time" :expiryDate="expiryDate" :strikePrice="getATM(symbol)+strikeInterval*2" chartID=2 :strikeInterval="strikeInterval" multiplier=2 >OI Series Line Chart</apex-oi-series-chart>
+            <apex-oi-series-chart :symbol="symbol" :time="time" :expiryDate="expiryDate" :strikePrice="getATM(symbol)+strikeInterval" chartID=3 :strikeInterval="strikeInterval" multiplier=1 >OI Series Line Chart</apex-oi-series-chart>
           </div>
           <div class="oiSeries">
-            <apex-oi-series-chart :symbol="symbol" :time="time" :strikePrice="getATM(symbol)" chartID=4 :strikeInterval="strikeInterval" multiplier=0 >OI Series Line Chart</apex-oi-series-chart>
+            <apex-oi-series-chart :symbol="symbol" :time="time" :expiryDate="expiryDate" :strikePrice="getATM(symbol)" chartID=4 :strikeInterval="strikeInterval" multiplier=0 >OI Series Line Chart</apex-oi-series-chart>
             <div class="oiSeriesHeader">
               <span class="symbol">{{ symbol }} </span> :  <span class="spotprice">{{spotPrice()}} </span>
               ATM: {{ getATM(symbol) }}
               OI Change PE - CE : <span :class="{ red: store.getTotals(symbol).OIChgdifference < 0 }">{{ Number(store.getTotals(symbol).OIChgdifference * oiMultiplier).toLocaleString() }}</span>
               PCR (Filtered): <span> {{ Number(store.getFilteredPCR(symbol)) }}</span>
-              <apex-oi-chart :symbol="symbol" :time="time" :prefix="'_inner'" v-if="display != 'both' ">Place for OI Chart</apex-oi-chart>
+              <apex-oi-chart :symbol="symbol" :time="time" :expiryDate="expiryDate" :prefix="'_inner'" v-if="display != 'both' ">Place for OI Chart</apex-oi-chart>
             </div>
           </div>
           <div class="oiSeries">
-              <apex-oi-series-chart :symbol="symbol" :time="time" :strikePrice="getATM(symbol)-strikeInterval" chartID=5 :strikeInterval="strikeInterval" multiplier=-1 >OI Series Line Chart</apex-oi-series-chart>
-              <apex-oi-series-chart :symbol="symbol" :time="time" :strikePrice="getATM(symbol)-strikeInterval*2" chartID=6 :strikeInterval="strikeInterval" multiplier=-2 >OI Series Line Chart</apex-oi-series-chart>
-              <apex-oi-series-chart :symbol="symbol" :time="time" :strikePrice="getATM(symbol)-strikeInterval*3" chartID=7 :strikeInterval="strikeInterval" multiplier=-3 >OI Series Line Chart</apex-oi-series-chart>
+              <apex-oi-series-chart :symbol="symbol" :time="time" :expiryDate="expiryDate" :strikePrice="getATM(symbol)-strikeInterval" chartID=5 :strikeInterval="strikeInterval" multiplier=-1 >OI Series Line Chart</apex-oi-series-chart>
+              <apex-oi-series-chart :symbol="symbol" :time="time" :expiryDate="expiryDate" :strikePrice="getATM(symbol)-strikeInterval*2" chartID=6 :strikeInterval="strikeInterval" multiplier=-2 >OI Series Line Chart</apex-oi-series-chart>
+              <apex-oi-series-chart :symbol="symbol" :time="time" :expiryDate="expiryDate" :strikePrice="getATM(symbol)-strikeInterval*3" chartID=7 :strikeInterval="strikeInterval" multiplier=-3 >OI Series Line Chart</apex-oi-series-chart>
           </div>
         </template>
 

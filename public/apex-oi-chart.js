@@ -1,7 +1,7 @@
 import { store } from "./store.js";
 
 export default {
-  props: ["symbol", "time", "prefix"],
+  props: ["symbol", "time", "prefix", "expiryDate"],
   data() {
     return {
       chart: undefined,
