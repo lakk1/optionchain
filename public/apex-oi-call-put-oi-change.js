@@ -230,8 +230,8 @@ export default {
     <div :id="symbol + '_oiCallPutOIChangeTrend'" style="width: 640px; height: 400px;"></div>
     <div class='analysis'>
       <div>
-        <input type="checkbox" :id="symbol + '_oiCallPutTrend_chkbox'"  class="analysis_chkbox'" @change="showDetails = !showDetails" />
-        <label :for="symbol + '_oiCallPutTrend_chkbox'"> Show / Hide Information
+        <input type="checkbox" :id="symbol + '_oiCallPutOIChangeTrend_chkbox'"  class="analysis_chkbox'" @change="showDetails = !showDetails" />
+        <label :for="symbol + '_oiCallPutOIChangeTrend_chkbox'"> Show / Hide Information
       </div>
       <div class="details" v-if="showDetails">
         <p>
