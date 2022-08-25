@@ -17,7 +17,6 @@ export default {
       previousRange: undefined,
       STRIKES: [],
       updated: false,
-      showDetails: true,
       expiryDate: "",
     };
   },
@@ -235,24 +234,6 @@ export default {
   template: `
   <div class="oiTrendContainer">
     <div :id="symbol + '_oiCallPutOIChangeTrend'" style="width: 640px; height: 400px;"></div>
-    <div class='analysis'>
-      <div>
-        <input type="checkbox" :id="symbol + '_oiCallPutOIChangeTrend_chkbox'"  class="analysis_chkbox'" @change="showDetails = !showDetails" />
-        <label :for="symbol + '_oiCallPutOIChangeTrend_chkbox'"> Show / Hide Information
-      </div>
-      <div class="details" v-if="showDetails">
-        <p>
-          As long as Puts are Increasing and Calls are decreasing or not incrasing it will be <span class="UP bold priceGreen">RISE - BULLISH</span>
-        </p>
-        <p>
-          As long as Calls are Increasing and Puts are decreasing or not incrasing it will be <span class="DOWN bold priceRed">FALL - BEARISH</span>
-        </p>
-        <p>
-          If both Calls and Puts are increasing or decreasing - STAY away - wait and watch.
-          <br/>It will be tough fight between Bulls and Bears, leading to Sidewise or RANGE bound market.
-        </p>
-      </div>
-    </div>
   </div>
   `,
 };
