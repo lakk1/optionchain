@@ -17,6 +17,7 @@ export default {
       previousRange: undefined,
       STRIKES: [],
       updated: false,
+      showDetails: true,
     };
   },
   methods: {
@@ -66,7 +67,7 @@ export default {
             width: [2, 2],
           },
           title: {
-            text: `${this.symbol} OI Call Put Contracts Trend For current expiry at ${this.lastFetchTime}`,
+            text: `${this.symbol} OI contracts Trend for current expiry, received @ ${this.lastFetchTime}`,
             // text: `${this.symbol} OI Call Put Trend for ${
             //   this.range * 2 + 1
             // } Strikes at ${this.lastFetchTime}`,
@@ -224,16 +225,23 @@ export default {
   template: `
   <div class="oiTrendContainer">
     <div :id="symbol + '_oiCallPutTrend'" style="width: 640px; height: 400px;"></div>
-    <div class='analysis'>
-      <p>
-        If <b>CALLS</b> are reducing with Short Covering (SC) and PUTS are increasing with Short Buildup (SB), Market will <span class="UP bold priceGreen">RISE - BULLISH</span> as Big Fishes are entering market with Big Fund.
-        <br/>
-        If <b>CALLS</b> side Long Buildup (LB) and PUTS side Short Buildup (SB) is happening , Market will <span class="UP bold priceGreen">RISE - BULLISH</span> as Big Fishes are entering market with Big Fund.
-      </p>
-      <p>
-      If <b>PUTS</b> are reducing with Short Covering (SC) and CALLS are increasing with Short Buildup (SB), Market will <span class="DOWN bold priceRed">FALL - BEARISH</span> as Big Fishes are running away without supporting the market.
-      <br/>
-      If <b>PUTS</b> side Long Buildup (LB) and CALLS side Short Buildup (SB) is happening , Market will <span class="DOWN bold priceRed">FALL - BEARISH</span> as Big Fishes are running away without supporting the market.</p>
+    <div class="analysis">
+      <div>
+        <input type="checkbox" :id="symbol + '_oiCallPutTrend_chkbox'"  class="analysis_chkbox'" @change="showDetails = !showDetails" />
+        <label :for="symbol + '_oiCallPutTrend_chkbox'"> Show / Hide Information
+      </div>
+      <div class="details" v-if="showDetails">
+        <p>
+          If <b>CALLS</b> are reducing with Short Covering (SC) and PUTS are increasing with Short Buildup (SB), Market will <span class="UP bold priceGreen">RISE - BULLISH</span> as Big Fishes are entering market with Big Fund.
+          <br/>
+          If <b>CALLS</b> side Long Buildup (LB) and PUTS side Short Buildup (SB) is happening , Market will <span class="UP bold priceGreen">RISE - BULLISH</span> as Big Fishes are entering market with Big Fund.
+        </p>
+        <p>
+          If <b>PUTS</b> are reducing with Short Covering (SC) and CALLS are increasing with Short Buildup (SB), Market will <span class="DOWN bold priceRed">FALL - BEARISH</span> as Big Fishes are running away without supporting the market.
+          <br/>
+          If <b>PUTS</b> side Long Buildup (LB) and CALLS side Short Buildup (SB) is happening , Market will <span class="DOWN bold priceRed">FALL - BEARISH</span> as Big Fishes are running away without supporting the market.
+        </p>
+      </div>
     </div>
   </div>
   `,

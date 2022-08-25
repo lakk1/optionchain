@@ -73,7 +73,7 @@ export default {
           <hr />
           <div class="headerActions">
             <div class="timestamp">
-              NSE data valid as on: <span class="red"> {{fetchTime(symbol)}} </span>
+              NSE data last received as on: <span class="red"> {{fetchTime(symbol)}} </span>
             </div>
             <div class="actions">
                 Display OI:
