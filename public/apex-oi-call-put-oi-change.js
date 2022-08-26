@@ -45,7 +45,7 @@ export default {
         let options = {
           series: this.getSeries(),
           chart: {
-            // height: 300,
+            background: "#cbe6f8",
             type: "line",
             animations: {
               enabled: false,
@@ -60,7 +60,6 @@ export default {
           dataLabels: {
             enabled: false,
           },
-          // colors: ["#FF0000", "darkgreen"],
           colors: ["#FF0000", "darkgreen", "#ffa500", "lightgreen"],
           stroke: {
             curve: "straight",
@@ -68,10 +67,6 @@ export default {
           },
           title: {
             text: `${this.symbol} OI Change Trend for current expiry, received @ ${this.lastFetchTime}`,
-
-            // text: `${this.symbol} OI Call Put Trend for ${
-            //   this.range * 2 + 1
-            // } Strikes at ${this.lastFetchTime}`,
             align: "left",
             style: {
               fontSize: "12px",
@@ -89,7 +84,6 @@ export default {
           markers: {
             size: 0,
           },
-
           xaxis: {
             categories: this.xAxisCategories,
             labels: {
