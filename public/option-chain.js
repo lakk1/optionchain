@@ -15,7 +15,6 @@ export default {
       lotSize: 0,
       strikeInterval: 0,
       fetchDate: undefined,
-      showDetails: true,
     };
   },
   mounted() {
@@ -237,78 +236,7 @@ export default {
                 </tr>
               </table>
             </div>
-
-            <hr/>
-            <div class="tips">
-              <b>NOTE</b>: If LTP is lesser than Actual value, then you are getting that strike price in DISCOUNTED price
-              <p><b>S S:</b> Strong Support, <b>S R:</b> Strong Resistance, <b>W S:</b> Support stronger than Resistance, <b>W R :</b> Resistance stronger than Support</p>
-              <p> Avoid any buying trades when IV is greater than 30 (only premium erosion will happen) <p>
-              <hr/>
-
-
-              <div class='analysis'>
-                <div>
-                    <input type="checkbox" :id="symbol + '_oiInfo_chkbox'"  class="analysis_chkbox'" @change="showDetails = !showDetails" />
-                    <label :for="symbol + '_oiInfo_chkbox'"> Show / Hide Information
-                </div>
-                <div class="details" v-if="showDetails">
-                  <p>
-                      If <b>CALLS</b> are reducing with Short Covering (SC) and PUTS are increasing with Short Buildup (SB), Market will <span class="UP bold priceGreen">RISE - BULLISH</span> as Big Fishes are entering market with Big Fund.
-                      <br/>
-                      If <b>CALLS</b> side Long Buildup (LB) and PUTS side Short Buildup (SB) is happening , Market will <span class="UP bold priceGreen">RISE - BULLISH</span> as Big Fishes are entering market with Big Fund.
-                  </p>
-                  <p>
-                      If <b>PUTS</b> are reducing with Short Covering (SC) and CALLS are increasing with Short Buildup (SB), Market will <span class="DOWN bold priceRed">FALL - BEARISH</span> as Big Fishes are running away without supporting the market.
-                      <br/>
-                      If <b>PUTS</b> side Long Buildup (LB) and CALLS side Short Buildup (SB) is happening , Market will <span class="DOWN bold priceRed">FALL - BEARISH</span> as Big Fishes are running away without supporting the market.
-                  </p>
-                  <p>
-                      As long as Puts are Increasing and Calls are decreasing or not incrasing it will be <span class="UP bold priceGreen">RISE - BULLISH</span>
-                  </p>
-                  <p>
-                      As long as Calls are Increasing and Puts are decreasing or not incrasing it will be <span class="DOWN bold priceRed">FALL - BEARISH</span>
-                  </p>
-                  <p>
-                      If both Calls and Puts are increasing or decreasing, side wise market <span class="NEUTRAL"> &#10500; </span>STAY away - wait and watch.
-                  <br/>It will be tough fight between Bulls and Bears, leading to Sidewise or RANGE bound market.
-                  </p>
-                  <div class="notes">
-                    <div>
-                      <p><b>LB - Long Buildup</b> - <span class='UP'>Price Increases</span>, <span class='UP'>OI Increases</span>
-                        <br />OI Change > 0, Price Change > 0
-                        <br/>Call side: Investor wants to take market UP, new contracts gets added
-                        <br/>Put side: Investor wants to take market DOWN, new contracts gets added
-                      <p/>
-                    </div>
-                    <div>
-                      <p><b>SB - Short Buildup</b> - <span class='DOWN'>Price Decreases<span>, <span class='UP'>OI Increases</span>
-                        <br />OI Change > 0, Price Change < 0
-                        <br/>Call side: Writers want to take market DOWN - stop/resist, new contracts get added
-                        <br/>Put side: Writers want to take market UP - support market, new contracts get added
-                      </p>
-                    </div>
-                  </div>
-                  <div class="notes">
-                    <div>
-                      <p><b>LU - Long Unwinding</b>: <span class='DOWN'>Price Decreases<span>, <span class='DOWN'>OI Decreases<span>
-                        <br/>OI Change < 0, Price Change < 0
-                        <br/>Call side: Writers want to either book profit or fear of market going DOWN - they will close the contract
-                        <br/>Put side: Writers want to either book profit or fear of market going UP - they will close the contract
-                      <p/>
-                    </div>
-                    <div>
-                      <p><b>SC - Short Covering</b>: <span class='UP'>Price Increases</span>, <span class='DOWN'>OI Decreases<span>
-                        <br/>OI Change < 0, Price Change > 0
-                        <br/>Call side: Writers close contracts fearing market will go UP
-                        <br/>Put side: Writers close contracts fearing market will go DOWN
-                      <p/>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
           </template>
-
         </template>
       </div>
     `,

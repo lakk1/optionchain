@@ -13,6 +13,7 @@ export default {
       refreshInterval: 30, // seconds
       display: "NIFTY",
       time: "",
+      showDetails: true,
     };
   },
   methods: {
