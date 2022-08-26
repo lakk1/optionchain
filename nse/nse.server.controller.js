@@ -66,12 +66,12 @@ async function getExpiryDatesFromFile(symbol) {
     let expiryDates = JSON.parse(data);
     let expTime = new Date(expiryDates[0] + " 15:35:00").getTime();
     let curTime = new Date().getTime();
-    let count = 3;
+    let count = 0;
     if (expTime < curTime) {
       count++;
     }
 
-    expiryDates = expiryDates.slice(0, count);
+    expiryDates = expiryDates.slice(count, count + 3);
 
     if (data) {
       return expiryDates;

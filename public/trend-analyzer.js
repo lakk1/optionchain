@@ -11,7 +11,7 @@ export default {
       expiryDate: undefined,
       expiryDates: "",
       refreshInterval: 30, // seconds
-      display: "BANKNIFTY",
+      display: "NIFTY",
       time: "",
     };
   },

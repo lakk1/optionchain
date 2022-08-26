@@ -102,36 +102,6 @@ export default {
         <div class="oiSeries" v-if="showOiCallPutTrend">
           <apex-oi-call-put-oi-change :symbol="symbol" :time="time" :range="range" :expiryDate="store.getExpiryDate()">OI Call Put Trend Line Chart</apex-oi-call-put-oi-change>
           <apex-oi-call-put-trend :symbol="symbol" :time="time" :range="range" :expiryDate="store.getExpiryDate()">OI Call Put Trend Line Chart</apex-oi-call-put-trend>
-
-          <div class='analysis'>
-            <div>
-                <input type="checkbox" :id="symbol + '_oiInfo_chkbox'"  class="analysis_chkbox'" @change="showDetails = !showDetails" />
-                <label :for="symbol + '_oiInfo_chkbox'"> Show / Hide Information
-            </div>
-            <div class="details" v-if="showDetails">
-                <p>
-                    If <b>CALLS</b> are reducing with Short Covering (SC) and PUTS are increasing with Short Buildup (SB), Market will <span class="UP bold priceGreen">RISE - BULLISH</span> as Big Fishes are entering market with Big Fund.
-                    <br/>
-                    If <b>CALLS</b> side Long Buildup (LB) and PUTS side Short Buildup (SB) is happening , Market will <span class="UP bold priceGreen">RISE - BULLISH</span> as Big Fishes are entering market with Big Fund.
-                </p>
-                <p>
-                    If <b>PUTS</b> are reducing with Short Covering (SC) and CALLS are increasing with Short Buildup (SB), Market will <span class="DOWN bold priceRed">FALL - BEARISH</span> as Big Fishes are running away without supporting the market.
-                    <br/>
-                    If <b>PUTS</b> side Long Buildup (LB) and CALLS side Short Buildup (SB) is happening , Market will <span class="DOWN bold priceRed">FALL - BEARISH</span> as Big Fishes are running away without supporting the market.
-                </p>
-                <p>
-                    As long as Puts are Increasing and Calls are decreasing or not incrasing it will be <span class="UP bold priceGreen">RISE - BULLISH</span>
-                </p>
-                <p>
-                    As long as Calls are Increasing and Puts are decreasing or not incrasing it will be <span class="DOWN bold priceRed">FALL - BEARISH</span>
-                </p>
-                <p>
-                    If both Calls and Puts are increasing or decreasing - STAY away - wait and watch.
-                <br/>It will be tough fight between Bulls and Bears, leading to Sidewise or RANGE bound market.
-                </p>
-
-            </div>
-          </div>
         </div>
 
         <template v-if="showOiBars">
@@ -272,6 +242,35 @@ export default {
             <p><b>S S:</b> Strong Support, <b>S R:</b> Strong Resistance, <b>W S:</b> Support stronger than Resistance, <b>W R :</b> Resistance stronger than Support</p>
             <p> Avoid any buying trades when IV is greater than 30 (only premium erosion will happen) <p>
             <hr/>
+
+
+            <div class='analysis'>
+            <div>
+                <input type="checkbox" :id="symbol + '_oiInfo_chkbox'"  class="analysis_chkbox'" @change="showDetails = !showDetails" />
+                <label :for="symbol + '_oiInfo_chkbox'"> Show / Hide Information
+            </div>
+            <div class="details" v-if="showDetails">
+                <p>
+                    If <b>CALLS</b> are reducing with Short Covering (SC) and PUTS are increasing with Short Buildup (SB), Market will <span class="UP bold priceGreen">RISE - BULLISH</span> as Big Fishes are entering market with Big Fund.
+                    <br/>
+                    If <b>CALLS</b> side Long Buildup (LB) and PUTS side Short Buildup (SB) is happening , Market will <span class="UP bold priceGreen">RISE - BULLISH</span> as Big Fishes are entering market with Big Fund.
+                </p>
+                <p>
+                    If <b>PUTS</b> are reducing with Short Covering (SC) and CALLS are increasing with Short Buildup (SB), Market will <span class="DOWN bold priceRed">FALL - BEARISH</span> as Big Fishes are running away without supporting the market.
+                    <br/>
+                    If <b>PUTS</b> side Long Buildup (LB) and CALLS side Short Buildup (SB) is happening , Market will <span class="DOWN bold priceRed">FALL - BEARISH</span> as Big Fishes are running away without supporting the market.
+                </p>
+                <p>
+                    As long as Puts are Increasing and Calls are decreasing or not incrasing it will be <span class="UP bold priceGreen">RISE - BULLISH</span>
+                </p>
+                <p>
+                    As long as Calls are Increasing and Puts are decreasing or not incrasing it will be <span class="DOWN bold priceRed">FALL - BEARISH</span>
+                </p>
+                <p>
+                    If both Calls and Puts are increasing or decreasing, side wise market <span class="NEUTRAL"> &#10500; </span>STAY away - wait and watch.
+                <br/>It will be tough fight between Bulls and Bears, leading to Sidewise or RANGE bound market.
+                </p>
+            </div>
             <div class="notes">
               <div>
                 <p><b>LB - Long Buildup</b> - <span class='UP'>Price Increases</span>, <span class='UP'>OI Increases</span>
@@ -304,6 +303,8 @@ export default {
                 <p/>
               </div>
             </div>
+          </div>
+
           </div>
         </template>
 

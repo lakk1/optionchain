@@ -20,24 +20,14 @@ export default {
 
       return [
         {
-          name: "PE OI Change",
-          type: "column",
-          data: PEoiChg,
-        },
-        {
-          name: "CE OI Change",
-          type: "column",
-          data: CEoiChg,
-        },
-        {
           name: "PE OI",
           type: "column",
-          data: PEoi,
+          data: peSum,
         },
         {
           name: "CE OI",
           type: "column",
-          data: CEoi,
+          data: ceSum,
         },
       ];
     },
@@ -64,7 +54,7 @@ export default {
         let options = {
           chart: {
             height: 350,
-            type: "line",
+            type: "bar",
             stacked: false,
             animations: {
               enabled: false,
@@ -76,16 +66,6 @@ export default {
           colors: ["#FF0000", "darkgreen", "#ffa500", "lightgreen"],
           series: [
             {
-              name: "PE OI Change",
-              type: "column",
-              data: [],
-            },
-            {
-              name: "CE OI Change",
-              type: "column",
-              data: [],
-            },
-            {
               name: "PE OI",
               type: "column",
               data: [],
@@ -95,11 +75,6 @@ export default {
               type: "column",
               data: [],
             },
-            // {
-            //   name: "Line C",
-            //   type: "line",
-            //   data: [1.4, 2, 2.5, 1.5, 2.5, 2.8, 3.8, 4.6],
-            // },
           ],
           stroke: {
             width: [0, 0, 0, 0],
@@ -127,12 +102,14 @@ export default {
         };
 
         this.chart = new ApexCharts(
-          document.querySelector("#" + symbol + "_barchart_div" + this.prefix),
+          document.querySelector(
+            "#" + symbol + "_oicontract_div" + this.prefix
+          ),
           options
         );
 
         document.querySelector(
-          "#" + symbol + "_barchart_div" + this.prefix
+          "#" + symbol + "_oicontract_div" + this.prefix
         ).innerHTML = "";
         this.chart.render();
       }
@@ -168,7 +145,7 @@ export default {
       <tr>
         <td style="width:100%">
         <hr/>
-          <div :id="symbol+'_barchart_div'+prefix" style="width: 1000px; height: 300px;"></div>
+          <div :id="symbol+'_oicontract_div'+prefix" style="width: 1000px; height: 300px;"></div>
         </td>
       </tr>
     </table>

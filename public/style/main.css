@@ -1,5 +1,9 @@
 .COLORS_URL {
-  /* URL : https://upload.wikimedia.org/wikipedia/commons/e/e7/SVG1.1_Color_Swatch.svg */
+  /*
+    COLORS : https://upload.wikimedia.org/wikipedia/commons/e/e7/SVG1.1_Color_Swatch.svg
+    ARROWS : https://www.toptal.com/designers/htmlarrows/arrows/
+
+  */
   color: red;
 }
 
@@ -265,6 +269,16 @@ table.report tr th {
   font-family: u1f800;
   padding-right: 3px;
 }
+.NETUTRAL {
+  font-size: 20px;
+  /* &#10500; */
+}
+/* .NEUTRAL:before {
+  content: "↔";
+  font-size: 20px;
+  font-family: u1f800;
+  padding-right: 3px;
+} */
 
 .notes {
   display: flex;
@@ -286,7 +300,6 @@ table.report tr th {
   flex-direction: column;
   flex-basis: 40%;
   justify-content: center;
-  align-items: center;
   font-size: 110%;
 }
 .bold {
