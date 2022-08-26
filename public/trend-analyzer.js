@@ -8,7 +8,7 @@ export default {
       symbol: "BANKNIFTY",
       range: 7,
       expiry: 0,
-      expiryDate: undefined,
+      expiryDate: "",
       expiryDates: "",
       refreshInterval: 30, // seconds
       display: "NIFTY",
@@ -24,20 +24,26 @@ export default {
         this.store.updateExpiryDates(response.data, symbol);
         try {
           this.expiryDates = response.data;
-          if (!this.expiryDate) {
-            this.expiryDate = this.expiryDates[0];
-          }
+          // if (!this.expiryDate) {
+          //   this.expiryDate = this.expiryDates[0];
+          // }
+          return response.data;
         } catch (e) {
           console.log("Error parsing Expiry Dates");
         }
       }
+      return [];
     },
 
     async fetchOptionChainDetails(sym) {
       let symbol = sym || this.display;
       // console.log("Fetching data for ", symbol);
       this.store.updateLoading(true);
-
+      let expDates = "";
+      if (!this.expiryDate) {
+        expDates = await this.getExpiryDates(symbol);
+        this.expiryDate = expDates[0];
+      }
       const response = await axios.get(
         "/nse/optionChain/" + symbol + "/" + this.range + "/" + this.expiryDate
       );

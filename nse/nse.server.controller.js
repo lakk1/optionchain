@@ -47,7 +47,7 @@ NSE.getOptionChain = async (req, res) => {
 
   let symbol = req.params.symbol || "NIFTY";
   let range = req.params.range || 25;
-  let expiry = req.params.expiry != "undefined" ? req.params.expiry : today();
+  let expiry = req.params.expiry != 0 ? req.params.expiry : today();
 
   try {
     let data = await fetchNSEdata(expiry, symbol, range);

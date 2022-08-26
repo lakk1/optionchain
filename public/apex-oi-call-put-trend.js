@@ -66,7 +66,7 @@ export default {
             width: [2, 2],
           },
           title: {
-            text: `${this.symbol} OI OPEN contracts for ${this.expiryDate} expiry, received @ ${this.lastFetchTime}`,
+            text: `${this.symbol} OI OPEN contracts for current expiry, received @ ${this.lastFetchTime}`,
             // text: `${this.symbol} OI Call Put Trend for ${
             //   this.range * 2 + 1
             // } Strikes at ${this.lastFetchTime}`,

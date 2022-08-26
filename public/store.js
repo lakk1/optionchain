@@ -32,9 +32,7 @@ export const store = reactive({
     this.data.expiryDate = expiryDate;
   },
   getExpiryDate() {
-    return this.data.expiryDate !== undefined
-      ? this.data.expiryDate
-      : "current";
+    return this.data.expiryDate !== "" ? this.data.expiryDate : "current";
   },
   getStrikes(sym = "NIFTY") {
     return this.data[sym] ? this.data[sym].STRIKES : [];

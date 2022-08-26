@@ -48,7 +48,7 @@
 
         &nbsp; Strikes:
         <select v-model="range" @change="refreshData()">
-          <option disabled value="">Number of Strikes</option>
+          <option disabled value="0">Select Strikes</option>
           <option>5</option>
           <option>7</option>
           <option>10</option>
@@ -59,11 +59,11 @@
         &nbsp; Current Time: <span class="timer"><timer></timer></span>
 
         &nbsp;
-        <template v-if="store.getExpiry(display) !== '' ">
-          <!-- button @click="refreshData()">Refresh</button -->
+        <!-- template v-if="store.getExpiry(display) !== '' ">
+          <button @click="refreshData()">Refresh</button >
           &nbsp; Data for Expiry Date:
           <span class="expiry">{{ expiryDate }} </span>
-        </template>
+        </template -->
       </div>
 
       <hr />

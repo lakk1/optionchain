@@ -67,7 +67,7 @@ export default {
             width: [2, 2],
           },
           title: {
-            text: `${this.symbol} OI Change Trend for ${this.expiryDate} expiry, received @ ${this.lastFetchTime}`,
+            text: `${this.symbol} OI Change Trend for current expiry, received @ ${this.lastFetchTime}`,
 
             // text: `${this.symbol} OI Call Put Trend for ${
             //   this.range * 2 + 1
