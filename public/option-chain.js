@@ -7,10 +7,10 @@ export default {
     return {
       store,
       multiply: false,
-      showOiSeries: false,
+      showOiSeries: true,
       showOiBars: false,
       showOptionChain: true,
-      showOiCallPutTrend: true,
+      showOiCallPutTrend: false,
       stockList: undefined,
       lotSize: 0,
       strikeInterval: 0,
@@ -101,7 +101,9 @@ export default {
 
           <div class="oiSeries" v-if="showOiCallPutTrend">
             <apex-oi-call-put-oi-change :symbol="symbol" :time="time" :range="range" :expiryDate="store.getExpiryDate()">OI Call Put Trend Line Chart</apex-oi-call-put-oi-change>
+            <!--
             <apex-oi-call-put-trend :symbol="symbol" :time="time" :range="range" :expiryDate="store.getExpiryDate()">OI Call Put Trend Line Chart</apex-oi-call-put-trend>
+            -->
           </div>
 
           <template v-if="showOiBars">
@@ -125,6 +127,8 @@ export default {
                 PCR (Filtered): <span> {{ Number(store.getFilteredPCR(symbol)) }}</span>
                 <apex-oi-chart :symbol="symbol" :time="time" :expiryDate="store.getExpiryDate()" :prefix="'_inner'" v-if="display != 'both' ">Place for OI Chart</apex-oi-chart>
               </div>
+              <apex-oi-call-put-oi-change :symbol="symbol" :time="time" :range="range"  :prefix="'_inner'" :expiryDate="store.getExpiryDate()">OI Call Put Trend Line Chart</apex-oi-call-put-oi-change>
+
             </div>
             <div class="oiSeries">
                 <apex-oi-series-chart :symbol="symbol" :time="time" :expiryDate="store.getExpiryDate()" :strikePrice="getATM(symbol)-strikeInterval" chartID=5 :strikeInterval="strikeInterval" multiplier=-1 >OI Series Line Chart</apex-oi-series-chart>

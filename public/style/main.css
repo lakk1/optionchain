@@ -253,10 +253,11 @@ table.report tr th {
   background-color: #87cefa;
   color: black;
 }
-.DOWN:before {
-  /* content: "↓"; */
-  /* content: "🠗"; */
-  content: "▼";
+
+.UP:before,
+.DOWN:before,
+.LEFT:before,
+.RIGHT:before {
   font-size: 12px;
   font-family: u1f800;
   padding-right: 3px;
@@ -264,21 +265,38 @@ table.report tr th {
 .UP:before {
   /* content: "↑"; */
   /* content: "🠕"; */
+  /* content: "⮝"; */
+  /* content: "⮙"; */
   content: "▲";
-  font-size: 12px;
-  font-family: u1f800;
-  padding-right: 3px;
+}
+.DOWN:before {
+  /* content: "↓"; */
+  /* content: "🠗"; */
+  /* content: "⮛"; */
+  /* content: "⮟"; */
+  content: "▼";
+}
+.LEFT:before {
+  /* content: "↑"; */
+  /* content: "⮘"; */
+  content: "⮜";
+}
+.RIGHT:before {
+  /* content: "↑"; */
+  /* content: "⮚"; */
+  content: "⮞";
 }
 .NETUTRAL {
   font-size: 20px;
   /* &#10500; */
 }
-/* .NEUTRAL:before {
-  content: "↔";
-  font-size: 20px;
+.NEUTRAL:before {
+  /* content: "↔"; */
+  content: "⬌";
+  font-size: 12px;
   font-family: u1f800;
   padding-right: 3px;
-} */
+}
 
 .notes {
   display: flex;

@@ -5,7 +5,7 @@ export default {
     return {
       store,
       stockList: [],
-      symbol: "BANKNIFTY",
+      symbol: "NIFTY",
       range: 7,
       expiry: 0,
       expiryDate: "",

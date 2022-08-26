@@ -1,7 +1,7 @@
 import { store } from "./store.js";
 
 export default {
-  props: ["symbol", "time", "range"],
+  props: ["symbol", "time", "range", "prefix"],
   data() {
     return {
       chart: undefined,
@@ -117,7 +117,7 @@ export default {
           },
         };
 
-        let selector = "#" + symbol + "_oiCallPutTrend";
+        let selector = "#" + symbol + "_oiCallPutTrend" + this.prefix;
 
         let elem = document.querySelector(selector);
 
@@ -229,7 +229,7 @@ export default {
   },
   template: `
   <div class="oiTrendContainer">
-    <div :id="symbol + '_oiCallPutTrend'" style="width: 640px; height: 400px;"></div>
+    <div :id="symbol + '_oiCallPutTrend' + prefix " style="width: 640px; height: 400px;"></div>
   </div>
   `,
 };
