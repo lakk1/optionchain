@@ -45,6 +45,7 @@ export default {
           series: this.getSeries(),
           chart: {
             // height: 300,
+            background: "#87cefa",
             type: "line",
             animations: {
               enabled: false,
