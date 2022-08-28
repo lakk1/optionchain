@@ -36,6 +36,21 @@ export default {
       let symbolDetails = stockList.filter((s) => s.symbol == this.symbol)[0];
       return symbolDetails.steps;
     },
+    getBackgroundColor() {
+      if (
+        this.seriesStrikePrice == store.getStrongSupport(this.symbol) &&
+        this.seriesStrikePrice == store.getStrongResistance(this.symbol)
+      ) {
+        return "#808080";
+      }
+      if (this.seriesStrikePrice == store.getStrongSupport(this.symbol)) {
+        return "#c9e4a0";
+      }
+      if (this.seriesStrikePrice == store.getStrongResistance(this.symbol)) {
+        return "#f8bbbb";
+      }
+      return "#fff";
+    },
     getSeries() {
       return [
         {
@@ -61,6 +76,7 @@ export default {
           series: this.getSeries(),
           chart: {
             // height: 300,
+            background: this.getBackgroundColor(),
             type: "line",
             animations: {
               enabled: false,

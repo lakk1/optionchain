@@ -114,12 +114,12 @@ export default {
 
           <template v-if="showOiSeries" >
             <div class="oiSeries">
-              <apex-oi-series-chart :symbol="symbol" :time="time" :expiryDate="store.getExpiryDate()" :strikePrice="getATM(symbol)+strikeInterval*3" chartID=1 :strikeInterval="strikeInterval" multiplier=3 >OI Series Line Chart</apex-oi-series-chart>
-              <apex-oi-series-chart :symbol="symbol" :time="time" :expiryDate="store.getExpiryDate()" :strikePrice="getATM(symbol)+strikeInterval*2" chartID=2 :strikeInterval="strikeInterval" multiplier=2 >OI Series Line Chart</apex-oi-series-chart>
-              <apex-oi-series-chart :symbol="symbol" :time="time" :expiryDate="store.getExpiryDate()" :strikePrice="getATM(symbol)+strikeInterval" chartID=3 :strikeInterval="strikeInterval" multiplier=1 >OI Series Line Chart</apex-oi-series-chart>
+              <apex-oi-strike-chart :symbol="symbol" :time="time" :expiryDate="store.getExpiryDate()" :strikePrice="getATM(symbol)+strikeInterval*3" chartID=1 :strikeInterval="strikeInterval" multiplier=3 >OI Series Line Chart</apex-oi-strike-chart>
+              <apex-oi-strike-chart :symbol="symbol" :time="time" :expiryDate="store.getExpiryDate()" :strikePrice="getATM(symbol)+strikeInterval*2" chartID=2 :strikeInterval="strikeInterval" multiplier=2 >OI Series Line Chart</apex-oi-strike-chart>
+              <apex-oi-strike-chart :symbol="symbol" :time="time" :expiryDate="store.getExpiryDate()" :strikePrice="getATM(symbol)+strikeInterval" chartID=3 :strikeInterval="strikeInterval" multiplier=1 >OI Series Line Chart</apex-oi-strike-chart>
             </div>
             <div class="oiSeries">
-              <apex-oi-series-chart :symbol="symbol" :time="time" :expiryDate="store.getExpiryDate()" :strikePrice="getATM(symbol)" chartID=4 :strikeInterval="strikeInterval" multiplier=0 >OI Series Line Chart</apex-oi-series-chart>
+              <apex-oi-strike-chart :symbol="symbol" :time="time" :expiryDate="store.getExpiryDate()" :strikePrice="getATM(symbol)" chartID=4 :strikeInterval="strikeInterval" multiplier=0 >OI Series Line Chart</apex-oi-strike-chart>
               <div class="oiSeriesHeader">
                 <span class="symbol">{{ symbol }} </span> :  <span class="spotprice">{{spotPrice()}} </span>
                 ATM: {{ getATM(symbol) }}
@@ -131,9 +131,9 @@ export default {
 
             </div>
             <div class="oiSeries">
-                <apex-oi-series-chart :symbol="symbol" :time="time" :expiryDate="store.getExpiryDate()" :strikePrice="getATM(symbol)-strikeInterval" chartID=5 :strikeInterval="strikeInterval" multiplier=-1 >OI Series Line Chart</apex-oi-series-chart>
-                <apex-oi-series-chart :symbol="symbol" :time="time" :expiryDate="store.getExpiryDate()" :strikePrice="getATM(symbol)-strikeInterval*2" chartID=6 :strikeInterval="strikeInterval" multiplier=-2 >OI Series Line Chart</apex-oi-series-chart>
-                <apex-oi-series-chart :symbol="symbol" :time="time" :expiryDate="store.getExpiryDate()" :strikePrice="getATM(symbol)-strikeInterval*3" chartID=7 :strikeInterval="strikeInterval" multiplier=-3 >OI Series Line Chart</apex-oi-series-chart>
+                <apex-oi-strike-chart :symbol="symbol" :time="time" :expiryDate="store.getExpiryDate()" :strikePrice="getATM(symbol)-strikeInterval" chartID=5 :strikeInterval="strikeInterval" multiplier=-1 >OI Series Line Chart</apex-oi-strike-chart>
+                <apex-oi-strike-chart :symbol="symbol" :time="time" :expiryDate="store.getExpiryDate()" :strikePrice="getATM(symbol)-strikeInterval*2" chartID=6 :strikeInterval="strikeInterval" multiplier=-2 >OI Series Line Chart</apex-oi-strike-chart>
+                <apex-oi-strike-chart :symbol="symbol" :time="time" :expiryDate="store.getExpiryDate()" :strikePrice="getATM(symbol)-strikeInterval*3" chartID=7 :strikeInterval="strikeInterval" multiplier=-3 >OI Series Line Chart</apex-oi-strike-chart>
             </div>
           </template>
 
