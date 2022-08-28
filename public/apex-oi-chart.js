@@ -69,6 +69,12 @@ export default {
             animations: {
               enabled: false,
             },
+            toolbar: {
+              show: false,
+            },
+            zoom: {
+              enabled: false,
+            },
           },
           dataLabels: {
             enabled: false,
@@ -123,6 +129,23 @@ export default {
           },
           xaxis: {
             categories: this.series,
+          },
+          annotations: {
+            xaxis: [
+              {
+                x: store.getATM(this.symbol),
+                borderColor: "orange",
+                label: {
+                  style: {
+                    fontSize: "12px",
+                    color: "#fff",
+                    background: "#00E396",
+                  },
+                  text: "ATM",
+                  orientation: "horizontal",
+                },
+              },
+            ],
           },
         };
 

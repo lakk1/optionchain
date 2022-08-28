@@ -130,6 +130,7 @@ NSE.getPutCallOiChange = async (req, res) => {
           PE_OI_CHANGE_SUM: {
             $sum: "$PE.changeInOI",
           },
+          SPOT_PRICE: { $avg: "$CE.marketPrice" },
         },
       },
       {

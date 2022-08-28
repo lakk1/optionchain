@@ -11,6 +11,7 @@ export default {
       xAxisCategories: [],
       callSum: [],
       putSum: [],
+      spotPrice: [],
       date: undefined,
       lastFetchTime: undefined,
       previousSymbol: undefined,
@@ -21,6 +22,14 @@ export default {
     };
   },
   methods: {
+    getRange() {
+      let strikes = store.getStrikes(this.symbol);
+      console.log("STRIKES: ", strikes);
+      console.log("STORE STRIKES: ", store.getStrikes(this.symbol));
+      let minStrike = strikes[0];
+      let maxStrike = strikes[strikes.length - 1];
+      return { minStrike, maxStrike };
+    },
     getSeries() {
       let seriesData = [
         {
@@ -31,6 +40,10 @@ export default {
           name: "Call OI Change",
           data: this.callSum,
         },
+        {
+          name: "Spot Price",
+          data: this.spotPrice,
+        },
       ];
       // console.log("Call put trend series: ", seriesData);
       return seriesData;
@@ -38,6 +51,7 @@ export default {
     drawOptionsChart() {
       let symbol = this.symbol;
       this.expiryDate = store.getExpiryDate();
+      let { minStrike, maxStrike } = this.getRange();
 
       console.log(`Drawing OI CALL PUT OI Change for ${this.symbol}`);
 
@@ -97,13 +111,54 @@ export default {
               },
             },
           },
-          yaxis: {
-            title: {
-              text: "Open Interest",
+          yaxis: [
+            {
+              seriesName: "Column A",
+              axisTicks: {
+                show: true,
+              },
+              axisBorder: {
+                show: true,
+              },
+              title: {
+                text: "Open Interst",
+              },
+              labels: {
+                formatter: function (value) {
+                  return parseInt(value);
+                },
+              },
             },
-            // min: 5,
-            // max: 40,
-          },
+            {
+              seriesName: "Column A",
+              show: false,
+              labels: {
+                formatter: function (value) {
+                  return parseInt(value);
+                },
+              },
+            },
+            {
+              opposite: true,
+              seriesName: "Line C",
+              axisTicks: {
+                show: true,
+              },
+              axisBorder: {
+                show: true,
+              },
+              title: {
+                text: "Spot Price",
+              },
+              labels: {
+                formatter: function (value) {
+                  return Number(value).toFixed(2);
+                },
+              },
+              min: minStrike,
+              max: maxStrike,
+            },
+          ],
           legend: {
             position: "bottom",
             horizontalAlign: "right",
@@ -173,16 +228,19 @@ export default {
         let xAxisCategories = [];
         let callSum = [];
         let putSum = [];
+        let spotPrice = [];
 
         response.data.records.forEach((e) => {
           xAxisCategories.push(e._id.substring(12, 17));
           callSum.push(e.CE_OI_CHANGE_SUM);
           putSum.push(e.PE_OI_CHANGE_SUM);
+          spotPrice.push(e.SPOT_PRICE);
         });
 
         this.xAxisCategories = xAxisCategories;
         this.callSum = callSum;
         this.putSum = putSum;
+        this.spotPrice = spotPrice;
 
         this.drawOptionsChart();
         // this.updateOptions();

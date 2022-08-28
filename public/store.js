@@ -35,7 +35,7 @@ export const store = reactive({
     return this.data.expiryDate !== "" ? this.data.expiryDate : "current";
   },
   getStrikes(sym = "NIFTY") {
-    return this.data[sym] ? this.data[sym].STRIKES : [];
+    return this.data[sym] ? this.data[sym].STRIKES.sort((a, b) => a - b) : [];
   },
   getResistanceStrength(sym = "NIFTY") {
     return this.data[sym] ? this.data[sym].resistanceStrength : "";
