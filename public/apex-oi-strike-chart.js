@@ -98,7 +98,7 @@ export default {
             width: [2, 2],
           },
           title: {
-            text: `${this.symbol} OI Change ${this.seriesStrikePrice} ${this.lastFetchTime}`,
+            text: `${this.symbol} OI Change for ${this.seriesStrikePrice}, data received on ${this.lastFetchTime}`,
             align: "left",
           },
           grid: {

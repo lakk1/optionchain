@@ -121,8 +121,12 @@ table.report tr {
 .oichart,
 .chainTabContainer {
   display: flex;
-  justify-content: center;
+  /* justify-content: center; */
   /* align-items: center; */
+  overflow: auto;
+}
+.chainTabContainer {
+  justify-content: center;
 }
 
 .oiTrendContainer {

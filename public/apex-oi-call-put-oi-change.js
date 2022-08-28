@@ -78,7 +78,7 @@ export default {
             width: [2, 2],
           },
           title: {
-            text: `${this.symbol} OI Change Trend for current expiry, received @ ${this.lastFetchTime}`,
+            text: `${this.symbol} OI Change Trend for current expiry, data received on ${this.lastFetchTime}`,
             align: "left",
             style: {
               fontSize: "12px",
