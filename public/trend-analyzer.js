@@ -5,22 +5,48 @@ export default {
     return {
       store,
       stockList: [],
-      symbol: "BANKNIFTY",
+      symbol: "NIFTY",
       range: 7,
       expiry: 0,
+      expiryDate: "",
+      expiryDates: "",
       refreshInterval: 30, // seconds
-      display: "BANKNIFTY",
+      display: "NIFTY",
       time: "",
+      showDetails: true,
     };
   },
   methods: {
-    async fetchOptions(sym) {
+    async getExpiryDates(sym) {
       let symbol = sym || this.display;
-      console.log("Fetching data for ", this.display);
-      this.store.updateLoading(true);
+      const response = await axios.get("/nse/getExpiryDates/" + symbol);
+      if (response.data) {
+        // console.log("Expiry date for ", symbol, response.data);
+        this.store.updateExpiryDates(response.data, symbol);
+        try {
+          this.expiryDates = response.data;
+          // if (!this.expiryDate) {
+          //   this.expiryDate = this.expiryDates[0];
+          // }
+          return response.data;
+        } catch (e) {
+          console.log("Error parsing Expiry Dates");
+        }
+      }
+      return [];
+    },
 
+    async fetchOptionChainDetails(sym) {
+      let symbol = sym || this.display;
+      // console.log("Fetching data for ", symbol);
+      this.store.updateLoading(true);
+      let expDates = "";
+      if (!this.expiryDate) {
+        expDates = await this.getExpiryDates(symbol);
+        this.expiryDate = expDates[0];
+      }
       const response = await axios.get(
-        "/nse/optionChain/" + symbol + "/" + this.range + "/" + this.expiry
+        "/nse/optionChain/" + symbol + "/" + this.range + "/" + this.expiryDate
       );
 
       if (response.data.fetchTime) {
@@ -33,11 +59,15 @@ export default {
     },
     refreshData() {
       if (this.display == "both") {
-        this.fetchOptions("NIFTY");
-        this.fetchOptions("BANKNIFTY");
+        this.fetchOptionChainDetails("NIFTY");
+        this.fetchOptionChainDetails("BANKNIFTY");
       } else {
         console.log("Displaying: ", this.display);
-        this.fetchOptions(this.display);
+        this.fetchOptionChainDetails(this.display);
+        if (!this.store.getExpiryDates(this.display))
+          this.getExpiryDates(this.display);
+
+        this.store.updateExpiry(this.expiryDate);
       }
       let title =
         this.display == "both" ? "INDICIES" : this.display.toUpperCase();
@@ -64,6 +94,7 @@ export default {
     },
   },
   async mounted() {
+    this.getExpiryDates("NIFTY");
     let interval = this.refreshInterval * 1000;
     this.refreshData(); // Call once before starting interval
     // Call every 30 seconds to refresh data

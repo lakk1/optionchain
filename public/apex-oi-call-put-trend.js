@@ -1,8 +1,7 @@
 import { store } from "./store.js";
-import stockList from "./data.js";
 
 export default {
-  props: ["symbol", "time", "range"],
+  props: ["symbol", "time", "range", "prefix"],
   data() {
     return {
       chart: undefined,
@@ -17,6 +16,7 @@ export default {
       previousRange: undefined,
       STRIKES: [],
       updated: false,
+      expiryDate: "",
     };
   },
   methods: {
@@ -36,7 +36,7 @@ export default {
     },
     drawOptionsChart() {
       let symbol = this.symbol;
-      let fetchDate = this.date || store.getFetchDate();
+      this.expiryDate = store.getExpiryDate();
 
       console.log(`Drawing OI CALL PUT trend for ${this.symbol}`);
 
@@ -45,6 +45,7 @@ export default {
           series: this.getSeries(),
           chart: {
             // height: 300,
+            background: "#87cefa",
             type: "line",
             animations: {
               enabled: false,
@@ -66,11 +67,16 @@ export default {
             width: [2, 2],
           },
           title: {
-            text: `${this.symbol} OI Call Put Contracts Trend For current expiry at ${this.lastFetchTime}`,
+            text: `${this.symbol} OI OPEN contracts for current expiry, received @ ${this.lastFetchTime}`,
             // text: `${this.symbol} OI Call Put Trend for ${
             //   this.range * 2 + 1
             // } Strikes at ${this.lastFetchTime}`,
             align: "left",
+            style: {
+              fontSize: "12px",
+              fontWeight: "bold",
+              color: "#263238",
+            },
           },
           grid: {
             borderColor: "#e7e7e7",
@@ -112,7 +118,7 @@ export default {
           },
         };
 
-        let selector = "#" + symbol + "_oiCallPutTrend";
+        let selector = "#" + symbol + "_oiCallPutTrend" + this.prefix;
 
         let elem = document.querySelector(selector);
 
@@ -144,6 +150,7 @@ export default {
 
       if (response.data) {
         this.oiOiCallPutTrend = response.data;
+        this.expiryDate = store.getExpiryDate();
 
         let totalRecords = response.data.records.length;
         if (totalRecords == 0) return;
@@ -223,18 +230,7 @@ export default {
   },
   template: `
   <div class="oiTrendContainer">
-    <div :id="symbol + '_oiCallPutTrend'" style="width: 640px; height: 400px;"></div>
-    <div class='analysis'>
-      <p>
-        If <b>CALLS</b> are reducing with Short Covering (SC) and PUTS are increasing with Short Buildup (SB), Market will <span class="UP bold priceGreen">RISE - BULLISH</span> as Big Fishes are entering market with Big Fund.
-        <br/>
-        If <b>CALLS</b> side Long Buildup (LB) and PUTS side Short Buildup (SB) is happening , Market will <span class="UP bold priceGreen">RISE - BULLISH</span> as Big Fishes are entering market with Big Fund.
-      </p>
-      <p>
-      If <b>PUTS</b> are reducing with Short Covering (SC) and CALLS are increasing with Short Buildup (SB), Market will <span class="DOWN bold priceRed">FALL - BEARISH</span> as Big Fishes are running away without supporting the market.
-      <br/>
-      If <b>PUTS</b> side Long Buildup (LB) and CALLS side Short Buildup (SB) is happening , Market will <span class="DOWN bold priceRed">FALL - BEARISH</span> as Big Fishes are running away without supporting the market.</p>
-    </div>
+    <div :id="symbol + '_oiCallPutTrend' + prefix " style="width: 640px; height: 400px;"></div>
   </div>
   `,
 };

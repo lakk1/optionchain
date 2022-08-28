@@ -17,6 +17,7 @@ export default {
       previousRange: undefined,
       STRIKES: [],
       updated: false,
+      expiryDate: "",
     };
   },
   methods: {
@@ -36,7 +37,7 @@ export default {
     },
     drawOptionsChart() {
       let symbol = this.symbol;
-      let fetchDate = this.date || store.getFetchDate();
+      this.expiryDate = store.getExpiryDate();
 
       console.log(`Drawing OI CALL PUT OI Change for ${this.symbol}`);
 
@@ -44,7 +45,7 @@ export default {
         let options = {
           series: this.getSeries(),
           chart: {
-            // height: 300,
+            background: "#cbe6f8",
             type: "line",
             animations: {
               enabled: false,
@@ -59,18 +60,19 @@ export default {
           dataLabels: {
             enabled: false,
           },
-          // colors: ["#FF0000", "darkgreen"],
           colors: ["#FF0000", "darkgreen", "#ffa500", "lightgreen"],
           stroke: {
             curve: "straight",
             width: [2, 2],
           },
           title: {
-            text: `${this.symbol} OI Put Call OI Change Trend for current expiry at ${this.lastFetchTime}`,
-            // text: `${this.symbol} OI Call Put Trend for ${
-            //   this.range * 2 + 1
-            // } Strikes at ${this.lastFetchTime}`,
+            text: `${this.symbol} OI Change Trend for current expiry, received @ ${this.lastFetchTime}`,
             align: "left",
+            style: {
+              fontSize: "12px",
+              fontWeight: "bold",
+              color: "#263238",
+            },
           },
           grid: {
             borderColor: "#e7e7e7",
@@ -82,7 +84,6 @@ export default {
           markers: {
             size: 0,
           },
-
           xaxis: {
             categories: this.xAxisCategories,
             labels: {
@@ -157,7 +158,7 @@ export default {
           this.previousRange == this.range
         ) {
           console.log(
-            "No new records to redraw OI Call Put Trend for ",
+            "No new records to redraw OIChange Trend for ",
             this.symbol
           );
           return;
@@ -227,18 +228,6 @@ export default {
   template: `
   <div class="oiTrendContainer">
     <div :id="symbol + '_oiCallPutOIChangeTrend'" style="width: 640px; height: 400px;"></div>
-    <div class='analysis'>
-      <p>
-        As long as Puts are Increasing and Calls are decreasing or not incrasing it will be <span class="UP bold priceGreen">RISE - BULLISH</span>
-      </p>
-      <p>
-        As long as Calls are Increasing and Puts are decreasing or not incrasing it will be <span class="DOWN bold priceRed">FALL - BEARISH</span>
-      </p>
-      <p>
-        If both Calls and Puts are increasing or decreasing - STAY away - wait and watch.
-        <br/>It will be tough fight between Bulls and Bears, leading to Sidewise or RANGE bound market.
-      </p>
-    </div>
   </div>
   `,
 };

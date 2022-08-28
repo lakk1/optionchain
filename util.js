@@ -349,16 +349,15 @@ function calculateTotals(filteredStrikes, ATM, INTERVAL) {
   return totals;
 } // End of calculateTotals
 
-function getDataForCurrentExpiry(response, symbol, range = 10, expiry = 0) {
-  let currentExpiry = response.records.expiryDates[0];
-  let expTime = new Date(currentExpiry).getTime();
-  let curTime = new Date().getTime();
-  if (expTime < curTime) {
-    expiry++;
-  }
-  currentExpiry = response.records.expiryDates[expiry];
+function getNSEdata(response, symbol, expiry, range = 10) {
+  currentExpiry = expiry || response.records.expiryDates[0];
 
-  let data = expiry == 0 ? response.filtered.data : response.records.data;
+  // console.log("Gettng NSE Data for", symbol, expiry, range, currentExpiry);
+
+  let data =
+    currentExpiry == response.records.expiryDates[0]
+      ? response.filtered.data
+      : response.records.data;
   let fetchTime = response.records.timestamp;
 
   let spotPrice = response.records.underlyingValue;
@@ -452,9 +451,7 @@ function getDataForCurrentExpiry(response, symbol, range = 10, expiry = 0) {
     ATM,
     currentExpiry,
   };
-}
-
-// getDataForCurrentExpiry(data, 'NIFTY');
+} // getNSEdata(data, 'NIFTY');
 function today() {
   const date = new Date();
   const formattedDate = date
@@ -467,4 +464,4 @@ function today() {
   return formattedDate;
 }
 
-module.exports = { getDataForCurrentExpiry, today };
+module.exports = { getNSEdata, today };

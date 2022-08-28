@@ -9,6 +9,7 @@ export default {
     "chartID",
     "strikeInterval",
     "multiplier",
+    "expiryDate",
   ],
   data() {
     return {

@@ -1,5 +1,9 @@
 .COLORS_URL {
-  /* URL : https://upload.wikimedia.org/wikipedia/commons/e/e7/SVG1.1_Color_Swatch.svg */
+  /*
+    COLORS : https://upload.wikimedia.org/wikipedia/commons/e/e7/SVG1.1_Color_Swatch.svg
+    ARROWS : https://www.toptal.com/designers/htmlarrows/arrows/
+
+  */
   color: red;
 }
 
@@ -249,10 +253,11 @@ table.report tr th {
   background-color: #87cefa;
   color: black;
 }
-.DOWN:before {
-  /* content: "↓"; */
-  /* content: "🠗"; */
-  content: "▼";
+
+.UP:before,
+.DOWN:before,
+.LEFT:before,
+.RIGHT:before {
   font-size: 12px;
   font-family: u1f800;
   padding-right: 3px;
@@ -260,7 +265,34 @@ table.report tr th {
 .UP:before {
   /* content: "↑"; */
   /* content: "🠕"; */
+  /* content: "⮝"; */
+  /* content: "⮙"; */
   content: "▲";
+}
+.DOWN:before {
+  /* content: "↓"; */
+  /* content: "🠗"; */
+  /* content: "⮛"; */
+  /* content: "⮟"; */
+  content: "▼";
+}
+.LEFT:before {
+  /* content: "↑"; */
+  /* content: "⮘"; */
+  content: "⮜";
+}
+.RIGHT:before {
+  /* content: "↑"; */
+  /* content: "⮚"; */
+  content: "⮞";
+}
+.NETUTRAL {
+  font-size: 20px;
+  /* &#10500; */
+}
+.NEUTRAL:before {
+  /* content: "↔"; */
+  content: "⬌";
   font-size: 12px;
   font-family: u1f800;
   padding-right: 3px;
@@ -286,7 +318,7 @@ table.report tr th {
   flex-direction: column;
   flex-basis: 40%;
   justify-content: center;
-  align-items: center;
+  font-size: 110%;
 }
 .bold {
   font-weight: bold;
