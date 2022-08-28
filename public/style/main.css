@@ -229,7 +229,7 @@ table.report tr th {
 }
 .chartLayout .title {
   font-weight: bold;
-  color: rgb(21, 72, 129);
+  color: #154881;
 }
 .expiry,
 .timer {
@@ -250,7 +250,7 @@ table.report tr th {
   color: black;
 }
 .SC {
-  background-color: #87cefa;
+  background-color: #b4d9ef;
   color: black;
 }
 

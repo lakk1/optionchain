@@ -24,8 +24,6 @@ export default {
   methods: {
     getRange() {
       let strikes = store.getStrikes(this.symbol);
-      console.log("STRIKES: ", strikes);
-      console.log("STORE STRIKES: ", store.getStrikes(this.symbol));
       let minStrike = strikes[0];
       let maxStrike = strikes[strikes.length - 1];
       return { minStrike, maxStrike };
@@ -74,7 +72,7 @@ export default {
           dataLabels: {
             enabled: false,
           },
-          colors: ["#FF0000", "darkgreen", "#ffa500", "lightgreen"],
+          colors: ["#FF0000", "darkgreen", "#154881", "lightgreen"],
           stroke: {
             curve: "straight",
             width: [2, 2],
