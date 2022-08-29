@@ -15,7 +15,7 @@ html {
 body {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  /* align-items: center; */
   /* font-size: 16px; */
 }
 
@@ -126,8 +126,10 @@ table.report tr {
   /* align-items: center; */
   overflow: auto;
 }
-.chainTabContainer {
+.chainTabContainer,
+.oichart {
   justify-content: center;
+  /* overflow: auto; */
 }
 
 .oiTrendContainer {
