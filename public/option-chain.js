@@ -8,7 +8,7 @@ export default {
       store,
       multiply: false,
       showOiSeries: false,
-      showOiBars: false,
+      showOiBars: true,
       showOptionChain: true,
       showOiCallPutTrend: false,
       stockList: undefined,
@@ -35,11 +35,6 @@ export default {
     isDataAvailable() {
       return this.store.data && this.store.data[this.symbol] ? true : false;
     },
-    spotPrice() {
-      return this.store.data[this.symbol]
-        ? this.store.data[this.symbol].spotPrice
-        : 0;
-    },
     fetchTime(sym) {
       return this.store.data[this.symbol]
         ? this.store.data[this.symbol].fetchTime
@@ -60,7 +55,7 @@ export default {
       <div>
         <template v-if="store.getExpiryDate(symbol) != 0 && isDataAvailable()">
           <div class="reportHeader">
-            <span class="symbol">{{ symbol }} </span> :  <span class="spotprice">{{spotPrice()}} </span>
+            <span class="symbol">{{ symbol }} </span> :  <span class="spotprice">{{store.getSpotPrice(symbol)}} </span>
             <span class="pcr">
               <span :class="{ pcrGreen: store.getOiPCR(symbol) < 0.7, red : store.getOiPCR(symbol) > 1.5 }"> PCR (oi): {{ store.getOiPCR(symbol) }} </span>
               &nbsp;
@@ -122,7 +117,7 @@ export default {
             <div class="oiSeries">
               <apex-oi-strike-chart :symbol="symbol" :time="time" :expiryDate="store.getExpiryDate()" :strikePrice="getATM(symbol)" chartID=4 :strikeInterval="strikeInterval" multiplier=0 >OI Series Line Chart</apex-oi-strike-chart>
               <div class="oiSeriesHeader">
-                <span class="symbol">{{ symbol }} </span> :  <span class="spotprice">{{spotPrice()}} </span>
+                <span class="symbol">{{ symbol }} </span> :  <span class="spotprice">{{store.getSpotPrice(symbol)}} </span>
                 ATM: {{ getATM(symbol) }}
                 OI Change PE - CE : <span :class="{ red: store.getTotals(symbol).OIChgdifference < 0 }">{{ Number(store.getTotals(symbol).OIChgdifference * oiMultiplier).toLocaleString() }}</span>
                 PCR (Filtered): <span> {{ Number(store.getFilteredPCR(symbol)) }}</span>
@@ -157,7 +152,7 @@ export default {
                   </th>
                   <th>
                     <span class="symbol">{{ symbol }} </span> <br/>
-                    <span class="spotprice">{{spotPrice()}} </span></th>
+                    <span class="spotprice">{{store.getSpotPrice(symbol)}} </span></th>
                   <th colspan="10" class="put">
                     PUT (Support is {{ store.getSupportStrength(symbol) }} at {{ store.getStrongSupport(symbol) }})
                     <br/>{{ store.getAnalysis(symbol, 'PE') }}

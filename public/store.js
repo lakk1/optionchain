@@ -52,6 +52,9 @@ export const store = reactive({
   getStrikesDetails(sym = "NIFTY") {
     return this.data[sym] ? this.data[sym].filteredStrikes : [];
   },
+  getSpotPrice(sym = "NIFTY", from) {
+    return this.data[sym] ? this.data[sym].spotPrice : 0;
+  },
   getTotals(sym = "NIFTY") {
     return this.data[sym] ? this.data[sym].totals : {};
   },
