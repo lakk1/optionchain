@@ -9,9 +9,8 @@ export default {
       series: [],
       oiOiCallPutTrend: undefined,
       xAxisCategories: [],
-      //   callSum: [],
-      //   putSum: [],
-      putCallDifference: [],
+      callSum: [],
+      putSum: [],
       spotPrice: [],
       date: undefined,
       lastFetchTime: undefined,
@@ -32,12 +31,12 @@ export default {
     getSeries() {
       let seriesData = [
         {
-          name: "Put Call Difference",
-          data: this.putCallDifference,
+          name: "Put OI Change",
+          data: this.putSum,
         },
         {
-          name: "Spot Price",
-          data: this.spotPrice,
+          name: "Call OI Change",
+          data: this.callSum,
         },
       ];
       // console.log("Call put trend series: ", seriesData);
@@ -48,13 +47,13 @@ export default {
       this.expiryDate = store.getExpiryDate();
       let { minStrike, maxStrike } = this.getRange();
 
-      console.log(`Drawing OI CALL PUT OI Difference for ${this.symbol}`);
+      console.log(`Drawing OI CALL PUT OI Change for ${this.symbol}`);
 
       if (this.oiOiCallPutTrend) {
         let options = {
           series: this.getSeries(),
           chart: {
-            background: "#cbe6f8",
+            background: "#f8f8ad",
             type: "line",
             animations: {
               enabled: false,
@@ -75,7 +74,7 @@ export default {
             width: [2, 2],
           },
           title: {
-            text: `${this.symbol} OI Difference Trend for current expiry, data received on ${this.lastFetchTime}`,
+            text: `${this.symbol} TODAY's OI Change for current expiry, data received on ${this.lastFetchTime}`,
             align: "left",
             style: {
               fontSize: "12px",
@@ -108,43 +107,9 @@ export default {
           },
           yaxis: [
             {
-              seriesName: "Put Call Difference",
-              show: true,
-
-              axisTicks: {
-                show: true,
-              },
-              axisBorder: {
-                show: true,
-              },
               title: {
-                text: "Put Call Difference",
+                text: "Put Call OI Change",
               },
-              labels: {
-                formatter: function (value) {
-                  return parseInt(value);
-                },
-              },
-            },
-            {
-              opposite: true,
-              seriesName: "Line C",
-              axisTicks: {
-                show: true,
-              },
-              axisBorder: {
-                show: true,
-              },
-              title: {
-                text: "Spot Price",
-              },
-              labels: {
-                formatter: function (value) {
-                  return Number(value).toFixed(2);
-                },
-              },
-              min: minStrike,
-              max: maxStrike,
             },
           ],
           legend: {
@@ -156,7 +121,7 @@ export default {
           },
         };
 
-        let selector = "#" + symbol + "_oiCallPutOIdiff";
+        let selector = "#" + symbol + "_oiCallPutOIChangeTrend";
 
         let elem = document.querySelector(selector);
 
@@ -242,7 +207,7 @@ export default {
           this.previousRange == this.range
         ) {
           console.log(
-            "No new records to redraw OI Difference Trend for ",
+            "No new records to redraw OIChange Trend for ",
             this.symbol
           );
           return;
@@ -255,34 +220,27 @@ export default {
 
         // Generate data for Chart
         let xAxisCategories = [];
-        // let callSum = [];
-        // let putSum = [];
-        let putCallDifference = [];
+        let callSum = [];
+        let putSum = [];
         let spotPrice = [];
 
         response.data.records.forEach((e) => {
           xAxisCategories.push(e._id.substring(12, 17));
-          //   callSum.push(e.CE_OI_CHANGE_SUM);
-          //   putSum.push(e.PE_OI_CHANGE_SUM);
-          //   console.log("e.CE_OI_CHANGE_SUM ", e.CE_OI_CHANGE_SUM);
-          //   console.log("e.PE_OI_CHANGE_SUM ", e.PE_OI_CHANGE_SUM);
-          //   console.log("Diff : ", e.PE_OI_CHANGE_SUM - e.CE_OI_CHANGE_SUM);
-          let diff = e.PE_OI_CHANGE_SUM - e.CE_OI_CHANGE_SUM;
-          putCallDifference.push(diff);
+          callSum.push(e.CE_OI_CHANGE_SUM);
+          putSum.push(e.PE_OI_CHANGE_SUM);
           spotPrice.push(e.SPOT_PRICE);
         });
 
         this.xAxisCategories = xAxisCategories;
-        // this.callSum = callSum;
-        // this.putSum = putSum;
-        this.putCallDifference = putCallDifference;
+        this.callSum = callSum;
+        this.putSum = putSum;
         this.spotPrice = spotPrice;
 
         this.drawOptionsChart();
         // this.updateOptions();
       } else {
         console.log(
-          "Failed to get OI Call Put OI Difference Trend for symbol",
+          "Failed to get OI Call Put OI Change Trend for symbol",
           symbol
         );
       }
@@ -294,13 +252,13 @@ export default {
       this.range != this.previousRange
     ) {
       console.log(
-        "Inside OI Call Put OI difference before Update - updating prev symbol and strike price"
+        "Inside OI Call Put OI Change trend before Update - updating prev symbol and strike price"
       );
       this.getOiCallPutTrendData("From Before Update");
     }
   },
   mounted() {
-    console.log("OI C P OI DIFF Trend mounted");
+    console.log("OI C P OI Change Trend mounted");
 
     this.intervalHandler = setInterval(() => {
       this.getOiCallPutTrendData("From SetInterval");
@@ -312,7 +270,7 @@ export default {
   },
   updated() {
     console.log(
-      "OI Call Put OI DIFF Trend Updated at ",
+      "OI Call Put OI Change Trend Updated at ",
       this.time,
       "range:",
       this.range
@@ -321,7 +279,7 @@ export default {
   },
   template: `
   <div class="oiTrendContainer">
-    <div :id="symbol + '_oiCallPutOIdiff'" style="width: 640px; height: 400px;"></div>
+    <div :id="symbol + '_oiCallPutOIChangeTrend'" style="width: 640px; height: 400px;"></div>
   </div>
   `,
 };

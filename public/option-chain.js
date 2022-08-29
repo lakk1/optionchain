@@ -7,7 +7,7 @@ export default {
     return {
       store,
       multiply: false,
-      showOiSeries: true,
+      showOiSeries: false,
       showOiBars: false,
       showOptionChain: true,
       showOiCallPutTrend: false,
@@ -100,7 +100,8 @@ export default {
           </div>
 
           <div class="oiSeries" v-if="showOiCallPutTrend">
-            <apex-oi-call-put-oi-change :symbol="symbol" :time="time" :range="range" :expiryDate="store.getExpiryDate()">OI Call Put Trend Line Chart</apex-oi-call-put-oi-change>
+              <apex-oi-call-put-oi-change :symbol="symbol" :time="time" :range="range"  :prefix="'_inner'" :expiryDate="store.getExpiryDate()">OI Call Put Trend Line Chart</apex-oi-call-put-oi-change>
+              <apex-put-call-oi-change :symbol="symbol" :time="time" :range="range" :expiryDate="store.getExpiryDate()">OI PUT Call Change Chart</apex-put-call-oi-change>
             <!--
             <apex-oi-call-put-trend :symbol="symbol" :time="time" :range="range" :expiryDate="store.getExpiryDate()">OI Call Put Trend Line Chart</apex-oi-call-put-trend>
             -->
