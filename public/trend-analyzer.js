@@ -5,13 +5,13 @@ export default {
     return {
       store,
       stockList: [],
-      symbol: "NIFTY",
+      symbol: "BANKNIFTY",
       range: 7,
       expiry: 0,
       expiryDate: "",
       expiryDates: "",
       refreshInterval: 30, // seconds
-      display: "NIFTY",
+      display: "BANKNIFTY",
       time: "",
       showDetails: true,
     };

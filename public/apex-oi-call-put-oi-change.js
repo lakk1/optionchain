@@ -7,7 +7,7 @@ export default {
     return {
       chart: undefined,
       series: [],
-      oiOiCallPutTrend: undefined,
+      oiCallPutTrend: undefined,
       xAxisCategories: [],
       //   callSum: [],
       //   putSum: [],
@@ -48,9 +48,9 @@ export default {
       this.expiryDate = store.getExpiryDate();
       let { minStrike, maxStrike } = this.getRange();
 
-      console.log(`Drawing OI CALL PUT OI Difference for ${this.symbol}`);
+      // console.log(`Drawing OI CALL PUT OI Difference for ${this.symbol}`);
 
-      if (this.oiOiCallPutTrend) {
+      if (this.oiCallPutTrend) {
         let options = {
           series: this.getSeries(),
           chart: {
@@ -228,7 +228,7 @@ export default {
       });
 
       if (response.data) {
-        this.oiOiCallPutTrend = response.data;
+        this.oiCallPutTrend = response.data;
 
         let totalRecords = response.data.records.length;
         if (totalRecords == 0) return;
@@ -241,10 +241,7 @@ export default {
           this.lastFetchTime == maxFetchTime &&
           this.previousRange == this.range
         ) {
-          console.log(
-            "No new records to redraw OI Difference Trend for ",
-            this.symbol
-          );
+          console.log("No new records to redraw OI Changes for ", this.symbol);
           return;
         }
 
@@ -311,12 +308,6 @@ export default {
     clearInterval(this.intervalHandler);
   },
   updated() {
-    console.log(
-      "OI Call Put OI DIFF Trend Updated at ",
-      this.time,
-      "range:",
-      this.range
-    );
     this.updated = this.time;
   },
   template: `

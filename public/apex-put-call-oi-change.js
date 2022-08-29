@@ -7,7 +7,7 @@ export default {
     return {
       chart: undefined,
       series: [],
-      oiOiCallPutTrend: undefined,
+      oiCallPutTrend: undefined,
       xAxisCategories: [],
       callSum: [],
       putSum: [],
@@ -49,7 +49,7 @@ export default {
 
       console.log(`Drawing OI CALL PUT OI Change for ${this.symbol}`);
 
-      if (this.oiOiCallPutTrend) {
+      if (this.oiCallPutTrend) {
         let options = {
           series: this.getSeries(),
           chart: {
@@ -193,7 +193,7 @@ export default {
       });
 
       if (response.data) {
-        this.oiOiCallPutTrend = response.data;
+        this.oiCallPutTrend = response.data;
 
         let totalRecords = response.data.records.length;
         if (totalRecords == 0) return;

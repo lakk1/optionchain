@@ -2,15 +2,7 @@ import { store } from "./store.js";
 import stockList from "./data.js";
 
 export default {
-  props: [
-    "symbol",
-    "strikePrice",
-    "time",
-    "chartID",
-    "strikeInterval",
-    "multiplier",
-    "expiryDate",
-  ],
+  props: ["symbol", "time", "chartID", "multiplier", "expiryDate"],
   data() {
     return {
       chart: undefined,
@@ -29,6 +21,8 @@ export default {
       STRIKES: [],
       interval: 0,
       updated: false,
+      strikePrice: 0,
+      manuallyChangedStrike: false,
     };
   },
   methods: {
@@ -65,7 +59,7 @@ export default {
     },
     drawOptionsChart() {
       let symbol = this.symbol;
-      let fetchDate = this.date || store.getFetchDate();
+      let fetchDate = this.date || store.getFetchDate(this.symbol);
 
       console.log(
         `Drawing OI Series for ${this.symbol} : ${this.seriesStrikePrice} of date: ${fetchDate}`
@@ -163,19 +157,19 @@ export default {
         },
       });
     },
+    changeStrikeManually() {
+      this.manuallyChangedStrike = true;
+      this.getOiSeriesData();
+    },
     async getOiSeriesData(calledFrom) {
-      let fetchDate = this.date || store.getFetchDate();
+      let fetchDate = this.date || store.getFetchDate(this.symbol);
       this.STRIKES = store.getStrikes(this.symbol);
 
-      if (this.strikeInterval == 0) {
-        console.log("Updating interval...");
+      if (this.manuallyChangedStrike == false) {
         let interval = this.getStrikeInterval();
-        this.seriesStrikePrice = this.strikePrice + interval * this.multiplier;
+        this.seriesStrikePrice =
+          store.getATM(this.symbol) + interval * this.multiplier;
       }
-
-      // console.log(
-      //   `${calledFrom} ===== Fetching OI Series for ${this.symbol} : ${this.seriesStrikePrice} of date: ${fetchDate}`
-      // );
 
       const response = await axios.post("/nse/filteredData/", {
         symbol: this.symbol,
@@ -234,15 +228,6 @@ export default {
     },
   },
   beforeUpdate() {
-    // console.log("STRIKES: ", store.getStrikes(this.symbol));
-    // console.log(
-    //   this.chartID,
-    //   "------------ OI SERIES before Update: ",
-    //   this.symbol,
-    //   this.strikePrice,
-    //   this.seriesStrikePrice
-    // );
-
     if (this.previousSymbol != this.symbol) {
       // console.log(        "Inside before Update - updating prev symbol and strike price"      );
       this.previousSymbol = this.symbol;
@@ -250,17 +235,11 @@ export default {
       this.getOiSeriesData("From Before Update");
     }
   },
-  created() {
-    // console.log(
-    //   this.chartID,
-    //   "OI SERIES CREATED: ",
-    //   this.symbol,
-    //   this.strikePrice,
-    //   " Interval: ",
-    //   this.strikeInterval
-    // );
-  },
   mounted() {
+    let interval = this.getStrikeInterval();
+    this.strikePrice = store.getATM(this.symbol) + interval * this.multiplier;
+
+    // console.log("Drawing OI Changes for Strike:", this.strikePrice);
     if (this.seriesStrikePrice != this.strikePrice) {
       this.seriesStrikePrice = this.strikePrice;
       this.STRIKES = store.getStrikes(this.symbol);
@@ -276,15 +255,14 @@ export default {
     clearInterval(this.intervalHandler);
   },
   updated() {
-    console.log("OI Series Updated at ", this.time);
     this.updated = this.time;
-    this.getOiSeriesData("From SetInterval");
+    this.getOiSeriesData("From Updated");
   },
   template: `
   <div class="oiSeriesContainer">
     <div>
       Strike Price
-      <select v-model="seriesStrikePrice" @change="getOiSeriesData('On DropDown Change')">
+      <select v-model="seriesStrikePrice" @change="changeStrikeManually()">
         <template v-for="s in STRIKES">
             <option :value="s">
               {{s}}
