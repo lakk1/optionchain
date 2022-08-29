@@ -4,7 +4,7 @@ import OptionChain from "./option-chain.js"; // Main OI Data with Resistance and
 import ApexOiChart from "./apex-oi-chart.js"; // To show the column bar charts of OI changes and OI at the top
 import ApexOiStrikeChart from "./apex-oi-strike-chart.js"; // To show the line series of the Call Put changes for a Strike price
 // import ApexOiCallPutTrend from "./apex-oi-call-put-trend.js"; //
-import ApexOiCallPutOiChange from "./apex-oi-call-put-oi-change.js"; // To show the line chart for Call and Put difference and Price Movement for summation of filtered strike prices
+import ApexPutCallDiff from "./apex-put-call-diff.js"; // To show the line chart for Call and Put difference and Price Movement for summation of filtered strike prices
 import ApexPutCallOiChange from "./apex-put-call-oi-change.js"; // To show the line chart for Call and Put difference and Price Movement for summation of filtered strike prices
 import Timer from "./timer.js"; // To show current time in the top of the page
 
@@ -15,7 +15,7 @@ app.component("OptionChain", OptionChain);
 app.component("ApexOiChart", ApexOiChart);
 app.component("ApexOiStrikeChart", ApexOiStrikeChart);
 // app.component("ApexOiCallPutTrend", ApexOiCallPutTrend);
-app.component("ApexOiCallPutOiChange", ApexOiCallPutOiChange);
+app.component("ApexPutCallDiff", ApexPutCallDiff);
 app.component("ApexPutCallOiChange", ApexPutCallOiChange);
 app.component("Timer", Timer);
 

@@ -95,7 +95,7 @@ export default {
           </div>
 
           <div class="oiSeries" v-if="showOiCallPutTrend">
-              <apex-oi-call-put-oi-change :symbol="symbol" :time="time" :range="range"  :prefix="'_inner'" :expiryDate="store.getExpiryDate()">OI Call Put Trend Line Chart</apex-oi-call-put-oi-change>
+              <apex-put-call-diff :symbol="symbol" :time="time" :range="range"  :prefix="'_inner'" :expiryDate="store.getExpiryDate()">OI Call Put Trend Line Chart</apex-put-call-diff>
               <apex-put-call-oi-change :symbol="symbol" :time="time" :range="range" :expiryDate="store.getExpiryDate()">OI PUT Call Change Chart</apex-put-call-oi-change>
             <!--
             <apex-oi-call-put-trend :symbol="symbol" :time="time" :range="range" :expiryDate="store.getExpiryDate()">OI Call Put Trend Line Chart</apex-oi-call-put-trend>
@@ -123,7 +123,7 @@ export default {
                 PCR (Filtered): <span> {{ Number(store.getFilteredPCR(symbol)) }}</span>
                 <apex-oi-chart :symbol="symbol" :time="time" :expiryDate="store.getExpiryDate()" :prefix="'_inner'" v-if="display != 'both' ">Place for OI Chart</apex-oi-chart>
               </div>
-              <apex-oi-call-put-oi-change :symbol="symbol" :time="time" :range="range"  :prefix="'_inner'" :expiryDate="store.getExpiryDate()">OI Call Put Trend Line Chart</apex-oi-call-put-oi-change>
+              <apex-put-call-diff :symbol="symbol" :time="time" :range="range"  :prefix="'_inner'" :expiryDate="store.getExpiryDate()">OI Call Put Trend Line Chart</apex-put-call-diff>
 
             </div>
             <div class="oiSeries">
