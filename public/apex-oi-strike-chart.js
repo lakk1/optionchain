@@ -35,7 +35,7 @@ export default {
         this.seriesStrikePrice == store.getStrongSupport(this.symbol) &&
         this.seriesStrikePrice == store.getStrongResistance(this.symbol)
       ) {
-        return "#808080";
+        return "#f8f8ad";
       }
       if (this.seriesStrikePrice == store.getStrongSupport(this.symbol)) {
         return "#c9e4a0";
