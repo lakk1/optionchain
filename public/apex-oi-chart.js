@@ -49,6 +49,49 @@ export default {
         xaxis: {
           categories: this.series,
         },
+        annotations: {
+          xaxis: [
+            {
+              x: store.getATM(this.symbol),
+              borderColor: "orange",
+              label: {
+                style: {
+                  fontSize: "12px",
+                  color: "#fff",
+                  background: "#00E396",
+                },
+                text: "ATM",
+                orientation: "horizontal",
+              },
+            },
+            {
+              x: store.getStrongSupport(this.symbol),
+              borderColor: "green",
+              label: {
+                style: {
+                  fontSize: "12px",
+                  color: "#fff",
+                  background: "green",
+                },
+                text: "SUPPORT",
+                // orientation: "horizontal",
+              },
+            },
+            {
+              x: store.getStrongResistance(this.symbol),
+              borderColor: "red",
+              label: {
+                style: {
+                  fontSize: "12px",
+                  color: "#fff",
+                  background: "red",
+                },
+                text: "RESISTANCE",
+                // orientation: "horizontal",
+              },
+            },
+          ],
+        },
       });
     },
     drawOptionsChart() {

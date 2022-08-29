@@ -9,8 +9,9 @@ export default {
       series: [],
       oiOiCallPutTrend: undefined,
       xAxisCategories: [],
-      callSum: [],
-      putSum: [],
+      //   callSum: [],
+      //   putSum: [],
+      putCallDifference: [],
       spotPrice: [],
       date: undefined,
       lastFetchTime: undefined,
@@ -31,12 +32,8 @@ export default {
     getSeries() {
       let seriesData = [
         {
-          name: "Put OI Change",
-          data: this.putSum,
-        },
-        {
-          name: "Call OI Change",
-          data: this.callSum,
+          name: "Put Call Difference",
+          data: this.putCallDifference,
         },
         {
           name: "Spot Price",
@@ -72,7 +69,7 @@ export default {
           dataLabels: {
             enabled: false,
           },
-          colors: ["#FF0000", "darkgreen", "#154881", "lightgreen"],
+          colors: ["#FF0000", "#154881", "darkgreen", "lightgreen"],
           stroke: {
             curve: "straight",
             width: [2, 2],
@@ -111,7 +108,9 @@ export default {
           },
           yaxis: [
             {
-              seriesName: "Column A",
+              seriesName: "Put Call Difference",
+              show: true,
+
               axisTicks: {
                 show: true,
               },
@@ -119,17 +118,8 @@ export default {
                 show: true,
               },
               title: {
-                text: "Open Interst",
+                text: "Put Call Difference",
               },
-              labels: {
-                formatter: function (value) {
-                  return parseInt(value);
-                },
-              },
-            },
-            {
-              seriesName: "Column A",
-              show: false,
               labels: {
                 formatter: function (value) {
                   return parseInt(value);
@@ -185,6 +175,47 @@ export default {
         xaxis: {
           categories: this.xAxisCategories,
         },
+        yaxis: [
+          {
+            seriesName: "Put Call Difference",
+            show: true,
+
+            axisTicks: {
+              show: true,
+            },
+            axisBorder: {
+              show: true,
+            },
+            title: {
+              text: "Put Call Difference",
+            },
+            labels: {
+              formatter: function (value) {
+                return parseInt(value);
+              },
+            },
+          },
+          {
+            opposite: true,
+            seriesName: "Line C",
+            axisTicks: {
+              show: true,
+            },
+            axisBorder: {
+              show: true,
+            },
+            title: {
+              text: "Spot Price",
+            },
+            labels: {
+              formatter: function (value) {
+                return Number(value).toFixed(2);
+              },
+            },
+            min: minStrike,
+            max: maxStrike,
+          },
+        ],
       });
     },
     async getOiCallPutTrendData(calledFrom) {
@@ -224,20 +255,27 @@ export default {
 
         // Generate data for Chart
         let xAxisCategories = [];
-        let callSum = [];
-        let putSum = [];
+        // let callSum = [];
+        // let putSum = [];
+        let putCallDifference = [];
         let spotPrice = [];
 
         response.data.records.forEach((e) => {
           xAxisCategories.push(e._id.substring(12, 17));
-          callSum.push(e.CE_OI_CHANGE_SUM);
-          putSum.push(e.PE_OI_CHANGE_SUM);
+          //   callSum.push(e.CE_OI_CHANGE_SUM);
+          //   putSum.push(e.PE_OI_CHANGE_SUM);
+          //   console.log("e.CE_OI_CHANGE_SUM ", e.CE_OI_CHANGE_SUM);
+          //   console.log("e.PE_OI_CHANGE_SUM ", e.PE_OI_CHANGE_SUM);
+          //   console.log("Diff : ", e.PE_OI_CHANGE_SUM - e.CE_OI_CHANGE_SUM);
+          let diff = e.PE_OI_CHANGE_SUM - e.CE_OI_CHANGE_SUM;
+          putCallDifference.push(diff);
           spotPrice.push(e.SPOT_PRICE);
         });
 
         this.xAxisCategories = xAxisCategories;
-        this.callSum = callSum;
-        this.putSum = putSum;
+        // this.callSum = callSum;
+        // this.putSum = putSum;
+        this.putCallDifference = putCallDifference;
         this.spotPrice = spotPrice;
 
         this.drawOptionsChart();
